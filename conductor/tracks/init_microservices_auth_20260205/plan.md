@@ -14,12 +14,12 @@
     - [x] Initialize `services/api-gateway` with `package.json` and basic Express server.
     - [x] Create a "Health Check" endpoint (`/health`) to verify the gateway is running.
     - [x] Implement `express-http-proxy` or similar middleware to forward requests.
-- [~] Task: Gateway Routing Logic
-    - [ ] Define the routing strategy for `/api/v1/auth/*` requests.
-    - [ ] Add basic logging (e.g., `morgan`) to track incoming requests.
+- [x] Task: Gateway Routing Logic
+    - [x] Define the routing strategy for `/api/v1/auth/*` requests.
+    - [x] Add basic logging (e.g., `morgan`) to track incoming requests.
 
 ## Phase 3: Auth Service - Core & Database
-- [ ] Task: Scaffolding Auth Service
+- [~] Task: Scaffolding Auth Service
     - [ ] Initialize `services/auth-service` with `package.json`, Express, and TypeScript.
     - [ ] Configure `dotenv` to load database credentials.
 - [ ] Task: Database Schema & Migration (PostgreSQL)
