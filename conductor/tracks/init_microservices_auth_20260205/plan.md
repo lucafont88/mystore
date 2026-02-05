@@ -42,13 +42,13 @@
     - [x] Implement: Store Refresh Token in Redis (whitelist approach) or return as HTTP-only cookie.
 
 ## Phase 5: Auth Service - Security & RBAC
-- [~] Task: Token Verification Middleware
-    - [ ] Implement a shared middleware (or library) to verify JWTs.
-    - [ ] Write Tests: Ensure invalid or expired tokens are rejected.
-- [ ] Task: Role-Based Access Control (RBAC)
-    - [ ] Implement a middleware/guard to check `user.role` against required permissions.
-    - [ ] Write Tests: Verify that a CUSTOMER cannot access ADMIN routes.
-- [ ] Task: Connect Gateway to Auth Service
+- [x] Task: Token Verification Middleware
+    - [x] Implement a shared middleware (or library) to verify JWTs.
+    - [x] Write Tests: Ensure invalid or expired tokens are rejected.
+- [x] Task: Role-Based Access Control (RBAC)
+    - [x] Implement a middleware/guard to check `user.role` against required permissions.
+    - [x] Write Tests: Verify that a CUSTOMER cannot access ADMIN routes.
+- [~] Task: Connect Gateway to Auth Service
     - [ ] Update API Gateway to route real traffic to the now-running Auth Service.
     - [ ] Verify the full flow: Client -> Gateway -> Auth Service -> DB.
 
