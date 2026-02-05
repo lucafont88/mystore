@@ -22,11 +22,11 @@
 - [x] Task: Scaffolding Auth Service
     - [x] Initialize `services/auth-service` with `package.json`, Express, and TypeScript.
     - [x] Configure `dotenv` to load database credentials.
-- [~] Task: Database Schema & Migration (PostgreSQL)
-    - [ ] Design the `User` table (id, email, password_hash, role, created_at).
-    - [ ] Design the `Role` enum or table if dynamic roles are needed (start with Enum: CUSTOMER, ADMIN, SUPPORT, VENDOR).
-    - [ ] Set up an ORM (e.g., Prisma or TypeORM) and run the initial migration.
-- [ ] Task: Redis Connection
+- [x] Task: Database Schema & Migration (PostgreSQL)
+    - [x] Design the `User` table (id, email, password_hash, role, created_at).
+    - [x] Design the `Role` enum or table if dynamic roles are needed (start with Enum: CUSTOMER, ADMIN, SUPPORT, VENDOR).
+    - [x] Set up an ORM (e.g., Prisma or TypeORM) and run the initial migration.
+- [~] Task: Redis Connection
     - [ ] Implement a Redis client module in the Auth Service for token management.
 
 ## Phase 4: Auth Service - Registration & Login
