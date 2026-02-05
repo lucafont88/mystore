@@ -30,12 +30,12 @@
     - [x] Implement a Redis client module in the Auth Service for token management.
 
 ## Phase 4: Auth Service - Registration & Login
-- [~] Task: User Registration Feature
-    - [ ] Write Tests: Create unit tests for user registration logic (input validation, duplicate email check).
-    - [ ] Implement: Create the `register` controller and service method.
-    - [ ] Implement: Hash passwords using `argon2` or `bcrypt`.
-    - [ ] Implement: Save user to PostgreSQL.
-- [ ] Task: User Login Feature
+- [x] Task: User Registration Feature
+    - [x] Write Tests: Create unit tests for user registration logic (input validation, duplicate email check).
+    - [x] Implement: Create the `register` controller and service method.
+    - [x] Implement: Hash passwords using `argon2` or `bcrypt`.
+    - [x] Implement: Save user to PostgreSQL.
+- [~] Task: User Login Feature
     - [ ] Write Tests: Create unit tests for login logic (credential verification, token generation).
     - [ ] Implement: Verify email and password.
     - [ ] Implement: Generate JWT Access Token and Refresh Token.
