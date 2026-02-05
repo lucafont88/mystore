@@ -5,12 +5,12 @@
     - [x] Initialize the root project with a `docker-compose.yml` defining the network, PostgreSQL, Redis, and RabbitMQ services.
     - [x] Create the directory structure for `services/api-gateway` and `services/auth-service`.
     - [x] Configure shared TypeScript configuration (`tsconfig.base.json`) and ESLint/Prettier settings in the root.
-- [/] Task: Database & Message Broker Configuration
-    - [ ] Verify local Docker environment is running PostgreSQL, Redis, and RabbitMQ.
-    - [ ] Create a `Makefile` or helper scripts to start/stop the infrastructure.
+- [x] Task: Database & Message Broker Configuration
+    - [x] Verify local Docker environment is running PostgreSQL, Redis, and RabbitMQ.
+    - [x] Create a `Makefile` or helper scripts to start/stop the infrastructure.
 
 ## Phase 2: API Gateway Implementation
-- [ ] Task: Scaffolding API Gateway
+- [~] Task: Scaffolding API Gateway
     - [ ] Initialize `services/api-gateway` with `package.json` and basic Express server.
     - [ ] Create a "Health Check" endpoint (`/health`) to verify the gateway is running.
     - [ ] Implement `express-http-proxy` or similar middleware to forward requests.
