@@ -26,11 +26,11 @@
     - [x] Design the `User` table (id, email, password_hash, role, created_at).
     - [x] Design the `Role` enum or table if dynamic roles are needed (start with Enum: CUSTOMER, ADMIN, SUPPORT, VENDOR).
     - [x] Set up an ORM (e.g., Prisma or TypeORM) and run the initial migration.
-- [~] Task: Redis Connection
-    - [ ] Implement a Redis client module in the Auth Service for token management.
+- [x] Task: Redis Connection
+    - [x] Implement a Redis client module in the Auth Service for token management.
 
 ## Phase 4: Auth Service - Registration & Login
-- [ ] Task: User Registration Feature
+- [~] Task: User Registration Feature
     - [ ] Write Tests: Create unit tests for user registration logic (input validation, duplicate email check).
     - [ ] Implement: Create the `register` controller and service method.
     - [ ] Implement: Hash passwords using `argon2` or `bcrypt`.
