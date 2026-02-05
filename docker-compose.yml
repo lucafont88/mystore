@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mystore-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: auth_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mystore-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: mystore-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - mystore-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: mystore-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - mystore-network
+
+networks:
+  mystore-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
