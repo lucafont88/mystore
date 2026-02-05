@@ -10,11 +10,11 @@
     - [x] Create a `Makefile` or helper scripts to start/stop the infrastructure.
 
 ## Phase 2: API Gateway Implementation
-- [~] Task: Scaffolding API Gateway
-    - [ ] Initialize `services/api-gateway` with `package.json` and basic Express server.
-    - [ ] Create a "Health Check" endpoint (`/health`) to verify the gateway is running.
-    - [ ] Implement `express-http-proxy` or similar middleware to forward requests.
-- [ ] Task: Gateway Routing Logic
+- [x] Task: Scaffolding API Gateway
+    - [x] Initialize `services/api-gateway` with `package.json` and basic Express server.
+    - [x] Create a "Health Check" endpoint (`/health`) to verify the gateway is running.
+    - [x] Implement `express-http-proxy` or similar middleware to forward requests.
+- [~] Task: Gateway Routing Logic
     - [ ] Define the routing strategy for `/api/v1/auth/*` requests.
     - [ ] Add basic logging (e.g., `morgan`) to track incoming requests.
 
