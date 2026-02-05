@@ -1,11 +1,11 @@
 # Implementation Plan - Microservices Foundation & Auth Service
 
 ## Phase 1: Infrastructure & Environment Setup
-- [~] Task: Initialize Project Structure & Docker Environment
-    - [ ] Initialize the root project with a `docker-compose.yml` defining the network, PostgreSQL, Redis, and RabbitMQ services.
-    - [ ] Create the directory structure for `services/api-gateway` and `services/auth-service`.
-    - [ ] Configure shared TypeScript configuration (`tsconfig.base.json`) and ESLint/Prettier settings in the root.
-- [ ] Task: Database & Message Broker Configuration
+- [x] Task: Initialize Project Structure & Docker Environment
+    - [x] Initialize the root project with a `docker-compose.yml` defining the network, PostgreSQL, Redis, and RabbitMQ services.
+    - [x] Create the directory structure for `services/api-gateway` and `services/auth-service`.
+    - [x] Configure shared TypeScript configuration (`tsconfig.base.json`) and ESLint/Prettier settings in the root.
+- [/] Task: Database & Message Broker Configuration
     - [ ] Verify local Docker environment is running PostgreSQL, Redis, and RabbitMQ.
     - [ ] Create a `Makefile` or helper scripts to start/stop the infrastructure.
 
