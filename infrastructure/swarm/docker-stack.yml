@@ -1,0 +1,372 @@
+# Docker Swarm Stack per E-commerce
+# Deploy: docker stack deploy -c docker-stack.yml ecommerce
+#
+# Nota: Molto simile a docker-compose, ma con opzioni deploy per Swarm
+
+version: '3.8'
+
+services:
+  # ===================
+  # API GATEWAY
+  # ===================
+  api-gateway:
+    image: ecommerce/api-gateway:${TAG:-latest}
+    networks:
+      - ecommerce-net
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      AUTH_SERVICE_URL: http://auth-service:3001
+      PRODUCT_SERVICE_URL: http://product-service:3002
+      REDIS_URL: redis://redis:6379
+    secrets:
+      - jwt_secret
+    deploy:
+      mode: replicated
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        order: start-first
+      rollback_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+      placement:
+        constraints:
+          - node.role == worker
+        preferences:
+          - spread: node.id
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ===================
+  # AUTH SERVICE
+  # ===================
+  auth-service:
+    image: ecommerce/auth-service:${TAG:-latest}
+    networks:
+      - ecommerce-net
+    environment:
+      NODE_ENV: production
+      PORT: "3001"
+      DATABASE_URL_FILE: /run/secrets/auth_db_url
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL_FILE: /run/secrets/rabbitmq_url
+    secrets:
+      - auth_db_url
+      - jwt_secret
+      - rabbitmq_url
+    deploy:
+      mode: replicated
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+      placement:
+        constraints:
+          - node.role == worker
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===================
+  # PRODUCT SERVICE
+  # ===================
+  product-service:
+    image: ecommerce/product-service:${TAG:-latest}
+    networks:
+      - ecommerce-net
+    environment:
+      NODE_ENV: production
+      PORT: "3002"
+      DATABASE_URL_FILE: /run/secrets/product_db_url
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL_FILE: /run/secrets/rabbitmq_url
+    secrets:
+      - product_db_url
+      - rabbitmq_url
+    deploy:
+      mode: replicated
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+      placement:
+        constraints:
+          - node.role == worker
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===================
+  # POSTGRES AUTH
+  # ===================
+  postgres-auth:
+    image: postgres:15-alpine
+    networks:
+      - ecommerce-net
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_DB: auth_db
+    secrets:
+      - postgres_user
+      - postgres_password
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.db == true
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===================
+  # POSTGRES PRODUCTS
+  # ===================
+  postgres-products:
+    image: postgres:15-alpine
+    networks:
+      - ecommerce-net
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_DB: products_db
+    secrets:
+      - postgres_user
+      - postgres_password
+    volumes:
+      - postgres_products_data:/var/lib/postgresql/data
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.db == true
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===================
+  # REDIS
+  # ===================
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    networks:
+      - ecommerce-net
+    volumes:
+      - redis_data:/data
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.cache == true
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ===================
+  # RABBITMQ
+  # ===================
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    networks:
+      - ecommerce-net
+    ports:
+      - "15672:15672"  # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER_FILE: /run/secrets/rabbitmq_user
+      RABBITMQ_DEFAULT_PASS_FILE: /run/secrets/rabbitmq_password
+    secrets:
+      - rabbitmq_user
+      - rabbitmq_password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.mq == true
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===================
+  # TRAEFIK (Load Balancer / Reverse Proxy)
+  # ===================
+  traefik:
+    image: traefik:v2.11
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # Let's Encrypt (decommentare in produzione)
+      # - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      # - "--certificatesresolvers.letsencrypt.acme.email=admin@example.com"
+      # - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - ecommerce-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_certs:/letsencrypt
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dashboard.rule=Host(`traefik.example.com`)"
+        - "traefik.http.routers.dashboard.service=api@internal"
+        - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+
+# ===================
+# NETWORKS
+# ===================
+networks:
+  ecommerce-net:
+    driver: overlay
+    attachable: true
+    driver_opts:
+      encrypted: "true"
+
+# ===================
+# VOLUMES
+# ===================
+volumes:
+  postgres_auth_data:
+    driver: local
+  postgres_products_data:
+    driver: local
+  redis_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+  traefik_certs:
+    driver: local
+
+# ===================
+# SECRETS (creare prima del deploy)
+# ===================
+secrets:
+  jwt_secret:
+    external: true
+  postgres_user:
+    external: true
+  postgres_password:
+    external: true
+  auth_db_url:
+    external: true
+  product_db_url:
+    external: true
+  rabbitmq_url:
+    external: true
+  rabbitmq_user:
+    external: true
+  rabbitmq_password:
+    external: true

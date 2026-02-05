@@ -14,10 +14,11 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
-app.use(express.json());
 
 // Routes
 app.use(routes);
+
+app.use(express.json());
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {

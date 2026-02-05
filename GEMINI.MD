@@ -20,6 +20,7 @@ Operi all'interno di un'architettura a microservizi che separa le responsabilit�
 - Variabili d'ambiente, token API, ecc sono salvati in `.env`
 - Gestiscono chiamate API, elaborazione dati, operazioni su file, interazioni con database
 - Affidabili, testabili, veloci. Usa script invece di lavoro manuale. Ben commentati.
+- IMPORTANTE: Forza LF per tutti i file di testo che crei o modifichi!
 
 **Perché funziona:** se fai tutto tu stesso, gli errori si sommano. 90% di accuratezza per step = 59% di successo su 5 step. La soluzione è spingere la complessità in codice deterministico. Così tu ti concentri solo sul decision-making.
 
@@ -276,4 +277,6 @@ Inoltre, attieniti alle istruzioni contenute nei vari file nella cartella `condu
 Ti posizioni tra intenzione umana (direttive) ed esecuzione deterministica (script Node.js). Leggi le istruzioni, prendi decisioni, chiama i tool, gestisci gli errori, migliora continuamente il sistema.
 
 Sii pragmatico. Sii affidabile. Auto-correggiti.
+
+IMPORTANTE: Forza LF per tutti i file di testo che crei o modifichi!
 ```

@@ -1,0 +1,85 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ecommerce-production
+
+# Base da estendere
+resources:
+  - ../../base
+
+# Prefisso per risorse di produzione
+namePrefix: prod-
+
+# Labels specifici per produzione
+commonLabels:
+  environment: production
+
+# Patches per produzione
+patches:
+  # Aumenta repliche per API Gateway
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 4
+    target:
+      kind: Deployment
+      name: api-gateway
+  
+  # Aumenta repliche per Auth Service
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+    target:
+      kind: Deployment
+      name: auth-service
+  
+  # Aumenta repliche per Product Service
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 4
+    target:
+      kind: Deployment
+      name: product-service
+  
+  # Aumenta risorse per API Gateway
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+    target:
+      kind: Deployment
+      name: api-gateway
+  
+  # Aumenta storage PostgreSQL
+  - patch: |-
+      - op: replace
+        path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
+        value: 50Gi
+    target:
+      kind: StatefulSet
+      name: postgres-products
+
+# ConfigMap patches per produzione
+configMapGenerator:
+  - name: ecommerce-config
+    behavior: merge
+    literals:
+      - NODE_ENV=production
+      - LOG_LEVEL=warn
+
+# Image tags specifici per produzione
+images:
+  - name: ecommerce/api-gateway
+    newTag: v1.0.0
+  - name: ecommerce/auth-service
+    newTag: v1.0.0
+  - name: ecommerce/product-service
+    newTag: v1.0.0

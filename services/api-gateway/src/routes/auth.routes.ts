@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import proxy from 'express-http-proxy';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -7,13 +7,19 @@ dotenv.config();
 const router: Router = Router();
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:3001';
 
-router.use('/', proxy(AUTH_SERVICE_URL, {
-  proxyReqPathResolver: (req) => {
-    return `/api/v1/auth${req.url}`;
+router.use('/', createProxyMiddleware({
+  target: AUTH_SERVICE_URL,
+  changeOrigin: true,
+  pathRewrite: {
+    '^': '/api/v1/auth', // Prepend /api/v1/auth because Express strips the mount path
   },
-  userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
-    // We can intercept/modify response here if needed
-    return proxyResData;
+  on: {
+    proxyReq: (proxyReq, req, res) => {
+      // Logic for request
+    },
+    error: (err, req, res) => {
+      console.error('Proxy Error:', err);
+    }
   }
 }));
 

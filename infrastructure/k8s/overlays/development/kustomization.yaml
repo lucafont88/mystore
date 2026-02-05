@@ -1,0 +1,58 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ecommerce-dev
+
+resources:
+  - ../../base
+
+namePrefix: dev-
+
+commonLabels:
+  environment: development
+
+patches:
+  # Singola replica per development
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+    target:
+      kind: Deployment
+  
+  # Risorse minime
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+    target:
+      kind: Deployment
+  
+  # Storage ridotto
+  - patch: |-
+      - op: replace
+        path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
+        value: 1Gi
+    target:
+      kind: StatefulSet
+
+configMapGenerator:
+  - name: ecommerce-config
+    behavior: merge
+    literals:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+
+images:
+  - name: ecommerce/api-gateway
+    newTag: latest
+  - name: ecommerce/auth-service
+    newTag: latest
+  - name: ecommerce/product-service
+    newTag: latest

@@ -44,6 +44,11 @@ export class AuthController {
       }
     }
   }
+
+  async me(req: Request, res: Response): Promise<void> {
+    // @ts-ignore
+    res.status(200).json({ user: req.user });
+  }
 }
 
 export default new AuthController();

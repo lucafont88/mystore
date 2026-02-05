@@ -1,0 +1,212 @@
+# ⚠️  Per produzione considera: Amazon RDS, Google Cloud SQL, o operatori come CloudNativePG
+# Questo è un setup base per development/staging
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-auth
+  namespace: ecommerce
+  labels:
+    app: postgres-auth
+    tier: database
+spec:
+  serviceName: postgres-auth
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-auth
+  template:
+    metadata:
+      labels:
+        app: postgres-auth
+        tier: database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+              name: postgres
+          
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              value: "auth_db"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          
+          volumeMounts:
+            - name: postgres-auth-data
+              mountPath: /var/lib/postgresql/data
+          
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - ecommerce
+                - -d
+                - auth_db
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - ecommerce
+                - -d
+                - auth_db
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+  
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-auth-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard  # Cambia in base al tuo cloud provider
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-auth
+  namespace: ecommerce
+spec:
+  type: ClusterIP
+  clusterIP: None  # Headless service per StatefulSet
+  ports:
+    - port: 5432
+      targetPort: 5432
+      name: postgres
+  selector:
+    app: postgres-auth
+
+---
+# PostgreSQL per Products DB
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-products
+  namespace: ecommerce
+  labels:
+    app: postgres-products
+    tier: database
+spec:
+  serviceName: postgres-products
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-products
+  template:
+    metadata:
+      labels:
+        app: postgres-products
+        tier: database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+              name: postgres
+          
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              value: "products_db"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          
+          volumeMounts:
+            - name: postgres-products-data
+              mountPath: /var/lib/postgresql/data
+          
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - ecommerce
+                - -d
+                - products_db
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - ecommerce
+                - -d
+                - products_db
+            initialDelaySeconds: 5
+            periodSeconds: 5
+  
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-products-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 20Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-products
+  namespace: ecommerce
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 5432
+      targetPort: 5432
+      name: postgres
+  selector:
+    app: postgres-products

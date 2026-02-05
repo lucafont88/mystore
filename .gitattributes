@@ -1,0 +1,127 @@
+# =============================================================================
+# Git Attributes - Cross-platform Line Endings
+# =============================================================================
+# Garantisce che tutti i file di testo usino LF (Linux) nel repository
+# Windows convertirà automaticamente in CRLF nel working directory se necessario
+
+# Default: rileva automaticamente e normalizza a LF
+* text=auto eol=lf
+
+# =============================================================================
+# Codice Sorgente
+# =============================================================================
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.json text eol=lf
+*.json5 text eol=lf
+
+# =============================================================================
+# Configurazione
+# =============================================================================
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.conf text eol=lf
+*.config text eol=lf
+*.env text eol=lf
+*.env.* text eol=lf
+.env* text eol=lf
+
+# =============================================================================
+# Docker & DevOps
+# =============================================================================
+Dockerfile text eol=lf
+Dockerfile.* text eol=lf
+*.dockerfile text eol=lf
+docker-compose*.yml text eol=lf
+docker-stack*.yml text eol=lf
+.dockerignore text eol=lf
+
+# =============================================================================
+# Shell Scripts (CRITICO - deve essere LF)
+# =============================================================================
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.fish text eol=lf
+
+# =============================================================================
+# Database
+# =============================================================================
+*.sql text eol=lf
+*.prisma text eol=lf
+
+# =============================================================================
+# Web
+# =============================================================================
+*.html text eol=lf
+*.htm text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.sass text eol=lf
+*.less text eol=lf
+*.svg text eol=lf
+
+# =============================================================================
+# Documentazione
+# =============================================================================
+*.md text eol=lf
+*.markdown text eol=lf
+*.txt text eol=lf
+*.rst text eol=lf
+LICENSE text eol=lf
+README text eol=lf
+
+# =============================================================================
+# File Binari (non modificare)
+# =============================================================================
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+
+*.zip binary
+*.tar binary
+*.gz binary
+*.7z binary
+*.rar binary
+
+*.pdf binary
+*.doc binary
+*.docx binary
+*.xls binary
+*.xlsx binary
+
+*.mp3 binary
+*.mp4 binary
+*.wav binary
+*.ogg binary
+*.webm binary
+
+# =============================================================================
+# Lock Files
+# =============================================================================
+package-lock.json text eol=lf -diff
+yarn.lock text eol=lf -diff
+pnpm-lock.yaml text eol=lf -diff
+
+# =============================================================================
+# Generati (non mostrare diff)
+# =============================================================================
+*.min.js binary
+*.min.css binary
+*.map binary

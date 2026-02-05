@@ -48,11 +48,11 @@
 - [x] Task: Role-Based Access Control (RBAC)
     - [x] Implement a middleware/guard to check `user.role` against required permissions.
     - [x] Write Tests: Verify that a CUSTOMER cannot access ADMIN routes.
-- [~] Task: Connect Gateway to Auth Service
-    - [ ] Update API Gateway to route real traffic to the now-running Auth Service.
-    - [ ] Verify the full flow: Client -> Gateway -> Auth Service -> DB.
+- [x] Task: Connect Gateway to Auth Service
+    - [x] Update API Gateway to route real traffic to the now-running Auth Service.
+    - [x] Verify the full flow: Client -> Gateway -> Auth Service -> DB.
 
 ## Phase 6: Final Verification
-- [ ] Task: Integrated System Test
-    - [ ] Run the full `docker-compose` stack.
-    - [ ] Perform a manual end-to-end test: Register a user, Login, and access a protected route (mocked if necessary).
+- [x] Task: Integrated System Test
+    - [x] Run the full `docker-compose` stack.
+    - [x] Perform a manual end-to-end test: Register a user, Login, and access a protected route (mocked if necessary).
