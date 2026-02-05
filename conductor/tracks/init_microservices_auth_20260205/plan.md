@@ -19,10 +19,10 @@
     - [x] Add basic logging (e.g., `morgan`) to track incoming requests.
 
 ## Phase 3: Auth Service - Core & Database
-- [~] Task: Scaffolding Auth Service
-    - [ ] Initialize `services/auth-service` with `package.json`, Express, and TypeScript.
-    - [ ] Configure `dotenv` to load database credentials.
-- [ ] Task: Database Schema & Migration (PostgreSQL)
+- [x] Task: Scaffolding Auth Service
+    - [x] Initialize `services/auth-service` with `package.json`, Express, and TypeScript.
+    - [x] Configure `dotenv` to load database credentials.
+- [~] Task: Database Schema & Migration (PostgreSQL)
     - [ ] Design the `User` table (id, email, password_hash, role, created_at).
     - [ ] Design the `Role` enum or table if dynamic roles are needed (start with Enum: CUSTOMER, ADMIN, SUPPORT, VENDOR).
     - [ ] Set up an ORM (e.g., Prisma or TypeORM) and run the initial migration.
