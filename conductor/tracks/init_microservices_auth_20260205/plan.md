@@ -35,14 +35,14 @@
     - [x] Implement: Create the `register` controller and service method.
     - [x] Implement: Hash passwords using `argon2` or `bcrypt`.
     - [x] Implement: Save user to PostgreSQL.
-- [~] Task: User Login Feature
-    - [ ] Write Tests: Create unit tests for login logic (credential verification, token generation).
-    - [ ] Implement: Verify email and password.
-    - [ ] Implement: Generate JWT Access Token and Refresh Token.
-    - [ ] Implement: Store Refresh Token in Redis (whitelist approach) or return as HTTP-only cookie.
+- [x] Task: User Login Feature
+    - [x] Write Tests: Create unit tests for login logic (credential verification, token generation).
+    - [x] Implement: Verify email and password.
+    - [x] Implement: Generate JWT Access Token and Refresh Token.
+    - [x] Implement: Store Refresh Token in Redis (whitelist approach) or return as HTTP-only cookie.
 
 ## Phase 5: Auth Service - Security & RBAC
-- [ ] Task: Token Verification Middleware
+- [~] Task: Token Verification Middleware
     - [ ] Implement a shared middleware (or library) to verify JWTs.
     - [ ] Write Tests: Ensure invalid or expired tokens are rejected.
 - [ ] Task: Role-Based Access Control (RBAC)

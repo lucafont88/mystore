@@ -1,6 +1,14 @@
 import argon2 from 'argon2';
 import prisma from '../config/db';
 import { User } from '@prisma/client';
+import { generateAccessToken, generateRefreshToken } from '../utils/token.util';
+import redis from '../config/redis';
+
+export interface LoginResponse {
+  user: Omit<User, 'passwordHash'>;
+  accessToken: string;
+  refreshToken: string;
+}
 
 export class AuthService {
   async register(email: string, password: string): Promise<Omit<User, 'passwordHash'>> {
@@ -23,6 +31,36 @@ export class AuthService {
 
     const { passwordHash: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
+  }
+
+  async login(email: string, password: string): Promise<LoginResponse> {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new Error('Invalid credentials');
+    }
+
+    const isPasswordValid = await argon2.verify(user.passwordHash, password);
+
+    if (!isPasswordValid) {
+      throw new Error('Invalid credentials');
+    }
+
+    const payload = { id: user.id, email: user.email, role: user.role };
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    // Store refresh token in Redis (expires in 7 days)
+    await redis.set(`refresh_token:${user.id}`, refreshToken, 'EX', 7 * 24 * 60 * 60);
+
+    const { passwordHash: _, ...userWithoutPassword } = user;
+    return {
+      user: userWithoutPassword,
+      accessToken,
+      refreshToken,
+    };
   }
 }
 

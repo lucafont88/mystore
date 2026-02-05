@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../app';
 import prisma from '../config/db';
+import redis from '../config/redis';
 
 describe('Auth Service - Registration', () => {
   const testUser = {
@@ -19,6 +20,7 @@ describe('Auth Service - Registration', () => {
 
   afterAll(async () => {
     await prisma.$disconnect();
+    await redis.quit();
   });
 
   it('should register a new user successfully', async () => {
@@ -48,5 +50,27 @@ describe('Auth Service - Registration', () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('errors');
+  });
+
+  describe('Login', () => {
+    it('should login an existing user and return tokens', async () => {
+      const response = await request(app)
+        .post('/api/v1/auth/login')
+        .send(testUser);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('accessToken');
+      expect(response.body).toHaveProperty('refreshToken');
+      expect(response.body.user.email).toBe(testUser.email);
+    });
+
+    it('should not login with wrong credentials', async () => {
+      const response = await request(app)
+        .post('/api/v1/auth/login')
+        .send({ email: testUser.email, password: 'WrongPassword!' });
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
+    });
   });
 });
