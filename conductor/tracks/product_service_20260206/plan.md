@@ -20,7 +20,7 @@
     - [x] Write Tests: Create unit tests for Product CRUD operations.
     - [x] Implement: Create `product.repository.ts` using Prisma.
     - [x] Implement: Add automatic slug generation logic.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Data Models & Repositories' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Core Data Models & Repositories' (Protocol in workflow.md)
 
 ## Phase 3: Product Management Logic (Vendor & Admin)
 - [ ] Task: Implement Product Service Logic

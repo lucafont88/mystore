@@ -32,16 +32,20 @@ describe('Category Repository', () => {
 
   it('should create a child category', async () => {
     const parent = await prisma.category.findUnique({ where: { slug: 'electronics' } });
+    if (!parent) {
+       await categoryRepository.create({ name: 'Electronics', slug: 'electronics' });
+    }
+    const parentUpdated = await prisma.category.findUnique({ where: { slug: 'electronics' } });
     
     const data = {
       name: 'Smartphones',
       slug: 'smartphones',
-      parentId: parent!.id,
+      parentId: parentUpdated!.id,
     };
 
     const category = await categoryRepository.create(data);
 
-    expect(category.parentId).toBe(parent!.id);
+    expect(category.parentId).toBe(parentUpdated!.id);
   });
 
   it('should get a category by ID', async () => {
