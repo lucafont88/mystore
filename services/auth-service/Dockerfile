@@ -9,20 +9,21 @@ WORKDIR /app
 # Copy root workspace files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
 
-# Copy Auth Service package
+# Copy ALL package.json files first for efficient caching
+COPY services/api-gateway/package.json ./services/api-gateway/
 COPY services/auth-service/package.json ./services/auth-service/
+COPY services/product-service/package.json ./services/product-service/
 
-# Install dependencies
-RUN pnpm install --filter auth-service...
+# Install dependencies for the whole workspace
+RUN pnpm install --frozen-lockfile
 
-# Copy Auth Service source
+# Copy source code
 COPY services/auth-service ./services/auth-service
 
-# Generate Prisma Client
-RUN pnpm --filter auth-service prisma:generate
-
 # Build Auth Service
-RUN pnpm --filter auth-service build
+WORKDIR /app/services/auth-service
+RUN pnpm prisma:generate
+RUN pnpm build
 
 # Stage 2: Production
 FROM node:20-alpine
@@ -32,14 +33,16 @@ WORKDIR /app
 # Install pnpm for production pruned install
 RUN npm install -g pnpm@10.28.2
 
-# Copy built artifacts and production files
+# Copy root workspace files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
 COPY services/auth-service/package.json ./services/auth-service/
+
+# Copy built artifacts and prisma
 COPY --from=builder /app/services/auth-service/dist ./services/auth-service/dist
 COPY --from=builder /app/services/auth-service/prisma ./services/auth-service/prisma
 
 # Install production dependencies only
-RUN pnpm install --prod --filter auth-service...
+RUN pnpm install --prod --frozen-lockfile --filter auth-service...
 
 WORKDIR /app/services/auth-service
 
