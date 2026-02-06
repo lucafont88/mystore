@@ -13,9 +13,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Scaffolding' (Protocol in workflow.md)
 
 ## Phase 2: Core Data Models & Repositories
-- [ ] Task: Implement Category Repository
-    - [ ] Write Tests: Create unit tests for Category CRUD operations including tree structure support.
-    - [ ] Implement: Create `category.repository.ts` using Prisma.
+- [x] Task: Implement Category Repository (37c57de)
+    - [x] Write Tests: Create unit tests for Category CRUD operations including tree structure support.
+    - [x] Implement: Create `category.repository.ts` using Prisma.
 - [ ] Task: Implement Product Repository
     - [ ] Write Tests: Create unit tests for Product CRUD operations.
     - [ ] Implement: Create `product.repository.ts` using Prisma.
