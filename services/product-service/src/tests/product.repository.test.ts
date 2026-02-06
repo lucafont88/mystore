@@ -7,8 +7,6 @@ import productRepository from '../repositories/product.repository';
 import categoryRepository from '../repositories/category.repository';
 
 describe('Product Repository', () => {
-  let categoryId: string;
-
   beforeAll(async () => {
     try {
       await prisma.product.deleteMany();
@@ -20,8 +18,8 @@ describe('Product Repository', () => {
     await prisma.$disconnect();
   });
 
-  const setupPrerequisites = async () => {
-    const slug = `cat-${Date.now()}`;
+  const setupPrerequisites = async (suffix: string) => {
+    const slug = `cat-${suffix}-${Date.now()}`;
     const cat = await categoryRepository.create({
       name: 'Test Category',
       slug: slug,
@@ -30,11 +28,11 @@ describe('Product Repository', () => {
   };
 
   it('should create a new product', async () => {
-    const catId = await setupPrerequisites();
-    const sku = `SKU-${Date.now()}`;
+    const catId = await setupPrerequisites('create');
+    const sku = `SKU-CREATE-${Date.now()}`;
     const data = {
       name: 'Test Product',
-      slug: `test-product-${Date.now()}`,
+      slug: `test-product-create-${Date.now()}`,
       description: 'A great product',
       price: 99.99,
       sku: sku,
@@ -51,7 +49,7 @@ describe('Product Repository', () => {
   });
 
   it('should find a product by ID', async () => {
-    const catId = await setupPrerequisites();
+    const catId = await setupPrerequisites('find');
     const sku = `SKU-ID-${Date.now()}`;
     const existing = await prisma.product.create({
       data: {
@@ -70,13 +68,26 @@ describe('Product Repository', () => {
   });
 
   it('should find products with filters (pagination)', async () => {
+    // Ensure at least one product exists
+    const catId = await setupPrerequisites('list');
+    await prisma.product.create({
+      data: {
+        name: 'List Item',
+        slug: `list-item-${Date.now()}`,
+        price: 10,
+        sku: `SKU-LIST-${Date.now()}`,
+        vendorId: 'v1',
+        categoryId: catId
+      }
+    });
+
     const result = await productRepository.findAll({ skip: 0, take: 10 });
     expect(result.items.length).toBeGreaterThanOrEqual(1);
     expect(result.total).toBeGreaterThanOrEqual(1);
   });
 
   it('should update a product', async () => {
-    const catId = await setupPrerequisites();
+    const catId = await setupPrerequisites('update');
     const sku = `SKU-UP-${Date.now()}`;
     const existing = await prisma.product.create({
       data: {
@@ -94,7 +105,7 @@ describe('Product Repository', () => {
   });
 
   it('should delete a product', async () => {
-    const catId = await setupPrerequisites();
+    const catId = await setupPrerequisites('delete');
     const sku = `SKU-DEL-${Date.now()}`;
     const target = await prisma.product.create({
       data: {

@@ -40,7 +40,7 @@
     - [x] Write Tests: Create integration tests for listing, searching, and detailing products.
     - [x] Implement: Add public routes for paginated listing and searching (using ILIKE).
     - [x] Implement: Add public routes for fetching category tree.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Category Management & Public Catalog' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 4: Category Management & Public Catalog' (Protocol in workflow.md)
 
 ## Phase 5: API Gateway Integration & Final E2E
 - [ ] Task: Connect Gateway to Product Service
