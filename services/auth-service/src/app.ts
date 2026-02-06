@@ -1,14 +1,16 @@
 import express, { Request, Response } from 'express';
+import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import routes from './routes';
 
-dotenv.config();
-
 const app: express.Application = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.AUTH_SERVICE_PORT || 3001;
 
 // Middlewares
 app.use(helmet());

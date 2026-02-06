@@ -1,2 +1,30 @@
+# =============================================================================
+# pnpm Workspace Configuration
+# =============================================================================
+# Definisce i package che fanno parte del monorepo
+# Docs: https://pnpm.io/workspaces
+# =============================================================================
+
 packages:
-  - 'services/*'
+  # ---------------------------------------------------------------------------
+  # Microservizi Backend
+  # ---------------------------------------------------------------------------
+  - 'services/api-gateway'
+  - 'services/auth-service'
+  # - 'services/product-service'
+  # - 'services/order-service'        # TODO: v2
+  # - 'services/cart-service'         # TODO: v2
+  # - 'services/payment-service'      # TODO: v2
+  # - 'services/notification-service' # TODO: v3
+  # - 'services/inventory-service'    # TODO: v3
+  
+  # ---------------------------------------------------------------------------
+  # Frontend Applications
+  # ---------------------------------------------------------------------------
+  - 'frontend/store-app'
+  # - 'frontend/admin-app'            # TODO: v2
+  
+  # ---------------------------------------------------------------------------
+  # Shared Packages
+  # ---------------------------------------------------------------------------
+  - 'shared'
