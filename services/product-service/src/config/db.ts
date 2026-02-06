@@ -1,4 +1,8 @@
 import { PrismaClient } from '@prisma/client';
+import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.join(__dirname, '../../../../.env') });
 
 const prisma = new PrismaClient();
 
