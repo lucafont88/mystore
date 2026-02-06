@@ -33,9 +33,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Product Management Logic (Vendor & Admin)' (Protocol in workflow.md)
 
 ## Phase 4: Category Management & Public Catalog
-- [ ] Task: Implement Category Controllers & Routes (Admin)
-    - [ ] Write Tests: Create integration tests for Category management endpoints.
-    - [ ] Implement: Create `category.controller.ts` and define routes.
+- [x] Task: Implement Category Controllers & Routes (Admin) (b358e10)
+    - [x] Write Tests: Create integration tests for Category management endpoints.
+    - [x] Implement: Create `category.controller.ts` and define routes.
 - [ ] Task: Implement Public Catalog Endpoints
     - [ ] Write Tests: Create integration tests for listing, searching, and detailing products.
     - [ ] Implement: Add public routes for paginated listing and searching (using ILIKE).
