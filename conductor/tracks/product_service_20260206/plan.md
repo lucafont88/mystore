@@ -10,7 +10,7 @@
     - [ ] Initialize Prisma in `services/product-service`.
     - [ ] Define initial schema in `schema.prisma` (Product, Category, and Role enum).
     - [ ] Run initial migration to create the `products_db` database and tables.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Scaffolding' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Scaffolding' (Protocol in workflow.md)
 
 ## Phase 2: Core Data Models & Repositories
 - [ ] Task: Implement Category Repository
