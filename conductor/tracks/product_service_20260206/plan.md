@@ -43,10 +43,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Category Management & Public Catalog' (Protocol in workflow.md)
 
 ## Phase 5: API Gateway Integration & Final E2E
-- [ ] Task: Connect Gateway to Product Service
-    - [ ] Update API Gateway routing strategy to forward `/api/v1/products/*` to Product Service.
-    - [ ] Add `PRODUCT_SERVICE_URL` to root `.env`.
-- [ ] Task: Final System Integration Test
-    - [ ] Write Tests: Perform a manual E2E test through the Gateway: Login as Vendor -> Create Product -> Search as Guest -> Update as Vendor.
-    - [ ] Verify: Ensure RBAC is enforced (e.g., Guest cannot create product).
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: API Gateway Integration & Final E2E' (Protocol in workflow.md)
+- [x] Task: Connect Gateway to Product Service (5dcace3)
+    - [x] Update API Gateway routing strategy to forward `/api/v1/products/*` to Product Service.
+    - [x] Add `PRODUCT_SERVICE_URL` to root `.env`.
+- [x] Task: Final System Integration Test (5dcace3)
+    - [x] Write Tests: Perform a manual E2E test through the Gateway: Login as Vendor -> Create Product -> Search as Guest -> Update as Vendor.
+    - [x] Verify: Ensure RBAC is enforced (e.g., Guest cannot create product).
+- [~] Task: Conductor - User Manual Verification 'Phase 5: API Gateway Integration & Final E2E' (Protocol in workflow.md)

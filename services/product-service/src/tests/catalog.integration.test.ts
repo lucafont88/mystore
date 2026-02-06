@@ -11,33 +11,36 @@ describe('Public Catalog Endpoints', () => {
   let categoryId: string;
 
   beforeAll(async () => {
-    await prisma.product.deleteMany();
-    await prisma.category.deleteMany();
-
-    const cat = await prisma.category.create({
-      data: { name: 'Public Cat', slug: 'public-cat' }
-    });
-    categoryId = cat.id;
-
-    const prod = await prisma.product.create({
-      data: {
-        name: 'Awesome Smartphone',
-        slug: 'awesome-smartphone',
-        price: 500,
-        sku: 'AS-001',
-        stockQuantity: 10,
-        vendorId: 'v1',
-        categoryId: categoryId
-      }
-    });
-    productId = prod.id;
+    try {
+      await prisma.product.deleteMany();
+      await prisma.category.deleteMany();
+    } catch (e) {}
   });
 
   afterAll(async () => {
     await prisma.$disconnect();
   });
 
+  const setupData = async () => {
+    const cat = await prisma.category.create({
+      data: { name: 'Public Cat', slug: `public-cat-${Date.now()}` }
+    });
+    const prod = await prisma.product.create({
+      data: {
+        name: 'Awesome Smartphone',
+        slug: `awesome-smartphone-${Date.now()}`,
+        price: 500,
+        sku: `AS-CAT-${Date.now()}`,
+        stockQuantity: 10,
+        vendorId: 'v1',
+        categoryId: cat.id
+      }
+    });
+    return { catId: cat.id, prodId: prod.id };
+  };
+
   it('should list products with pagination', async () => {
+    await setupData();
     const res = await request(app).get('/api/v1/products?take=5&skip=0');
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('items');
@@ -45,14 +48,16 @@ describe('Public Catalog Endpoints', () => {
   });
 
   it('should search products by keyword', async () => {
-    const res = await request(app).get('/api/v1/products?search=awesome');
+    await setupData();
+    const res = await request(app).get('/api/v1/products?search=Awesome');
     expect(res.status).toBe(200);
     expect(res.body.items.some((p: any) => p.name.includes('Awesome'))).toBe(true);
   });
 
   it('should get product by ID', async () => {
-    const res = await request(app).get(`/api/v1/products/${productId}`);
+    const { prodId } = await setupData();
+    const res = await request(app).get(`/api/v1/products/${prodId}`);
     expect(res.status).toBe(200);
-    expect(res.body.id).toBe(productId);
+    expect(res.body.id).toBe(prodId);
   });
 });
