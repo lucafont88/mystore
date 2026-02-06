@@ -1,0 +1,52 @@
+# Implementation Plan - Product Service Implementation
+
+## Phase 1: Infrastructure & Scaffolding [checkpoint: 0c896e5]
+- [x] Task: Create `services/product-service` directory structure and initialize project. (ed745ee)
+    - [x] Initialize `package.json` with necessary dependencies (express, prisma, zod, etc.).
+    - [x] Configure TypeScript (`tsconfig.json`) extending root config.
+    - [x] Create basic Express application scaffolding in `src/app.ts`.
+- [x] Task: Database Configuration (PostgreSQL) (cd2d79f)
+    - [x] Update root `.env` with `PRODUCT_DATABASE_URL`.
+    - [x] Initialize Prisma in `services/product-service`.
+    - [x] Define initial schema in `schema.prisma` (Product, Category, and Role enum).
+    - [x] Run initial migration to create the `products_db` database and tables.
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Scaffolding' (Protocol in workflow.md)
+
+## Phase 2: Core Data Models & Repositories [checkpoint: a677dbd]
+- [x] Task: Implement Category Repository (37c57de)
+    - [x] Write Tests: Create unit tests for Category CRUD operations including tree structure support.
+    - [x] Implement: Create `category.repository.ts` using Prisma.
+- [x] Task: Implement Product Repository (42ace65)
+    - [x] Write Tests: Create unit tests for Product CRUD operations.
+    - [x] Implement: Create `product.repository.ts` using Prisma.
+    - [x] Implement: Add automatic slug generation logic.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Core Data Models & Repositories' (Protocol in workflow.md)
+
+## Phase 3: Product Management Logic (Vendor & Admin) [checkpoint: c1ba7c7]
+- [x] Task: Implement Product Service Logic (0f017d6)
+    - [x] Write Tests: Create unit tests for business logic (ownership verification, inventory validation).
+    - [x] Implement: Create `product.service.ts` to handle business rules.
+- [x] Task: Implement Product Controllers & Routes (a187d76)
+    - [x] Write Tests: Create integration tests for Product endpoints (POST, PUT, DELETE).
+    - [x] Implement: Create `product.controller.ts` and define routes in `routes/product.routes.ts`.
+    - [x] Implement: Add ownership verification middleware using JWT data.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Product Management Logic (Vendor & Admin)' (Protocol in workflow.md)
+
+## Phase 4: Category Management & Public Catalog [checkpoint: 297d26f]
+- [x] Task: Implement Category Controllers & Routes (Admin) (b358e10)
+    - [x] Write Tests: Create integration tests for Category management endpoints.
+    - [x] Implement: Create `category.controller.ts` and define routes.
+- [x] Task: Implement Public Catalog Endpoints (19c318d)
+    - [x] Write Tests: Create integration tests for listing, searching, and detailing products.
+    - [x] Implement: Add public routes for paginated listing and searching (using ILIKE).
+    - [x] Implement: Add public routes for fetching category tree.
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Category Management & Public Catalog' (Protocol in workflow.md)
+
+## Phase 5: API Gateway Integration & Final E2E [checkpoint: 6dcf614]
+- [x] Task: Connect Gateway to Product Service (5dcace3)
+    - [x] Update API Gateway routing strategy to forward `/api/v1/products/*` to Product Service.
+    - [x] Add `PRODUCT_SERVICE_URL` to root `.env`.
+- [x] Task: Final System Integration Test (5dcace3)
+    - [x] Write Tests: Perform a manual E2E test through the Gateway: Login as Vendor -> Create Product -> Search as Guest -> Update as Vendor.
+    - [x] Verify: Ensure RBAC is enforced (e.g., Guest cannot create product).
+- [x] Task: Conductor - User Manual Verification 'Phase 5: API Gateway Integration & Final E2E' (Protocol in workflow.md)

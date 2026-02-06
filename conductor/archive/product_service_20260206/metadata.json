@@ -1,0 +1,8 @@
+{
+  "track_id": "product_service_20260206",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-06T11:57:00Z",
+  "updated_at": "2026-02-06T11:57:00Z",
+  "description": "Implement the Product Service to manage categories and products for vendors and admins, including public search and catalog browsing through the API Gateway."
+}
