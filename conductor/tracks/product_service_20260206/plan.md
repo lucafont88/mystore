@@ -26,10 +26,10 @@
 - [x] Task: Implement Product Service Logic (0f017d6)
     - [x] Write Tests: Create unit tests for business logic (ownership verification, inventory validation).
     - [x] Implement: Create `product.service.ts` to handle business rules.
-- [ ] Task: Implement Product Controllers & Routes
-    - [ ] Write Tests: Create integration tests for Product endpoints (POST, PUT, DELETE).
-    - [ ] Implement: Create `product.controller.ts` and define routes in `routes/product.routes.ts`.
-    - [ ] Implement: Add ownership verification middleware using JWT data.
+- [x] Task: Implement Product Controllers & Routes (a187d76)
+    - [x] Write Tests: Create integration tests for Product endpoints (POST, PUT, DELETE).
+    - [x] Implement: Create `product.controller.ts` and define routes in `routes/product.routes.ts`.
+    - [x] Implement: Add ownership verification middleware using JWT data.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Product Management Logic (Vendor & Admin)' (Protocol in workflow.md)
 
 ## Phase 4: Category Management & Public Catalog
