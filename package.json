@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"pnpm --filter api-gateway dev\" \"pnpm --filter auth-service dev\"",
     "auth:migrate": "dotenv -e .env -- pnpm --filter auth-service exec prisma migrate dev",
+    "product:migrate": "dotenv -e .env -- pnpm --filter product-service exec prisma migrate dev",
     "infra:up": "docker-compose up -d",
     "infra:down": "docker-compose down",
     "infra:logs": "docker-compose logs -f"
