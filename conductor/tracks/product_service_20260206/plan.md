@@ -5,7 +5,7 @@
     - [ ] Initialize `package.json` with necessary dependencies (express, prisma, zod, etc.).
     - [ ] Configure TypeScript (`tsconfig.json`) extending root config.
     - [ ] Create basic Express application scaffolding in `src/app.ts`.
-- [ ] Task: Database Configuration (PostgreSQL)
+- [x] Task: Database Configuration (PostgreSQL) (cd2d79f)
     - [ ] Update root `.env` with `PRODUCT_DATABASE_URL`.
     - [ ] Initialize Prisma in `services/product-service`.
     - [ ] Define initial schema in `schema.prisma` (Product, Category, and Role enum).
