@@ -11,7 +11,7 @@ packages:
   # ---------------------------------------------------------------------------
   - 'services/api-gateway'
   - 'services/auth-service'
-  # - 'services/product-service'
+  - 'services/product-service'
   # - 'services/order-service'        # TODO: v2
   # - 'services/cart-service'         # TODO: v2
   # - 'services/payment-service'      # TODO: v2
