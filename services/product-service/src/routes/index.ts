@@ -1,8 +1,11 @@
 import { Router } from 'express';
+import productRoutes from './product.routes';
 
 const router: Router = Router();
 
-router.get('/products/ping', (req, res) => {
+router.use('/products', productRoutes);
+
+router.get('/ping', (req, res) => {
   res.status(200).json({ message: 'Product Service is alive' });
 });
 
