@@ -32,7 +32,7 @@
     - [x] Implement: Add ownership verification middleware using JWT data.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Product Management Logic (Vendor & Admin)' (Protocol in workflow.md)
 
-## Phase 4: Category Management & Public Catalog
+## Phase 4: Category Management & Public Catalog [checkpoint: 297d26f]
 - [x] Task: Implement Category Controllers & Routes (Admin) (b358e10)
     - [x] Write Tests: Create integration tests for Category management endpoints.
     - [x] Implement: Create `category.controller.ts` and define routes.
@@ -40,7 +40,7 @@
     - [x] Write Tests: Create integration tests for listing, searching, and detailing products.
     - [x] Implement: Add public routes for paginated listing and searching (using ILIKE).
     - [x] Implement: Add public routes for fetching category tree.
-- [~] Task: Conductor - User Manual Verification 'Phase 4: Category Management & Public Catalog' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Category Management & Public Catalog' (Protocol in workflow.md)
 
 ## Phase 5: API Gateway Integration & Final E2E
 - [ ] Task: Connect Gateway to Product Service
