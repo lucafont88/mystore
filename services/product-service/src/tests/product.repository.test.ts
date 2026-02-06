@@ -10,30 +10,37 @@ describe('Product Repository', () => {
   let categoryId: string;
 
   beforeAll(async () => {
-    await prisma.product.deleteMany();
-    await prisma.category.deleteMany();
-
-    const cat = await categoryRepository.create({
-      name: 'Test Category',
-      slug: 'test-category',
-    });
-    categoryId = cat.id;
+    try {
+      await prisma.product.deleteMany();
+      await prisma.category.deleteMany();
+    } catch (e) {}
   });
 
   afterAll(async () => {
     await prisma.$disconnect();
   });
 
+  const setupPrerequisites = async () => {
+    const slug = `cat-${Date.now()}`;
+    const cat = await categoryRepository.create({
+      name: 'Test Category',
+      slug: slug,
+    });
+    return cat.id;
+  };
+
   it('should create a new product', async () => {
+    const catId = await setupPrerequisites();
+    const sku = `SKU-${Date.now()}`;
     const data = {
       name: 'Test Product',
-      slug: 'test-product',
+      slug: `test-product-${Date.now()}`,
       description: 'A great product',
       price: 99.99,
-      sku: 'TP-001',
+      sku: sku,
       stockQuantity: 10,
       vendorId: 'vendor-123',
-      categoryId: categoryId,
+      categoryId: catId,
     };
 
     const product = await productRepository.create(data);
@@ -44,10 +51,21 @@ describe('Product Repository', () => {
   });
 
   it('should find a product by ID', async () => {
-    const existing = await prisma.product.findUnique({ where: { sku: 'TP-001' } });
-    const product = await productRepository.findById(existing!.id);
+    const catId = await setupPrerequisites();
+    const sku = `SKU-ID-${Date.now()}`;
+    const existing = await prisma.product.create({
+      data: {
+        name: 'Find Me',
+        slug: `find-me-${Date.now()}`,
+        price: 10,
+        sku: sku,
+        vendorId: 'v1',
+        categoryId: catId
+      }
+    });
+    const product = await productRepository.findById(existing.id);
 
-    expect(product?.id).toBe(existing!.id);
+    expect(product?.id).toBe(existing.id);
     expect(product?.category).toBeDefined();
   });
 
@@ -58,17 +76,39 @@ describe('Product Repository', () => {
   });
 
   it('should update a product', async () => {
-    const existing = await prisma.product.findUnique({ where: { sku: 'TP-001' } });
-    const updated = await productRepository.update(existing!.id, { stockQuantity: 20 });
+    const catId = await setupPrerequisites();
+    const sku = `SKU-UP-${Date.now()}`;
+    const existing = await prisma.product.create({
+      data: {
+        name: 'Update Me',
+        slug: `update-me-${Date.now()}`,
+        price: 10,
+        sku: sku,
+        vendorId: 'v1',
+        categoryId: catId
+      }
+    });
+    const updated = await productRepository.update(existing.id, { stockQuantity: 20 });
 
     expect(updated.stockQuantity).toBe(20);
   });
 
   it('should delete a product', async () => {
-    const target = await prisma.product.findUnique({ where: { sku: 'TP-001' } });
-    await productRepository.delete(target!.id);
+    const catId = await setupPrerequisites();
+    const sku = `SKU-DEL-${Date.now()}`;
+    const target = await prisma.product.create({
+      data: {
+        name: 'Delete Me',
+        slug: `delete-me-${Date.now()}`,
+        price: 10,
+        sku: sku,
+        vendorId: 'v1',
+        categoryId: catId
+      }
+    });
+    await productRepository.delete(target.id);
 
-    const check = await prisma.product.findUnique({ where: { id: target!.id } });
+    const check = await prisma.product.findUnique({ where: { id: target.id } });
     expect(check).toBeNull();
   });
 });

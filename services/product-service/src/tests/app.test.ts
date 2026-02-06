@@ -10,7 +10,7 @@ describe('App Scaffolding', () => {
   });
 
   it('should return 200 for ping', async () => {
-    const res = await request(app).get('/api/v1/products/ping');
+    const res = await request(app).get('/api/v1/ping');
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Product Service is alive');
   });
