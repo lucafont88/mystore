@@ -36,10 +36,10 @@
 - [x] Task: Implement Category Controllers & Routes (Admin) (b358e10)
     - [x] Write Tests: Create integration tests for Category management endpoints.
     - [x] Implement: Create `category.controller.ts` and define routes.
-- [ ] Task: Implement Public Catalog Endpoints
-    - [ ] Write Tests: Create integration tests for listing, searching, and detailing products.
-    - [ ] Implement: Add public routes for paginated listing and searching (using ILIKE).
-    - [ ] Implement: Add public routes for fetching category tree.
+- [x] Task: Implement Public Catalog Endpoints (19c318d)
+    - [x] Write Tests: Create integration tests for listing, searching, and detailing products.
+    - [x] Implement: Add public routes for paginated listing and searching (using ILIKE).
+    - [x] Implement: Add public routes for fetching category tree.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Category Management & Public Catalog' (Protocol in workflow.md)
 
 ## Phase 5: API Gateway Integration & Final E2E
