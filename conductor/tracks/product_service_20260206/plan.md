@@ -12,7 +12,7 @@
     - [x] Run initial migration to create the `products_db` database and tables.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Scaffolding' (Protocol in workflow.md)
 
-## Phase 2: Core Data Models & Repositories
+## Phase 2: Core Data Models & Repositories [checkpoint: a677dbd]
 - [x] Task: Implement Category Repository (37c57de)
     - [x] Write Tests: Create unit tests for Category CRUD operations including tree structure support.
     - [x] Implement: Create `category.repository.ts` using Prisma.
@@ -20,7 +20,7 @@
     - [x] Write Tests: Create unit tests for Product CRUD operations.
     - [x] Implement: Create `product.repository.ts` using Prisma.
     - [x] Implement: Add automatic slug generation logic.
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Core Data Models & Repositories' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Core Data Models & Repositories' (Protocol in workflow.md)
 
 ## Phase 3: Product Management Logic (Vendor & Admin)
 - [ ] Task: Implement Product Service Logic
