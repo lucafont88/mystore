@@ -3,8 +3,8 @@
 ## Phase 1: Dockerfile Implementation
 - [x] Task: Create Dockerfile for `api-gateway`. (ce24cda)
     - [x] Implement: Multi-stage build (Builder stage: pnpm install, build; Production stage: node:20-alpine, copy dist/modules).
-- [ ] Task: Create Dockerfile for `auth-service`.
-    - [ ] Implement: Multi-stage build (Builder stage: pnpm install, prisma generate, build; Production stage: node:20-alpine, copy dist/modules/prisma).
+- [x] Task: Create Dockerfile for `auth-service`. (7f0af65)
+    - [x] Implement: Multi-stage build (Builder stage: pnpm install, prisma generate, build; Production stage: node:20-alpine, copy dist/modules/prisma).
 - [ ] Task: Create Dockerfile for `product-service`.
     - [ ] Implement: Multi-stage build (Builder stage: pnpm install, prisma generate, build; Production stage: node:20-alpine, copy dist/modules/prisma).
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Dockerfile Implementation' (Protocol in workflow.md)
