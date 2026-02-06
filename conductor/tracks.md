@@ -8,7 +8,3 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/init_microservices_auth_20260205/](./tracks/init_microservices_auth_20260205/)*
 
 
----
-
-- [~] **Track: Containerize the microservices (Auth, Product, API Gateway) using multi-stage Dockerfiles and orchestrate the entire stack with Docker Compose.**
-*Link: [./tracks/docker_service_20260206/](./tracks/docker_service_20260206/)*
