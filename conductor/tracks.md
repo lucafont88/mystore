@@ -9,5 +9,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Implement the Product Service to manage categories and products for vendors and admins, including public search and catalog browsing through the API Gateway.**
+- [x] **Track: Implement the Product Service to manage categories and products for vendors and admins, including public search and catalog browsing through the API Gateway.**
 *Link: [./tracks/product_service_20260206/](./tracks/product_service_20260206/)*
