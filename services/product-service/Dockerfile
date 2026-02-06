@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
 
 # Install pnpm
 RUN npm install -g pnpm@10.28.2
@@ -22,11 +22,14 @@ COPY services/product-service ./services/product-service
 
 # Build Product Service
 WORKDIR /app/services/product-service
-RUN pnpm prisma:generate
+RUN pnpm prisma generate
 RUN pnpm build
 
 # Stage 2: Production
-FROM node:20-alpine
+FROM node:20
+
+# Install openssl
+RUN apt-get update -y && apt-get install -y openssl
 
 WORKDIR /app
 
@@ -42,9 +45,10 @@ COPY --from=builder /app/services/product-service/dist ./services/product-servic
 COPY --from=builder /app/services/product-service/prisma ./services/product-service/prisma
 
 # Install production dependencies only
-RUN pnpm install --prod --frozen-lockfile --filter product-service...
+RUN pnpm install --frozen-lockfile --filter product-service...
 
 WORKDIR /app/services/product-service
+RUN pnpm prisma generate
 
 EXPOSE 3002
 

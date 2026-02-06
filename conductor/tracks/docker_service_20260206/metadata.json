@@ -1,8 +1,0 @@
-{
-  "track_id": "docker_service_20260206",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-02-06T15:30:00Z",
-  "updated_at": "2026-02-06T15:30:00Z",
-  "description": "Containerize the microservices (Auth, Product, API Gateway) using multi-stage Dockerfiles and orchestrate the entire stack with Docker Compose."
-}
