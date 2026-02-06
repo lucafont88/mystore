@@ -42,11 +42,11 @@
     - [x] Implement: Add public routes for fetching category tree.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Category Management & Public Catalog' (Protocol in workflow.md)
 
-## Phase 5: API Gateway Integration & Final E2E
+## Phase 5: API Gateway Integration & Final E2E [checkpoint: 6dcf614]
 - [x] Task: Connect Gateway to Product Service (5dcace3)
     - [x] Update API Gateway routing strategy to forward `/api/v1/products/*` to Product Service.
     - [x] Add `PRODUCT_SERVICE_URL` to root `.env`.
 - [x] Task: Final System Integration Test (5dcace3)
     - [x] Write Tests: Perform a manual E2E test through the Gateway: Login as Vendor -> Create Product -> Search as Guest -> Update as Vendor.
     - [x] Verify: Ensure RBAC is enforced (e.g., Guest cannot create product).
-- [~] Task: Conductor - User Manual Verification 'Phase 5: API Gateway Integration & Final E2E' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: API Gateway Integration & Final E2E' (Protocol in workflow.md)
