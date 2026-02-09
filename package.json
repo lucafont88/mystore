@@ -14,7 +14,8 @@
     "monitoring:up": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d",
     "monitoring:down": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml down",
     "monitoring:logs": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml logs -f",
-    "dev:full": "pnpm monitoring:up && pnpm dev"
+    "dev:full": "pnpm monitoring:up && pnpm dev",
+    "traffic:gen": "node scripts/generate-traffic.js"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "@types/node": "^25.2.0",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
+    "axios": "^1.13.5",
     "concurrently": "^9.2.1",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9.39.2",
