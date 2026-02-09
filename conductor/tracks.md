@@ -17,3 +17,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Implement a comprehensive observability stack (LGTM: Loki, Grafana, Tempo, Prometheus) for the e-commerce microservices architecture.**
   *Link: [./archive/observability_20260209/](./archive/observability_20260209/)*
+- [~] **Track: Refactor the observability module in @ecommerce/shared from JavaScript to native TypeScript with strong typing and consolidated exports.**
+  *Link: [./tracks/observability_ts_refactor_20260209/](./tracks/observability_ts_refactor_20260209/)*
