@@ -25,9 +25,10 @@
 
 ## Observability (LGTM Stack)
 - **Logging:** Pino (structured JSON, TypeScript), Loki, Promtail
-- **Metrics:** prom-client (Node.js, TypeScript), Prometheus
+- **Metrics:** OpenTelemetry Metrics SDK (TypeScript), Prometheus
 - **Tracing:** OpenTelemetry (OTel SDK, TypeScript), Tempo
-- **Visualization:** Grafana
+- **Visualization:** Grafana (correlated Trace-Log-Metrics)
+- **Collector:** OpenTelemetry Collector (centralized, persistent queues)
 
 ## Architecture
 - **Pattern:** Microservices
