@@ -34,12 +34,12 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure & Collector Setup' (Protocol in workflow.md)
 
 ## Phase 3: Service Integration & Resilience Validation
-- [ ] Task: Integrate API Gateway
-    - [ ] Update: `app.ts` to initialize observability as the first execution step.
-    - [ ] Implement: Graceful shutdown logic to flush OTel buffers.
-- [ ] Task: Integrate Auth and Product Services
-    - [ ] Apply the same initialization and middleware patterns to both services.
-- [ ] Task: End-to-End Resilience Test
-    - [ ] Write Tests: Verify that telemetry is buffered and successfully delivered after a 60s Collector restart.
-    - [ ] Verify: Confirm distributed traces capture RabbitMQ and Prisma (PG) spans.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Service Integration & Resilience Validation' (Protocol in workflow.md)
+- [x] Task: Integrate API Gateway 40b35be
+    - [x] Update: `app.ts` to initialize observability as the first execution step.
+    - [x] Implement: Graceful shutdown logic to flush OTel buffers.
+- [x] Task: Integrate Auth and Product Services 61ee4b4
+    - [x] Apply the same initialization and middleware patterns to both services.
+- [x] Task: End-to-End Resilience Test 5334f63
+    - [x] Write Tests: Verify that telemetry is buffered and successfully delivered after a 60s Collector restart.
+    - [x] Verify: Confirm distributed traces capture RabbitMQ and Prisma (PG) spans.
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Service Integration & Resilience Validation' (Protocol in workflow.md)
