@@ -44,6 +44,9 @@ importers:
 
   services/api-gateway:
     dependencies:
+      '@ecommerce/shared':
+        specifier: workspace:*
+        version: link:../../shared
       cors:
         specifier: ^2.8.6
         version: 2.8.6
@@ -75,9 +78,21 @@ importers:
       '@types/node':
         specifier: ^25.2.0
         version: 25.2.0
+      '@types/supertest':
+        specifier: ^6.0.3
+        version: 6.0.3
+      jest:
+        specifier: ^30.2.0
+        version: 30.2.0(@types/node@25.2.0)(ts-node@10.9.2(@types/node@25.2.0)(typescript@5.9.3))
       nodemon:
         specifier: ^3.1.11
         version: 3.1.11
+      supertest:
+        specifier: ^7.2.2
+        version: 7.2.2
+      ts-jest:
+        specifier: ^29.4.6
+        version: 29.4.6(@babel/core@7.29.0)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@30.2.0(@babel/core@7.29.0))(jest-util@30.2.0)(jest@30.2.0(@types/node@25.2.0)(ts-node@10.9.2(@types/node@25.2.0)(typescript@5.9.3)))(typescript@5.9.3)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@25.2.0)(typescript@5.9.3)
@@ -87,6 +102,9 @@ importers:
 
   services/auth-service:
     dependencies:
+      '@ecommerce/shared':
+        specifier: workspace:*
+        version: link:../../shared
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -163,6 +181,9 @@ importers:
 
   services/product-service:
     dependencies:
+      '@ecommerce/shared':
+        specifier: workspace:*
+        version: link:../../shared
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)

@@ -39,20 +39,20 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure Configuration & Docker Compose' (Protocol in workflow.md)
 
 ## Phase 3: Service Integration
-- [ ] Task: Integrate Observability into API Gateway
-    - [ ] Update `services/api-gateway/package.json` to depend on `@ecommerce/shared`.
-    - [ ] Update `services/api-gateway/src/app.ts` (or .js) to initialize observability first.
-    - [ ] Implement: `/metrics` and `/health` endpoints.
-    - [ ] Verify: Manual check via `curl localhost:3000/metrics`.
-- [ ] Task: Integrate Observability into Auth Service
-    - [ ] Update `services/auth-service/package.json`.
-    - [ ] Update `services/auth-service/src/app.ts` to initialize observability.
-    - [ ] Implement: `/metrics` and `/health` endpoints.
-- [ ] Task: Integrate Observability into Product Service
-    - [ ] Update `services/product-service/package.json`.
-    - [ ] Update `services/product-service/src/app.ts` to initialize observability.
-    - [ ] Implement: `/metrics` and `/health` endpoints.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Service Integration' (Protocol in workflow.md)
+- [x] Task: Integrate Observability into API Gateway 57a2960
+    - [x] Update `services/api-gateway/package.json` to depend on `@ecommerce/shared`.
+    - [x] Update `services/api-gateway/src/app.ts` (or .js) to initialize observability first.
+    - [x] Implement: `/metrics` and `/health` endpoints.
+    - [x] Verify: Manual check via `curl localhost:3000/metrics`.
+- [x] Task: Integrate Observability into Auth Service f9494a2
+    - [x] Update `services/auth-service/package.json`.
+    - [x] Update `services/auth-service/src/app.ts` to initialize observability.
+    - [x] Implement: `/metrics` and `/health` endpoints.
+- [x] Task: Integrate Observability into Product Service 391d739
+    - [x] Update `services/product-service/package.json`.
+    - [x] Update `services/product-service/src/app.ts` to initialize observability.
+    - [x] Implement: `/metrics` and `/health` endpoints.
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Service Integration' (Protocol in workflow.md)
 
 ## Phase 4: Final Validation & Dashboards
 - [ ] Task: Final End-to-End Verification
