@@ -23,6 +23,12 @@
     - **Staging/Mid-Scale:** Docker Swarm
     - **Production:** Kubernetes
 
+## Observability (LGTM Stack)
+- **Logging:** Pino (structured JSON), Loki, Promtail
+- **Metrics:** prom-client (Node.js), Prometheus
+- **Tracing:** OpenTelemetry (OTel SDK), Tempo
+- **Visualization:** Grafana
+
 ## Architecture
 - **Pattern:** Microservices
 - **Communication:** Asynchronous messaging via RabbitMQ
