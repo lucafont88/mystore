@@ -1,10 +1,11 @@
-const pino = require('pino');
-const api = require('@opentelemetry/api');
-const { logger } = require('../observability/logger');
+import pino from 'pino';
+import * as api from '@opentelemetry/api';
+import { logger } from '../observability/logger';
+import { PassThrough } from 'stream';
 
 // Initialize OTel context manager and provider for testing
-const { BasicTracerProvider } = require('@opentelemetry/sdk-trace-base');
-const { AsyncHooksContextManager } = require('@opentelemetry/context-async-hooks');
+import { BasicTracerProvider } from '@opentelemetry/sdk-trace-base';
+import { AsyncHooksContextManager } from '@opentelemetry/context-async-hooks';
 
 const provider = new BasicTracerProvider();
 api.trace.setGlobalTracerProvider(provider);
@@ -18,16 +19,16 @@ describe('Logger', () => {
     const traceId = '1234567890abcdef1234567890abcdef';
     const spanId = '1234567890abcdef';
     
-    const spanContext = {
+    const spanContext: api.SpanContext = {
       traceId,
       spanId,
       traceFlags: api.TraceFlags.SAMPLED,
     };
 
-    const stream = new (require('stream').PassThrough)();
+    const stream = new PassThrough();
     const testLogger = pino({
         formatters: {
-            log(object) {
+            log(object: Record<string, unknown>) {
                 const span = api.trace.getSpan(api.context.active());
                 if (!span) return object;
                 const spanContext = span.spanContext();

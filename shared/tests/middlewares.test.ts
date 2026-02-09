@@ -1,11 +1,11 @@
-const express = require('express');
-const request = require('supertest');
-const { requestLogger } = require('../observability/middlewares/requestLogger');
-const { metricsMiddleware } = require('../observability/middlewares/metricsMiddleware');
-const { register } = require('../observability/metrics');
+import express from 'express';
+import request from 'supertest';
+import { requestLogger } from '../observability/middlewares/requestLogger';
+import { metricsMiddleware } from '../observability/middlewares/metricsMiddleware';
+import { register } from '../observability/metrics';
 
 describe('Middlewares', () => {
-  let app;
+  let app: express.Application;
 
   beforeEach(() => {
     register.resetMetrics();
@@ -33,7 +33,7 @@ describe('Middlewares', () => {
     
     const metrics = await register.metrics();
     expect(metrics).toContain('http_requests_total');
-    // Ensure route is normalized (though metricsMiddleware implementation will define HOW it normalizes)
+    // Ensure route is normalized
     expect(metrics).toContain('route="/test/:id"');
   });
 });
