@@ -8,7 +8,6 @@ groups:
           severity: critical
         annotations:
           summary: "Service {{ $labels.job }} is down"
-          description: "Service {{ $labels.job }} has been down for more than 1 minute."
 
       - alert: HighErrorRate
         expr: rate(http_requests_total{status_code=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
@@ -16,23 +15,28 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High error rate on {{ $labels.job }}"
-          description: "Error rate for {{ $labels.job }} is above 5% for the last 5 minutes."
+          summary: "High error rate on {{ $labels.service }}"
 
-      - alert: HighLatency
-        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, job)) > 1
+      - alert: OTelCollectorDown
+        expr: up{job="otel-collector"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "OTel Collector is down"
+
+      - alert: OTelCollectorQueueFilling
+        expr: otelcol_exporter_queue_size > 4000
         for: 5m
         labels:
           severity: warning
         annotations:
-          summary: "High latency on {{ $labels.job }}"
-          description: "95th percentile latency for {{ $labels.job }} is above 1s for the last 5 minutes."
+          summary: "OTel Collector exporter queue is filling up"
 
-      - alert: HighMemoryUsage
-        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 < 20
-        for: 5m
+      - alert: OTelCollectorDroppedData
+        expr: rate(otelcol_processor_dropped_spans[1m]) > 0
+        for: 1m
         labels:
-          severity: warning
+          severity: critical
         annotations:
-          summary: "High memory usage"
-          description: "Memory usage is above 80% for the last 5 minutes."
+          summary: "OTel Collector is dropping data"
