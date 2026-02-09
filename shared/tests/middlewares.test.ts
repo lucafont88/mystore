@@ -9,7 +9,10 @@ describe('Express Middlewares', () => {
 
   beforeAll(() => {
     // Initialize metrics once
-    initMetrics({ serviceName: 'test-service' });
+    initMetrics({ 
+        serviceName: 'test-service',
+        otlpEndpoint: 'http://localhost:4318',
+    });
   });
 
   beforeEach(() => {
@@ -34,8 +37,6 @@ describe('Express Middlewares', () => {
   });
 
   it('should increment request counter', async () => {
-    // This is hard to test directly without checking internal state or mocking
-    // but we can ensure the middleware doesn't crash
     const response = await request(app).get('/test');
     expect(response.status).toBe(200);
     expect(httpMetrics?.requestCounter).toBeDefined();

@@ -4,7 +4,7 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
-import { trace, Tracer, Span, Context } from '@opentelemetry/api';
+import { trace, context, Tracer, Span } from '@opentelemetry/api';
 import { ObservabilityConfig } from './types';
 
 let sdk: NodeSDK | null = null;
@@ -62,7 +62,7 @@ export function getTracer(name: string, version?: string): Tracer {
 }
 
 export function getActiveSpan(): Span | undefined {
-  return trace.getSpan(trace.active());
+  return trace.getSpan(context.active());
 }
 
 export function createSpan<T>(name: string, fn: (span: Span) => T): T {
