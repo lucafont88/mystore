@@ -14,5 +14,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Containerize the microservices (Auth, Product, API Gateway) using multi-stage Dockerfiles and orchestrate the entire stack with Docker Compose.**
   *Link: [./archive/docker_service_20260206/](./archive/docker_service_20260206/)*
+
 - [x] **Track: Implement a comprehensive observability stack (LGTM: Loki, Grafana, Tempo, Prometheus) for the e-commerce microservices architecture.**
-  *Link: [./tracks/observability_20260209/](./tracks/observability_20260209/)*
+  *Link: [./archive/observability_20260209/](./archive/observability_20260209/)*
