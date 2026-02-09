@@ -1,13 +1,16 @@
-const pino = require('pino');
-const api = require('@opentelemetry/api');
+import pino, { Logger } from 'pino';
+import * as api from '@opentelemetry/api';
 
-const logger = pino({
+/**
+ * Pino Logger configured with OpenTelemetry context correlation.
+ */
+export const logger: Logger = pino({
   level: process.env.LOG_LEVEL || 'info',
   formatters: {
-    level: (label) => {
+    level: (label: string) => {
       return { level: label };
     },
-    log(object) {
+    log(object: Record<string, unknown>) {
       const span = api.trace.getSpan(api.context.active());
       if (!span) return object;
 
@@ -31,5 +34,3 @@ const logger = pino({
     },
   }),
 });
-
-module.exports = { logger };
