@@ -21,17 +21,17 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Shared Package Observability SDK' (Protocol in workflow.md)
 
 ## Phase 2: Infrastructure & Collector Setup
-- [ ] Task: Configure OpenTelemetry Collector
-    - [ ] Implement: `otel-collector-config.yaml` with `file_storage` extension and persistent `sending_queue`.
-- [ ] Task: Configure Backend Storage & Alerts
-    - [ ] Implement: `prometheus.yml` (Remote Write) and `alerts.yml` (Collector health rules).
-    - [ ] Implement: `loki-config.yml` and `tempo-config.yml` for local persistent storage.
-- [ ] Task: Configure Grafana Provisioning
-    - [ ] Implement: `datasources.yml` with Trace-to-Log and Trace-to-Metrics linking.
-- [ ] Task: Docker Compose Orchestration
-    - [ ] Implement: `docker-compose.monitoring.yml` with persistent volumes (`otel_storage`, etc.).
-    - [ ] Update: Root `package.json` with monitoring lifecycle scripts.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure & Collector Setup' (Protocol in workflow.md)
+- [x] Task: Configure OpenTelemetry Collector 7b4380e
+    - [x] Implement: `otel-collector-config.yaml` with `file_storage` extension and persistent `sending_queue`.
+- [x] Task: Configure Backend Storage & Alerts bdc992c
+    - [x] Implement: `prometheus.yml` (Remote Write) and `alerts.yml` (Collector health rules).
+    - [x] Implement: `loki-config.yml` and `tempo-config.yml` for local persistent storage.
+- [x] Task: Configure Grafana Provisioning 3a1f518
+    - [x] Implement: `datasources.yml` with Trace-to-Log and Trace-to-Metrics linking.
+- [x] Task: Docker Compose Orchestration 2c3a9d6
+    - [x] Implement: `docker-compose.monitoring.yml` with persistent volumes (`otel_storage`, etc.).
+    - [x] Update: Root `package.json` with monitoring lifecycle scripts.
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure & Collector Setup' (Protocol in workflow.md)
 
 ## Phase 3: Service Integration & Resilience Validation
 - [ ] Task: Integrate API Gateway
