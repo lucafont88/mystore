@@ -1,5 +1,13 @@
+// IMPORTANTE: initObservability DEVE essere chiamato PRIMA di qualsiasi altro import
 import { initObservability } from '@ecommerce/shared';
-const { metricsHandler, middlewares } = initObservability('auth-service');
+
+const { logger, middlewares, shutdown } = initObservability({
+  serviceName: 'auth-service',
+  serviceVersion: '1.0.0',
+  environment: process.env.NODE_ENV || 'development',
+  otlpEndpoint: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'http://ecommerce-otel-collector:4318',
+  logLevel: process.env.LOG_LEVEL || 'info',
+});
 
 import express, { Request, Response } from 'express';
 import path from 'path';
@@ -15,16 +23,13 @@ const app: express.Application = express();
 const PORT = process.env.AUTH_SERVICE_PORT || 3001;
 
 // Observability Middlewares
-app.use(middlewares.metricsMiddleware);
+app.use(middlewares.metrics);
 app.use(middlewares.requestLogger);
 
 // Middlewares
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-
-// Metrics endpoint
-app.get('/metrics', metricsHandler);
 
 // Routes
 app.use('/api/v1', routes);
@@ -40,8 +45,16 @@ app.get('/api/v1/auth', (req: Request, res: Response) => {
 });
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Auth Service is running on port ${PORT}`);
+  const server = app.listen(PORT, () => {
+    logger.info(`Auth Service is running on port ${PORT}`);
+  });
+
+  process.on('SIGTERM', async () => {
+    logger.info('SIGTERM received, shutting down gracefully');
+    server.close(async () => {
+      await shutdown();
+      process.exit(0);
+    });
   });
 }
 
