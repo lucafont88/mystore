@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 import productRepository from '../repositories/product.repository';
-import { Product, Prisma } from '@prisma/client';
+import { Product, Prisma } from '../generated/client';
 
 export class ProductService {
   async createProduct(data: any): Promise<Product> {

@@ -26,11 +26,8 @@ processors:
 exporters:
   prometheusremotewrite:
     endpoint: "http://ecommerce-prometheus:9090/api/v1/write"
-    sending_queue:
-      enabled: true
-      num_consumers: 10
-      queue_size: 5000
-      storage: file_storage/metrics
+    # Rimosso sending_queue perché causa errori di decoding su questo specifico exporter
+    # in questa versione del collector.
     retry_on_failure:
       enabled: true
       initial_interval: 5s

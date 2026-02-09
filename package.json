@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"pnpm --filter api-gateway dev\" \"pnpm --filter auth-service dev\"",
+    "dev": "concurrently \"pnpm --filter api-gateway dev\" \"pnpm --filter auth-service dev\" \"pnpm --filter product-service dev\"",
     "auth:migrate": "dotenv -e .env -- pnpm --filter auth-service exec prisma migrate dev",
     "product:migrate": "dotenv -e .env -- pnpm --filter product-service exec prisma migrate dev",
     "infra:up": "docker-compose up -d",
@@ -15,7 +15,7 @@
     "monitoring:down": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml down",
     "monitoring:logs": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml logs -f",
     "monitoring:restart": "pnpm monitoring:down && pnpm monitoring:up",
-    "dev:full": "pnpm monitoring:up && sleep 15 && pnpm dev",
+    "dev:full": "pnpm monitoring:up && node -e \"setTimeout(() => {}, 15000)\" && pnpm dev",
     "traffic:gen": "node scripts/generate-traffic.js",
     "build:shared": "pnpm --filter @ecommerce/shared build"
   },
