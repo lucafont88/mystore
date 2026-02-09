@@ -38,7 +38,7 @@
     - [x] Implement: Add `monitoring` scripts to root `package.json`.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure Configuration & Docker Compose' (Protocol in workflow.md)
 
-## Phase 3: Service Integration
+## Phase 3: Service Integration [checkpoint: 0acd567]
 - [x] Task: Integrate Observability into API Gateway 57a2960
     - [x] Update `services/api-gateway/package.json` to depend on `@ecommerce/shared`.
     - [x] Update `services/api-gateway/src/app.ts` (or .js) to initialize observability first.
@@ -52,7 +52,7 @@
     - [x] Update `services/product-service/package.json`.
     - [x] Update `services/product-service/src/app.ts` to initialize observability.
     - [x] Implement: `/metrics` and `/health` endpoints.
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Service Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Service Integration' (Protocol in workflow.md)
 
 ## Phase 4: Final Validation & Dashboards
 - [ ] Task: Final End-to-End Verification
