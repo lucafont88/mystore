@@ -20,7 +20,7 @@
     - [x] Implement: `init.ts` (orchestrating startup order) and `index.ts` (consolidated exports).
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Shared Package Observability SDK' (Protocol in workflow.md)
 
-## Phase 2: Infrastructure & Collector Setup
+## Phase 2: Infrastructure & Collector Setup [checkpoint: 10d474a]
 - [x] Task: Configure OpenTelemetry Collector 7b4380e
     - [x] Implement: `otel-collector-config.yaml` with `file_storage` extension and persistent `sending_queue`.
 - [x] Task: Configure Backend Storage & Alerts bdc992c
@@ -31,7 +31,7 @@
 - [x] Task: Docker Compose Orchestration 2c3a9d6
     - [x] Implement: `docker-compose.monitoring.yml` with persistent volumes (`otel_storage`, etc.).
     - [x] Update: Root `package.json` with monitoring lifecycle scripts.
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure & Collector Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure & Collector Setup' (Protocol in workflow.md)
 
 ## Phase 3: Service Integration & Resilience Validation
 - [ ] Task: Integrate API Gateway
