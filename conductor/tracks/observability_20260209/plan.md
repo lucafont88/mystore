@@ -20,7 +20,7 @@
     - [x] Verify: Ensure the package builds/lints correctly within the pnpm workspace.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Shared Observability Module Implementation' (Protocol in workflow.md)
 
-## Phase 2: Infrastructure Configuration & Docker Compose
+## Phase 2: Infrastructure Configuration & Docker Compose [checkpoint: 125a76a]
 - [x] Task: Configure Prometheus & Alerting e195a6f
     - [x] Implement: `infrastructure/monitoring/prometheus/prometheus.yml` (Scrape jobs).
     - [x] Implement: `infrastructure/monitoring/prometheus/alerts.yml` (ServiceDown, HighErrorRate, HighLatency).
@@ -36,7 +36,7 @@
 - [x] Task: Docker Compose Orchestration 404b955
     - [x] Implement: `docker-compose.monitoring.yml` with all services and network configuration.
     - [x] Implement: Add `monitoring` scripts to root `package.json`.
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure Configuration & Docker Compose' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure Configuration & Docker Compose' (Protocol in workflow.md)
 
 ## Phase 3: Service Integration
 - [ ] Task: Integrate Observability into API Gateway
