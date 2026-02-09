@@ -4,7 +4,15 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+## Archived Tracks
+
 - [x] **Track: Initialize the microservices architecture, setup the API Gateway, and implement the Auth Service to support user registration and login with Role-Based Access Control (RBAC).**
-  *Link: [./tracks/init_microservices_auth_20260205/](./tracks/init_microservices_auth_20260205/)*
+  *Link: [./archive/init_microservices_auth_20260205/](./archive/init_microservices_auth_20260205/)*
 
+- [x] **Track: Implement the Product Service to manage categories and products for vendors and admins, including public search and catalog browsing through the API Gateway.**
+  *Link: [./archive/product_service_20260206/](./archive/product_service_20260206/)*
 
+- [x] **Track: Containerize the microservices (Auth, Product, API Gateway) using multi-stage Dockerfiles and orchestrate the entire stack with Docker Compose.**
+  *Link: [./archive/docker_service_20260206/](./archive/docker_service_20260206/)*
+- [~] **Track: Implement a comprehensive observability stack (LGTM: Loki, Grafana, Tempo, Prometheus) for the e-commerce microservices architecture.**
+  *Link: [./tracks/observability_20260209/](./tracks/observability_20260209/)*

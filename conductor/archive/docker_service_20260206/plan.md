@@ -21,7 +21,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Docker Compose Configuration' (Protocol in workflow.md)
 
 ## Phase 3: Final Verification & Cleanup
-- [~] Task: Integrated Container Test.
-    - [ ] Write Tests: Run `docker-compose up --build` and verify all services start.
-    - [ ] Verify: Execute health checks against port 3000 (Gateway) and verify it proxies to internal services.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Final Verification & Cleanup' (Protocol in workflow.md)
+- [x] Task: Integrated Container Test.
+    - [x] Write Tests: Run `docker-compose up --build` and verify all services start.
+    - [x] Verify: Execute health checks against port 3000 (Gateway) and verify it proxies to internal services.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Final Verification & Cleanup' (Protocol in workflow.md)
