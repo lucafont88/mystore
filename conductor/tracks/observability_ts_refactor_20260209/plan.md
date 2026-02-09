@@ -8,17 +8,17 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Environment & Build Setup' (Protocol in workflow.md)
 
 ## Phase 2: Core Module Refactoring
-- [ ] Task: Refactor Core Components to TS
-    - [ ] Convert `shared/observability/tracing.js` -> `tracing.ts`. Define types for SDK initialization.
-    - [ ] Convert `shared/observability/logger.js` -> `logger.ts`. Implement custom formatting logic with OTel types.
-    - [ ] Convert `shared/observability/metrics.js` -> `metrics.ts`. Define interfaces for business metrics and labels.
-- [ ] Task: Refactor Middlewares to TS
-    - [ ] Convert `shared/observability/middlewares/requestLogger.js` -> `requestLogger.ts`. Extend Express `Request` type.
-    - [ ] Convert `shared/observability/middlewares/metricsMiddleware.js` -> `metricsMiddleware.ts`.
-- [ ] Task: Consolidated Entry Point
-    - [ ] Create `shared/index.ts` exporting all observability components.
-    - [ ] Remove legacy `shared/index.js` and `shared/index.d.ts`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Module Refactoring' (Protocol in workflow.md)
+- [x] Task: Refactor Core Components to TS 1360928
+    - [x] Convert `shared/observability/tracing.js` -> `tracing.ts`. Define types for SDK initialization.
+    - [x] Convert `shared/observability/logger.js` -> `logger.ts`. Implement custom formatting logic with OTel types.
+    - [x] Convert `shared/observability/metrics.js` -> `metrics.ts`. Define interfaces for business metrics and labels.
+- [x] Task: Refactor Middlewares to TS be883eb
+    - [x] Convert `shared/observability/middlewares/requestLogger.js` -> `requestLogger.ts`. Extend Express `Request` type.
+    - [x] Convert `shared/observability/middlewares/metricsMiddleware.js` -> `metricsMiddleware.ts`.
+- [x] Task: Consolidated Entry Point 326c945
+    - [x] Create `shared/index.ts` exporting all observability components.
+    - [x] Remove legacy `shared/index.js` and `shared/index.d.ts`.
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Core Module Refactoring' (Protocol in workflow.md)
 
 ## Phase 3: Test Refactoring & Validation
 - [ ] Task: Convert Unit Tests to TS
