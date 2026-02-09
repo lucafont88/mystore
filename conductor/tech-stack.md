@@ -2,7 +2,7 @@
 
 ## Backend (Microservices)
 - **Runtime:** Node.js
-- **Language:** TypeScript
+- **Language:** TypeScript (ESM for shared, CommonJS for services)
 - **Framework:** Express.js (inferred standard for Node microservices)
 
 ## Frontend
@@ -24,9 +24,9 @@
     - **Production:** Kubernetes
 
 ## Observability (LGTM Stack)
-- **Logging:** Pino (structured JSON), Loki, Promtail
-- **Metrics:** prom-client (Node.js), Prometheus
-- **Tracing:** OpenTelemetry (OTel SDK), Tempo
+- **Logging:** Pino (structured JSON, TypeScript), Loki, Promtail
+- **Metrics:** prom-client (Node.js, TypeScript), Prometheus
+- **Tracing:** OpenTelemetry (OTel SDK, TypeScript), Tempo
 - **Visualization:** Grafana
 
 ## Architecture
