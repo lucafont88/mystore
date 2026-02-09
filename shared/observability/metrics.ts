@@ -1,55 +1,77 @@
-import { Registry, Counter, Histogram, Gauge, collectDefaultMetrics, CounterConfiguration, HistogramConfiguration, GaugeConfiguration } from 'prom-client';
-import { Request, Response } from 'express';
+import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
+import { Resource } from '@opentelemetry/resources';
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { Meter, Counter, Histogram, ObservableGauge, MetricOptions, UpDownCounter } from '@opentelemetry/api';
+import { ObservabilityConfig } from './types';
 
-export const register = new Registry();
+let meterProvider: MeterProvider | null = null;
+let meter: Meter | null = null;
 
-collectDefaultMetrics({ register });
-
-export const httpRequestsTotal = new Counter({
-  name: 'http_requests_total',
-  help: 'Total number of HTTP requests',
-  labelNames: ['method', 'route', 'status_code', 'service'],
-  registers: [register],
-});
-
-export const httpRequestDurationSeconds = new Histogram({
-  name: 'http_request_duration_seconds',
-  help: 'Duration of HTTP requests in seconds',
-  labelNames: ['method', 'route', 'service'],
-  buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10],
-  registers: [register],
-});
-
-export const httpRequestsInProgress = new Gauge({
-  name: 'http_requests_in_progress',
-  help: 'Number of HTTP requests currently in progress',
-  labelNames: ['service'],
-  registers: [register],
-});
-
-/**
- * Creates a new business metric and registers it to the global registry.
- * @param type - The type of metric (Counter, Histogram, Gauge).
- * @param config - The metric configuration.
- */
-export function createBusinessMetric(type: 'Counter' | 'Histogram' | 'Gauge', config: CounterConfiguration<string> | HistogramConfiguration<string> | GaugeConfiguration<string>): any {
-  const metricConfig = { ...config, registers: [register] };
-  switch (type) {
-    case 'Counter':
-      return new Counter(metricConfig as CounterConfiguration<string>);
-    case 'Histogram':
-      return new Histogram(metricConfig as HistogramConfiguration<string>);
-    case 'Gauge':
-      return new Gauge(metricConfig as GaugeConfiguration<string>);
-    default:
-      throw new Error(`Unsupported metric type: ${type}`);
-  }
+export interface HttpMetrics {
+  requestCounter: Counter;
+  durationHistogram: Histogram;
+  inProgressCounter: UpDownCounter;
 }
 
-/**
- * Express handler for the /metrics endpoint.
- */
-export const metricsHandler = async (_req: Request, res: Response): Promise<void> => {
-  res.set('Content-Type', register.contentType);
-  res.end(await register.metrics());
-};
+export let httpMetrics: HttpMetrics | null = null;
+
+export function initMetrics(config: ObservabilityConfig): MeterProvider {
+  const metricExporter = new OTLPMetricExporter({
+    url: `${config.otlpEndpoint}/v1/metrics`,
+    timeoutMillis: config.reliability?.exportTimeoutMillis || 30000,
+  });
+
+  const metricReader = new PeriodicExportingMetricReader({
+    exporter: metricExporter,
+    exportIntervalMillis: 60000, // Export every 60s
+    exportTimeoutMillis: 30000,
+  });
+
+  meterProvider = new MeterProvider({
+    resource: new Resource({
+      [SemanticResourceAttributes.SERVICE_NAME]: config.serviceName,
+      [SemanticResourceAttributes.SERVICE_VERSION]: config.serviceVersion || '1.0.0',
+      [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: config.environment || 'development',
+    }),
+    readers: [metricReader],
+  });
+
+  meter = meterProvider.getMeter(config.serviceName, config.serviceVersion);
+
+  // Initialize standard HTTP metrics
+  httpMetrics = {
+    requestCounter: meter.createCounter('http_requests_total', {
+      description: 'Total number of HTTP requests',
+    }),
+    durationHistogram: meter.createHistogram('http_request_duration_seconds', {
+      description: 'Duration of HTTP requests in seconds',
+      unit: 's',
+    }),
+    inProgressCounter: meter.createUpDownCounter('http_requests_in_progress', {
+      description: 'Number of HTTP requests currently in progress',
+    }),
+  };
+
+  return meterProvider;
+}
+
+export function createCounter(name: string, options?: MetricOptions): Counter {
+  if (!meter) throw new Error('Metrics not initialized. Call initMetrics first.');
+  return meter.createCounter(name, options);
+}
+
+export function createHistogram(name: string, options?: MetricOptions): Histogram {
+  if (!meter) throw new Error('Metrics not initialized. Call initMetrics first.');
+  return meter.createHistogram(name, options);
+}
+
+export function createGauge(name: string, options?: MetricOptions): ObservableGauge {
+  if (!meter) throw new Error('Metrics not initialized. Call initMetrics first.');
+  return meter.createObservableGauge(name, options);
+}
+
+export function createUpDownCounter(name: string, options?: MetricOptions): UpDownCounter {
+  if (!meter) throw new Error('Metrics not initialized. Call initMetrics first.');
+  return meter.createUpDownCounter(name, options);
+}
