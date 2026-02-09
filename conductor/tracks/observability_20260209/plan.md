@@ -54,10 +54,10 @@
     - [x] Implement: `/metrics` and `/health` endpoints.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Service Integration' (Protocol in workflow.md)
 
-## Phase 4: Final Validation & Dashboards
+## Phase 4: Final Validation & Dashboards [checkpoint: f23222f]
 - [x] Task: Final End-to-End Verification e97ebba
     - [x] Write Tests: Create a script or manual procedure to generate traffic (success/fail) across all services.
     - [x] Verify: Check Grafana (`http://localhost:3001`) for data flow in "Microservices Overview".
     - [x] Verify: Confirm Alerts fire (e.g., stop a container to trigger ServiceDown).
     - [x] Verify: Trace a request from Gateway -> Auth -> DB in Tempo.
-- [~] Task: Conductor - User Manual Verification 'Phase 4: Final Validation & Dashboards' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Final Validation & Dashboards' (Protocol in workflow.md)
