@@ -31,7 +31,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Test Refactoring & Validation' (Protocol in workflow.md)
 
 ## Phase 4: Service Integration Update
-- [ ] Task: Update Microservices Imports
+- [~] Task: Update Microservices Imports
     - [ ] Update `api-gateway`, `auth-service`, and `product-service` to use the consolidated `import { ... } from '@ecommerce/shared'` syntax.
     - [ ] Verify: Run builds for all services to ensure type compatibility.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Service Integration Update' (Protocol in workflow.md)
