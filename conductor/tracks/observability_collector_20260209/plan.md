@@ -33,7 +33,7 @@
     - [x] Update: Root `package.json` with monitoring lifecycle scripts.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure & Collector Setup' (Protocol in workflow.md)
 
-## Phase 3: Service Integration & Resilience Validation
+## Phase 3: Service Integration & Resilience Validation [checkpoint: 3755a9b]
 - [x] Task: Integrate API Gateway 40b35be
     - [x] Update: `app.ts` to initialize observability as the first execution step.
     - [x] Implement: Graceful shutdown logic to flush OTel buffers.
@@ -42,4 +42,4 @@
 - [x] Task: End-to-End Resilience Test 5334f63
     - [x] Write Tests: Verify that telemetry is buffered and successfully delivered after a 60s Collector restart.
     - [x] Verify: Confirm distributed traces capture RabbitMQ and Prisma (PG) spans.
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Service Integration & Resilience Validation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Service Integration & Resilience Validation' (Protocol in workflow.md)
