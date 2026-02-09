@@ -2,6 +2,7 @@
   "name": "@ecommerce/shared",
   "version": "1.0.0",
   "main": "index.js",
+  "types": "index.d.ts",
   "license": "ISC",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest"
