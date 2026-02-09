@@ -14,8 +14,10 @@
     "monitoring:up": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d",
     "monitoring:down": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml down",
     "monitoring:logs": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml logs -f",
-    "dev:full": "pnpm monitoring:up && pnpm dev",
-    "traffic:gen": "node scripts/generate-traffic.js"
+    "monitoring:restart": "pnpm monitoring:down && pnpm monitoring:up",
+    "dev:full": "pnpm monitoring:up && sleep 15 && pnpm dev",
+    "traffic:gen": "node scripts/generate-traffic.js",
+    "build:shared": "pnpm --filter @ecommerce/shared build"
   },
   "keywords": [],
   "author": "",

@@ -1,108 +1,130 @@
 services:
+  # OpenTelemetry Collector - COMPONENTE CENTRALE
+  # ⭐ Con persistenza su disco per alta affidabilità
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.96.0
+    container_name: ecommerce-otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    ports:
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "8888:8888"   # Prometheus metrics (collector self)
+      - "13133:13133" # Health check
+    volumes:
+      - ./infrastructure/monitoring/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+      - otel_storage:/var/lib/otel  # ⭐ PERSISTENZA per file_storage extension
+    networks:
+      - mystore-network
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:13133/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # Prometheus - Metrics Storage
   prometheus:
     image: prom/prometheus:v2.49.1
-    container_name: monitoring-prometheus
+    container_name: ecommerce-prometheus
     ports:
       - "9090:9090"
     volumes:
-      - ./infrastructure/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./infrastructure/monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml
+      - ./infrastructure/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./infrastructure/monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-remote-write-receiver'
     networks:
       - mystore-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
 
+  # Loki - Logs Storage
   loki:
     image: grafana/loki:2.9.4
-    container_name: monitoring-loki
+    container_name: ecommerce-loki
     ports:
       - "3100:3100"
     volumes:
-      - ./infrastructure/monitoring/loki/loki-config.yml:/etc/loki/local-config.yaml
+      - ./infrastructure/monitoring/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki_data:/loki
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - mystore-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3100/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
 
-  promtail:
-    image: grafana/promtail:2.9.4
-    container_name: monitoring-promtail
-    volumes:
-      - ./infrastructure/monitoring/promtail/promtail-config.yml:/etc/promtail/config.yml
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    command: -config.file=/etc/promtail/config.yml
-    networks:
-      - mystore-network
-
+  # Tempo - Traces Storage
   tempo:
     image: grafana/tempo:2.3.1
-    container_name: monitoring-tempo
-    command: ["-config.file=/etc/tempo.yaml"]
-    volumes:
-      - ./infrastructure/monitoring/tempo/tempo-config.yml:/etc/tempo.yaml
-      - tempo_data:/tmp/tempo
+    container_name: ecommerce-tempo
     ports:
-      - "3200:3200"
-      - "4317:4317"
-      - "4318:4318"
+      - "3200:3200"   # Tempo API
+    volumes:
+      - ./infrastructure/monitoring/tempo/tempo-config.yml:/etc/tempo/tempo.yaml:ro
+      - tempo_data:/tmp/tempo
+    command: -config.file=/etc/tempo/tempo.yaml
     networks:
       - mystore-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3200/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
 
+  # Grafana - Visualization
   grafana:
     image: grafana/grafana:10.3.1
-    container_name: monitoring-grafana
+    container_name: ecommerce-grafana
     ports:
       - "3001:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin123
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3001
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
     volumes:
-      - ./infrastructure/monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - ./infrastructure/monitoring/grafana/dashboards:/etc/grafana/dashboards
+      - ./infrastructure/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infrastructure/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
     networks:
       - mystore-network
-
-  postgres-exporter:
-    image: prometheuscommunity/postgres-exporter
-    container_name: monitoring-postgres-exporter
-    environment:
-      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@mystore-postgres:5432/auth_db?sslmode=disable"
     depends_on:
-      - postgres
-    networks:
-      - mystore-network
-
-  redis-exporter:
-    image: oliver006/redis_exporter
-    container_name: monitoring-redis-exporter
-    command: --redis.addr=redis://mystore-redis:6379
-    depends_on:
-      - redis
-    networks:
-      - mystore-network
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.2
-    container_name: monitoring-cadvisor
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    networks:
-      - mystore-network
-
-volumes:
-  prometheus_data:
-  tempo_data:
+      - prometheus
+      - loki
+      - tempo
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
 
 networks:
   mystore-network:
     external: true
+
+volumes:
+  prometheus_data:
+  loki_data:
+  tempo_data:
+  grafana_data:
+  otel_storage:     # ⭐ Persistenza file_storage per alta affidabilità
