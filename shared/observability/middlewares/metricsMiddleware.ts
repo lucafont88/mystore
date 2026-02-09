@@ -1,6 +1,10 @@
-const { httpRequestsTotal, httpRequestDurationSeconds, httpRequestsInProgress } = require('../metrics');
+import { Request, Response, NextFunction } from 'express';
+import { httpRequestsTotal, httpRequestDurationSeconds, httpRequestsInProgress } from '../metrics';
 
-const metricsMiddleware = (req, res, next) => {
+/**
+ * Express middleware that tracks HTTP metrics (total requests, duration, in-progress).
+ */
+export const metricsMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const start = process.hrtime();
   
   // We use the service name from environment or a default
@@ -20,7 +24,7 @@ const metricsMiddleware = (req, res, next) => {
     httpRequestsTotal.inc({
       method: req.method,
       route,
-      status_code: res.statusCode,
+      status_code: res.statusCode.toString(),
       service,
     });
 
@@ -36,5 +40,3 @@ const metricsMiddleware = (req, res, next) => {
 
   next();
 };
-
-module.exports = { metricsMiddleware };
