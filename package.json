@@ -10,7 +10,11 @@
     "product:migrate": "dotenv -e .env -- pnpm --filter product-service exec prisma migrate dev",
     "infra:up": "docker-compose up -d",
     "infra:down": "docker-compose down",
-    "infra:logs": "docker-compose logs -f"
+    "infra:logs": "docker-compose logs -f",
+    "monitoring:up": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d",
+    "monitoring:down": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml down",
+    "monitoring:logs": "docker compose -f docker-compose.yml -f docker-compose.monitoring.yml logs -f",
+    "dev:full": "pnpm monitoring:up && pnpm dev"
   },
   "keywords": [],
   "author": "",
