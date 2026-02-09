@@ -21,22 +21,22 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Shared Observability Module Implementation' (Protocol in workflow.md)
 
 ## Phase 2: Infrastructure Configuration & Docker Compose
-- [ ] Task: Configure Prometheus & Alerting
-    - [ ] Implement: `infrastructure/monitoring/prometheus/prometheus.yml` (Scrape jobs).
-    - [ ] Implement: `infrastructure/monitoring/prometheus/alerts.yml` (ServiceDown, HighErrorRate, HighLatency).
-- [ ] Task: Configure Logging (Loki & Promtail)
-    - [ ] Implement: `infrastructure/monitoring/loki/loki-config.yml` (Retention, Storage).
-    - [ ] Implement: `infrastructure/monitoring/promtail/promtail-config.yml` (Docker SD, JSON pipeline).
-- [ ] Task: Configure Tracing (Tempo)
-    - [ ] Implement: `infrastructure/monitoring/tempo/tempo-config.yml` (OTLP receivers).
-- [ ] Task: Configure Grafana Provisioning
-    - [ ] Implement: `infrastructure/monitoring/grafana/provisioning/datasources/datasources.yml` (Prometheus, Loki, Tempo).
-    - [ ] Implement: `infrastructure/monitoring/grafana/provisioning/dashboards/dashboards.yml`.
-    - [ ] Implement: `infrastructure/monitoring/grafana/dashboards/microservices-overview.json`.
-- [ ] Task: Docker Compose Orchestration
-    - [ ] Implement: `docker-compose.monitoring.yml` with all services and network configuration.
-    - [ ] Implement: Add `monitoring` scripts to root `package.json`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure Configuration & Docker Compose' (Protocol in workflow.md)
+- [x] Task: Configure Prometheus & Alerting e195a6f
+    - [x] Implement: `infrastructure/monitoring/prometheus/prometheus.yml` (Scrape jobs).
+    - [x] Implement: `infrastructure/monitoring/prometheus/alerts.yml` (ServiceDown, HighErrorRate, HighLatency).
+- [x] Task: Configure Logging (Loki & Promtail) af04a99
+    - [x] Implement: `infrastructure/monitoring/loki/loki-config.yml` (Retention, Storage).
+    - [x] Implement: `infrastructure/monitoring/promtail/promtail-config.yml` (Docker SD, JSON pipeline).
+- [x] Task: Configure Tracing (Tempo) a76ab0f
+    - [x] Implement: `infrastructure/monitoring/tempo/tempo-config.yml` (OTLP receivers).
+- [x] Task: Configure Grafana Provisioning 3797682
+    - [x] Implement: `infrastructure/monitoring/grafana/provisioning/datasources/datasources.yml` (Prometheus, Loki, Tempo).
+    - [x] Implement: `infrastructure/monitoring/grafana/provisioning/dashboards/dashboards.yml`.
+    - [x] Implement: `infrastructure/monitoring/grafana/dashboards/microservices-overview.json`.
+- [x] Task: Docker Compose Orchestration 404b955
+    - [x] Implement: `docker-compose.monitoring.yml` with all services and network configuration.
+    - [x] Implement: Add `monitoring` scripts to root `package.json`.
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Infrastructure Configuration & Docker Compose' (Protocol in workflow.md)
 
 ## Phase 3: Service Integration
 - [ ] Task: Integrate Observability into API Gateway
