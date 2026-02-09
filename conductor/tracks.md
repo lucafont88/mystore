@@ -20,5 +20,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Refactor the observability module in @ecommerce/shared from JavaScript to native TypeScript with strong typing and consolidated exports.**
   *Link: [./archive/observability_ts_refactor_20260209/](./archive/observability_ts_refactor_20260209/)*
+
 - [x] **Track: Implement a high-reliability OpenTelemetry Collector architecture to centralize telemetry (logs, metrics, traces) with persistent buffering.**
-  *Link: [./tracks/observability_collector_20260209/](./tracks/observability_collector_20260209/)*
+  *Link: [./archive/observability_collector_20260209/](./archive/observability_collector_20260209/)*
