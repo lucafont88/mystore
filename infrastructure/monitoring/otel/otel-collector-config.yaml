@@ -1,0 +1,101 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 1000
+    send_batch_max_size: 1500
+
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+    spike_limit_mib: 128
+
+  resource:
+    attributes:
+      - key: deployment.environment
+        value: "development"
+        action: insert
+
+exporters:
+  prometheusremotewrite:
+    endpoint: "http://ecommerce-prometheus:9090/api/v1/write"
+    sending_queue:
+      enabled: true
+      num_consumers: 10
+      queue_size: 5000
+      storage: file_storage/metrics
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
+
+  loki:
+    endpoint: "http://ecommerce-loki:3100/loki/api/v1/push"
+    sending_queue:
+      enabled: true
+      num_consumers: 10
+      queue_size: 5000
+      storage: file_storage/logs
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
+
+  otlp/tempo:
+    endpoint: "ecommerce-tempo:4317"
+    tls:
+      insecure: true
+    sending_queue:
+      enabled: true
+      num_consumers: 10
+      queue_size: 5000
+      storage: file_storage/traces
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+  file_storage/traces:
+    directory: /var/lib/otel/traces
+    timeout: 10s
+    compaction:
+      on_start: true
+      on_rebound: true
+      directory: /var/lib/otel/traces/compaction
+  file_storage/metrics:
+    directory: /var/lib/otel/metrics
+  file_storage/logs:
+    directory: /var/lib/otel/logs
+
+service:
+  extensions: [health_check, pprof, zpages, file_storage/traces, file_storage/metrics, file_storage/logs]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, resource]
+      exporters: [otlp/tempo]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, resource]
+      exporters: [prometheusremotewrite]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, resource]
+      exporters: [loki]
+  telemetry:
+    metrics:
+      address: 0.0.0.0:8888
