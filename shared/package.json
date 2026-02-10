@@ -1,8 +1,9 @@
 {
   "name": "@ecommerce/shared",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "ISC",
   "scripts": {
     "test": "cross-env NODE_ENV=test vitest run",
