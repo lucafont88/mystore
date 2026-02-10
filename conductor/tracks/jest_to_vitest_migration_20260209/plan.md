@@ -20,18 +20,18 @@
     - [x] Verify: Run `pnpm --filter api-gateway test` and ensure health check/metrics tests pass.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Pilot Service Migration (API Gateway)' (Protocol in workflow.md)
 
-## Phase 3: Core Services Migration (Auth & Product)
-- [ ] Task: Migrate `auth-service`
-    - [ ] Create `services/auth-service/vitest.config.ts`.
-    - [ ] Update `services/auth-service/package.json`: Remove Jest dependencies and add `vitest`.
-    - [ ] Refactor: Update all `auth-service` test files (Prisma mocks, context propagation).
-    - [ ] Verify: Run `pnpm --filter auth-service test` and ensure all tests pass.
-- [ ] Task: Migrate `product-service`
-    - [ ] Create `services/product-service/vitest.config.ts`.
-    - [ ] Update `services/product-service/package.json`: Remove Jest dependencies and add `vitest`.
-    - [ ] Refactor: Update all `product-service` test files (CRUD operations, integration tests).
-    - [ ] Verify: Run `pnpm --filter product-service test` and ensure all tests pass.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Core Services Migration (Auth & Product)' (Protocol in workflow.md)
+## Phase 3: Core Services Migration (Auth & Product) 2300dac
+- [x] Task: Migrate `auth-service`
+    - [x] Create `services/auth-service/vitest.config.ts`.
+    - [x] Update `services/auth-service/package.json`: Remove Jest dependencies and add `vitest`.
+    - [x] Refactor: Update all `auth-service` test files (Prisma mocks, context propagation).
+    - [x] Verify: Run `pnpm --filter auth-service test` and ensure all tests pass.
+- [x] Task: Migrate `product-service`
+    - [x] Create `services/product-service/vitest.config.ts`.
+    - [x] Update `services/product-service/package.json`: Remove Jest dependencies and add `vitest`.
+    - [x] Refactor: Update all `product-service` test files (CRUD operations, integration tests).
+    - [x] Verify: Run `pnpm --filter product-service test` and ensure all tests pass.
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Core Services Migration (Auth & Product)' (Protocol in workflow.md)
 
 ## Phase 4: Final Cleanup & Global Validation
 - [ ] Task: Dependency Cleanup & Lockfile Update
