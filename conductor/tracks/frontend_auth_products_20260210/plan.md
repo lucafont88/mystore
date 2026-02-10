@@ -45,11 +45,11 @@
     - [ ] Implement: `ProductDetailPage` with image gallery and full descriptions.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Product Catalog & Details' (Protocol in workflow.md)
 
-## Phase 5: Cart & Checkout Scaffolding
-- [ ] Task: Implement Shopping Cart UI
+## Phase 5: Cart & Checkout Scaffolding [checkpoint: fcc33db]
+- [x] Task: Implement Shopping Cart UI (1c895ab)
     - [ ] Implement: `CartDrawer` using shadcn Sheet component.
     - [ ] Implement: `CartItem` with quantity updates.
-- [ ] Task: Build Checkout Skeleton
+- [x] Task: Build Checkout Skeleton (7ff72e4)
     - [ ] Implement: `CheckoutPage` using internal state for the multi-step flow.
     - [ ] Implement: Stepper component and final Order Summary.
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Cart & Checkout Scaffolding' (Protocol in workflow.md)
