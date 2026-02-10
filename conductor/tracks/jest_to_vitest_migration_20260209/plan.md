@@ -34,7 +34,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Core Services Migration (Auth & Product)' (Protocol in workflow.md)
 
 ## Phase 4: Final Cleanup & Global Validation
-- [ ] Task: Dependency Cleanup & Lockfile Update
+- [~] Task: Dependency Cleanup & Lockfile Update
     - [ ] Remove all remaining `jest.config.js` files across the workspace.
     - [ ] Execute `pnpm install` to update the lockfile and remove orphaned Jest dependencies.
 - [ ] Task: Global Test & Coverage Verification
