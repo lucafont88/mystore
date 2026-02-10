@@ -81,7 +81,7 @@ const SheetHeader = ({
       "flex flex-col space-y-2 text-center sm:text-left",
       className
     )}
-    ...props
+    {...props}
   />
 )
 SheetHeader.displayName = "SheetHeader"
@@ -95,7 +95,7 @@ const SheetFooter = ({
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
       className
     )}
-    ...props
+    {...props}
   />
 )
 SheetFooter.displayName = "SheetFooter"
