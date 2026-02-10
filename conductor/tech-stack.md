@@ -2,7 +2,7 @@
 
 ## Backend (Microservices)
 - **Runtime:** Node.js
-- **Language:** TypeScript
+- **Language:** TypeScript (ESM for shared, CommonJS for services)
 - **Framework:** Express.js (inferred standard for Node microservices)
 
 ## Frontend
@@ -22,6 +22,17 @@
     - **Development:** Docker Compose
     - **Staging/Mid-Scale:** Docker Swarm
     - **Production:** Kubernetes
+
+## Testing
+- **Framework:** Vitest (Workspace setup)
+- **Coverage:** v8 provider
+
+## Observability (LGTM Stack)
+- **Logging:** Pino (structured JSON, TypeScript), Loki, Promtail
+- **Metrics:** OpenTelemetry Metrics SDK (TypeScript), Prometheus
+- **Tracing:** OpenTelemetry (OTel SDK, TypeScript), Tempo
+- **Visualization:** Grafana (correlated Trace-Log-Metrics)
+- **Collector:** OpenTelemetry Collector (centralized, persistent queues)
 
 ## Architecture
 - **Pattern:** Microservices

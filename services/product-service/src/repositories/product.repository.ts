@@ -1,5 +1,5 @@
 import prisma from '../config/db';
-import { Product, Prisma } from '@prisma/client';
+import { Product, Prisma } from '../generated/client';
 
 export interface ProductFilter {
   skip?: number;

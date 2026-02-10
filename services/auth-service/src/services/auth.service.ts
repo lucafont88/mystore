@@ -1,6 +1,6 @@
 import argon2 from 'argon2';
 import prisma from '../config/db';
-import { User } from '@prisma/client';
+import { User } from '../generated/client';
 import { generateAccessToken, generateRefreshToken } from '../utils/token.util';
 import redis from '../config/redis';
 

@@ -1,5 +1,5 @@
 import prisma from '../config/db';
-import { Category, Prisma } from '@prisma/client';
+import { Category, Prisma } from '../generated/client';
 
 export class CategoryRepository {
   async create(data: Prisma.CategoryCreateInput | Prisma.CategoryUncheckedCreateInput): Promise<Category> {

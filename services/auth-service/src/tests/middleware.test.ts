@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Response, NextFunction } from 'express';
 import { authenticate, AuthRequest } from '../middlewares/auth.middleware';
 import { authorize } from '../middlewares/role.middleware';
@@ -6,15 +7,15 @@ import * as tokenUtil from '../utils/token.util';
 describe('Auth Middleware', () => {
   let mockRequest: Partial<AuthRequest>;
   let mockResponse: Partial<Response>;
-  let nextFunction: NextFunction = jest.fn();
+  let nextFunction: NextFunction = vi.fn();
 
   beforeEach(() => {
     mockRequest = {};
     mockResponse = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-    nextFunction = jest.fn();
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
+    } as unknown as Partial<Response>;
+    nextFunction = vi.fn();
   });
 
   describe('authenticate', () => {
@@ -23,7 +24,7 @@ describe('Auth Middleware', () => {
       const token = 'valid-token';
       mockRequest.headers = { authorization: `Bearer ${token}` };
       
-      jest.spyOn(tokenUtil, 'verifyAccessToken').mockReturnValue(payload);
+      vi.spyOn(tokenUtil, 'verifyAccessToken').mockReturnValue(payload);
 
       authenticate(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
 
@@ -42,7 +43,7 @@ describe('Auth Middleware', () => {
 
     it('should return 401 if token is invalid', () => {
       mockRequest.headers = { authorization: 'Bearer invalid-token' };
-      jest.spyOn(tokenUtil, 'verifyAccessToken').mockImplementation(() => {
+      vi.spyOn(tokenUtil, 'verifyAccessToken').mockImplementation(() => {
         throw new Error('Invalid token');
       });
 
