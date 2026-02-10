@@ -10,7 +10,8 @@ describe('api service', () => {
 
   it('should add Authorization header if token exists', async () => {
     const token = 'test-token';
-    useAuthStore.getState().setToken(token);
+    const user = { id: '1', email: 'test@test.com', firstName: 'T', lastName: 'T' };
+    useAuthStore.getState().login(user, token);
     
     (fetch as any).mockResolvedValueOnce({
       ok: true,
