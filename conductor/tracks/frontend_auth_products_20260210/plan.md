@@ -26,12 +26,12 @@
     - [ ] Implement initial Query Key factory.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Infrastructure & State Management' (Protocol in workflow.md)
 
-## Phase 3: Authentication & Protected Journeys
-- [ ] Task: Implement Auth Components & Logic
+## Phase 3: Authentication & Protected Journeys [checkpoint: 6376391]
+- [x] Task: Implement Auth Components & Logic (986b08d)
     - [ ] Write Tests: Verify LoginForm validation with Zod.
     - [ ] Implement: `LoginForm` and `RegisterForm` components.
     - [ ] Implement: `ProtectedRoute` guard component.
-- [ ] Task: Build Authentication Pages
+- [x] Task: Build Authentication Pages (12f83de)
     - [ ] Implement: `LoginPage` and `RegisterPage` layouts using Indigo/Blue accents.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Authentication & Protected Journeys' (Protocol in workflow.md)
 
