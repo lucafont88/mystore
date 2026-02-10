@@ -35,12 +35,12 @@
     - [ ] Implement: `LoginPage` and `RegisterPage` layouts using Indigo/Blue accents.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Authentication & Protected Journeys' (Protocol in workflow.md)
 
-## Phase 4: Product Catalog & Details
-- [ ] Task: Implement Product Listing Flow
+## Phase 4: Product Catalog & Details [checkpoint: c322fbc]
+- [x] Task: Implement Product Listing Flow (f70726a)
     - [ ] Implement: `ProductCard` with hover animations and Add-to-Cart functionality.
     - [ ] Implement: `ProductGrid` with responsive breakpoints.
     - [ ] Implement: `useProductsQuery` hook for fetching and filtering.
-- [ ] Task: Build Product Pages
+- [x] Task: Build Product Pages (e0e3b0c)
     - [ ] Implement: `ProductsPage` with sidebar filters and search integration.
     - [ ] Implement: `ProductDetailPage` with image gallery and full descriptions.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Product Catalog & Details' (Protocol in workflow.md)
