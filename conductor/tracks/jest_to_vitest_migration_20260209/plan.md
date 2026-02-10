@@ -12,13 +12,13 @@
     - [x] Verify: Run `pnpm --filter @ecommerce/shared test` and ensure all tests pass.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Global Setup & Shared Package Migration' (Protocol in workflow.md)
 
-## Phase 2: Pilot Service Migration (API Gateway)
+## Phase 2: Pilot Service Migration (API Gateway) [checkpoint: c8f0599]
 - [x] Task: Migrate `api-gateway` Service 28438d7
     - [x] Create `services/api-gateway/vitest.config.ts`.
     - [x] Update `services/api-gateway/package.json`: Remove Jest dependencies and add `vitest`.
     - [x] Refactor: Update `services/api-gateway/src/tests/**/*.test.ts` to use Vitest syntax and explicit imports.
     - [x] Verify: Run `pnpm --filter api-gateway test` and ensure health check/metrics tests pass.
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Pilot Service Migration (API Gateway)' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Pilot Service Migration (API Gateway)' (Protocol in workflow.md)
 
 ## Phase 3: Core Services Migration (Auth & Product)
 - [ ] Task: Migrate `auth-service`
