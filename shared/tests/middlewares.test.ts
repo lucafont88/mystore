@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import express from 'express';
 import request from 'supertest';
 import { requestLoggerMiddleware } from '../observability/middlewares/requestLogger.middleware';

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll } from 'vitest';
 import { createCounter, createHistogram, createGauge, initMetrics } from '../observability/metrics';
 
 describe('Metrics Core', () => {
