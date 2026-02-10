@@ -42,16 +42,18 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // Graceful shutdown
-const server = app.listen(PORT, () => {
-  logger.info(`API Gateway started on port ${PORT}`);
-});
-
-process.on('SIGTERM', async () => {
-  logger.info('SIGTERM received, shutting down gracefully');
-  server.close(async () => {
-    await shutdown();
-    process.exit(0);
+if (process.env.NODE_ENV !== 'test') {
+  const server = app.listen(PORT, () => {
+    logger.info(`API Gateway started on port ${PORT}`);
   });
-});
+
+  process.on('SIGTERM', async () => {
+    logger.info('SIGTERM received, shutting down gracefully');
+    server.close(async () => {
+      await shutdown();
+      process.exit(0);
+    });
+  });
+}
 
 export default app;
