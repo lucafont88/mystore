@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -7,9 +8,6 @@ import app from '../app';
 import prisma from '../config/db';
 
 describe('Public Catalog Endpoints', () => {
-  let productId: string;
-  let categoryId: string;
-
   beforeAll(async () => {
     try {
       await prisma.product.deleteMany();

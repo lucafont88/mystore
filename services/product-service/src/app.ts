@@ -36,7 +36,7 @@ app.use('/api/v1', routes);
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'UP', service: 'product-service', timestamp: new Date().toISOString() });
+  res.status(200).json({ status: 'healthy', service: 'product-service', timestamp: new Date().toISOString() });
 });
 
 if (process.env.NODE_ENV !== 'test') {
