@@ -13,15 +13,15 @@
     - [ ] Create initial translation files for `it` and `en` (navigation, actions).
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding & Configuration' (Protocol in workflow.md)
 
-## Phase 2: Core Infrastructure & State Management
-- [ ] Task: Implement Typed API Client (`api.ts`)
+## Phase 2: Core Infrastructure & State Management [checkpoint: bb9f708]
+- [x] Task: Implement Typed API Client (`api.ts`) (6e55878)
     - [ ] Write Tests: Mock fetch to verify automatic Bearer token injection and 401 handling.
     - [ ] Implement: Generic fetch wrapper with global error handling.
-- [ ] Task: Implement Global Stores (Zustand)
+- [x] Task: Implement Global Stores (Zustand) (87afcc0)
     - [ ] Implement: `authStore.ts` with local storage persistence.
     - [ ] Implement: `cartStore.ts` with basic add/remove logic and persistence.
     - [ ] Implement: `uiStore.ts` for managing drawers and modals.
-- [ ] Task: Configure Data Fetching (TanStack Query)
+- [x] Task: Configure Data Fetching (TanStack Query) (1020758)
     - [ ] Set up `QueryClient` and global provider in `App.tsx`.
     - [ ] Implement initial Query Key factory.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Infrastructure & State Management' (Protocol in workflow.md)
