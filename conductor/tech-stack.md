@@ -23,6 +23,10 @@
     - **Staging/Mid-Scale:** Docker Swarm
     - **Production:** Kubernetes
 
+## Testing
+- **Framework:** Vitest (Workspace setup)
+- **Coverage:** v8 provider
+
 ## Observability (LGTM Stack)
 - **Logging:** Pino (structured JSON, TypeScript), Loki, Promtail
 - **Metrics:** OpenTelemetry Metrics SDK (TypeScript), Prometheus
