@@ -20,18 +20,18 @@
     - [x] Verify: Run `pnpm --filter api-gateway test` and ensure health check/metrics tests pass.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Pilot Service Migration (API Gateway)' (Protocol in workflow.md)
 
-## Phase 3: Core Services Migration (Auth & Product) 2300dac
-- [x] Task: Migrate `auth-service`
+## Phase 3: Core Services Migration (Auth & Product) [checkpoint: cc9d5bc]
+- [x] Task: Migrate `auth-service` 2300dac
     - [x] Create `services/auth-service/vitest.config.ts`.
     - [x] Update `services/auth-service/package.json`: Remove Jest dependencies and add `vitest`.
     - [x] Refactor: Update all `auth-service` test files (Prisma mocks, context propagation).
     - [x] Verify: Run `pnpm --filter auth-service test` and ensure all tests pass.
-- [x] Task: Migrate `product-service`
+- [x] Task: Migrate `product-service` 2300dac
     - [x] Create `services/product-service/vitest.config.ts`.
     - [x] Update `services/product-service/package.json`: Remove Jest dependencies and add `vitest`.
     - [x] Refactor: Update all `product-service` test files (CRUD operations, integration tests).
     - [x] Verify: Run `pnpm --filter product-service test` and ensure all tests pass.
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Core Services Migration (Auth & Product)' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Core Services Migration (Auth & Product)' (Protocol in workflow.md)
 
 ## Phase 4: Final Cleanup & Global Validation
 - [ ] Task: Dependency Cleanup & Lockfile Update
