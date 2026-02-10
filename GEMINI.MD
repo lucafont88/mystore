@@ -106,6 +106,7 @@ Gli errori sono opportunità di apprendimento. Quando qualcosa si rompe:
 | Framework | Express.js | 4.x |
 | Database | PostgreSQL | 15 |
 | ORM | Prisma | 5.x |
+| Testing | Vitest | 4.x+c |
 | Cache | Redis | 7 |
 | Message Broker | RabbitMQ | 3.x |
 | Container | Docker | 24+ |

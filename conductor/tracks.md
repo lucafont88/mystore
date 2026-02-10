@@ -23,3 +23,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Implement a high-reliability OpenTelemetry Collector architecture to centralize telemetry (logs, metrics, traces) with persistent buffering.**
   *Link: [./archive/observability_collector_20260209/](./archive/observability_collector_20260209/)*
+- [~] **Track: Migrate the entire testing framework of the workspace (all microservices and shared packages) from Jest to Vitest.**
+  *Link: [./tracks/jest_to_vitest_migration_20260209/](./tracks/jest_to_vitest_migration_20260209/)*
