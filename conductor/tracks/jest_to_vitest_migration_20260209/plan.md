@@ -1,6 +1,6 @@
 # Implementation Plan - Migration from Jest to Vitest
 
-## Phase 1: Global Setup & Shared Package Migration
+## Phase 1: Global Setup & Shared Package Migration [checkpoint: b0fc486]
 - [x] Task: Configure Vitest Workspace & Global Dependencies 72ba364
     - [x] Update root `package.json`: Add `vitest` and `@vitest/coverage-v8` to devDependencies.
     - [x] Create `vitest.workspace.ts` in the root to manage the monorepo structure.
@@ -10,7 +10,7 @@
     - [x] Update `shared/package.json`: Remove `jest`, `ts-jest`, `@types/jest`. Add `vitest`.
     - [x] Refactor: Update all `shared/tests/**/*.test.ts` files to use explicit imports from `vitest` and replace `jest.*` with `vi.*`.
     - [x] Verify: Run `pnpm --filter @ecommerce/shared test` and ensure all tests pass.
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Global Setup & Shared Package Migration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Global Setup & Shared Package Migration' (Protocol in workflow.md)
 
 ## Phase 2: Pilot Service Migration (API Gateway)
 - [ ] Task: Migrate `api-gateway` Service
