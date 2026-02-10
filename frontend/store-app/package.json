@@ -11,6 +11,11 @@
     "test": "vitest",
     "test:ui": "vitest --ui"
   },
+  "vitest": {
+    "environment": "jsdom",
+    "globals": true,
+    "setupFiles": "./src/tests/setup.ts"
+  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -35,8 +40,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-select": "^2.0.0",
-    "@radix-ui/react-tabs": "^1.0.4",
-    "lucide-react": "^0.323.0"
+    "@radix-ui/react-tabs": "^1.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
