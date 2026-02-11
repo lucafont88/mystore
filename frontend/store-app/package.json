@@ -13,8 +13,7 @@
   },
   "vitest": {
     "environment": "jsdom",
-    "globals": true,
-    "setupFiles": "./src/tests/setup.ts"
+    "globals": false
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -57,6 +56,9 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.3.3",
     "vite": "^5.1.3",
-    "vitest": "^1.3.0"
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
+    "jsdom": "^24.0.0",
+    "vitest": "^4.0.18"
   }
 }
