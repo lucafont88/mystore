@@ -1,0 +1,23 @@
+{
+  "navigation": {
+    "home": "Home",
+    "products": "Prodotti",
+    "cart": "Carrello",
+    "account": "Account",
+    "login": "Accedi",
+    "register": "Registrati"
+  },
+  "actions": {
+    "add": "Aggiungi",
+    "remove": "Rimuovi",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "loading": "Caricamento...",
+    "search": "Cerca..."
+  },
+  "messages": {
+    "success": "Operazione completata",
+    "error": "Si è verificato un errore",
+    "empty": "Nessun elemento trovato"
+  }
+}

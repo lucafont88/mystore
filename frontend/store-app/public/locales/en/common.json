@@ -1,0 +1,23 @@
+{
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "cart": "Cart",
+    "account": "Account",
+    "login": "Login",
+    "register": "Register"
+  },
+  "actions": {
+    "add": "Add",
+    "remove": "Remove",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "search": "Search..."
+  },
+  "messages": {
+    "success": "Operation successful",
+    "error": "An error occurred",
+    "empty": "No items found"
+  }
+}
