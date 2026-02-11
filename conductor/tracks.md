@@ -26,3 +26,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Migrate the entire testing framework of the workspace (all microservices and shared packages) from Jest to Vitest.**
   *Link: [./archive/jest_to_vitest_migration_20260209/](./archive/jest_to_vitest_migration_20260209/)*
+
+- [x] **Track: Frontend for Auth and Products using Vite, React, and Indigo/Blue theme**
+  *Link: [./tracks/frontend_auth_products_20260210/](./tracks/frontend_auth_products_20260210/)*
