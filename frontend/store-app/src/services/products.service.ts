@@ -6,7 +6,7 @@ export const productsService = {
     // Convert filters to string params for the fetch wrapper
     const params: Record<string, string> = {};
     Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined) params[key] = String(value);
+      if (value !== undefined && value !== '') params[key] = String(value);
     });
 
     return api.get<PaginatedProducts>('/products', { params });

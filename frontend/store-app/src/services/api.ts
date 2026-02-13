@@ -1,7 +1,7 @@
 import { useAuthStore } from '../stores/authStore';
 import { ApiError, RequestOptions } from '../types/api';
 
-const BASE_URL = '/api';
+const BASE_URL = '/api/v1';
 
 async function request<T>(url: string, options: RequestOptions = {}): Promise<T> {
   const { params, headers, ...rest } = options;

@@ -96,9 +96,9 @@ export function Header() {
                 <DropdownMenuContent align="end">
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className="flex flex-col space-y-1 leading-none">
-                      {user?.firstName && (
+                      {user?.email && (
                         <p className="font-medium text-sm">
-                          {user.firstName} {user.lastName}
+                          {user.email.split('@')[0]}
                         </p>
                       )}
                       {user?.email && <p className="w-[200px] truncate text-xs text-muted-foreground">{user.email}</p>}

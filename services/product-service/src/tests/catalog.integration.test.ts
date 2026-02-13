@@ -8,14 +8,18 @@ import app from '../app';
 import prisma from '../config/db';
 
 describe('Public Catalog Endpoints', () => {
-  beforeAll(async () => {
-    try {
-      await prisma.product.deleteMany();
-      await prisma.category.deleteMany();
-    } catch (e) {}
-  });
+  const createdProductIds: string[] = [];
+  const createdCategoryIds: string[] = [];
 
   afterAll(async () => {
+    try {
+      if (createdProductIds.length) {
+        await prisma.product.deleteMany({ where: { id: { in: createdProductIds } } });
+      }
+      if (createdCategoryIds.length) {
+        await prisma.category.deleteMany({ where: { id: { in: createdCategoryIds } } });
+      }
+    } catch (e) {}
     await prisma.$disconnect();
   });
 
@@ -23,6 +27,7 @@ describe('Public Catalog Endpoints', () => {
     const cat = await prisma.category.create({
       data: { name: 'Public Cat', slug: `public-cat-${Date.now()}` }
     });
+    createdCategoryIds.push(cat.id);
     const prod = await prisma.product.create({
       data: {
         name: 'Awesome Smartphone',
@@ -34,6 +39,7 @@ describe('Public Catalog Endpoints', () => {
         categoryId: cat.id
       }
     });
+    createdProductIds.push(prod.id);
     return { catId: cat.id, prodId: prod.id };
   };
 

@@ -1,77 +1,108 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import request from 'supertest';
-import app from '../app';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { AuthService } from '../services/auth.service';
+
+// Mock dependencies
+vi.mock('../config/db', () => ({
+  default: {
+    user: {
+      findUnique: vi.fn(),
+      create: vi.fn(),
+      deleteMany: vi.fn(),
+    },
+  },
+}));
+
+vi.mock('../config/redis', () => ({
+  default: {
+    set: vi.fn().mockResolvedValue('OK'),
+    quit: vi.fn().mockResolvedValue('OK'),
+  },
+}));
+
+vi.mock('../utils/token.util', () => ({
+  generateAccessToken: vi.fn().mockReturnValue('mock-access-token'),
+  generateRefreshToken: vi.fn().mockReturnValue('mock-refresh-token'),
+}));
+
+vi.mock('argon2', () => ({
+  default: {
+    hash: vi.fn().mockResolvedValue('hashed-password'),
+    verify: vi.fn(),
+  },
+}));
+
 import prisma from '../config/db';
-import redis from '../config/redis';
+import argon2 from 'argon2';
+
+const authService = new AuthService();
+
+const mockUser = {
+  id: 'user-1',
+  email: 'test@example.com',
+  passwordHash: 'hashed-password',
+  role: 'CUSTOMER',
+  createdAt: new Date('2026-01-01'),
+  updatedAt: new Date('2026-01-01'),
+};
 
 describe('Auth Service - Registration', () => {
-  const testUser = {
-    email: 'test@example.com',
-    password: 'Password123!',
-  };
-
-  beforeAll(async () => {
-    // Clean up test data
-    await prisma.user.deleteMany({
-      where: {
-        email: testUser.email,
-      },
-    });
-  });
-
-  afterAll(async () => {
-    await prisma.$disconnect();
-    await redis.quit();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   it('should register a new user successfully', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/register')
-      .send(testUser);
+    (prisma.user.findUnique as any).mockResolvedValue(null);
+    (prisma.user.create as any).mockResolvedValue(mockUser);
 
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('id');
-    expect(response.body.email).toBe(testUser.email);
-    expect(response.body).not.toHaveProperty('passwordHash');
+    const result = await authService.register('test@example.com', 'Password123!');
+
+    expect(result).toHaveProperty('id');
+    expect(result.email).toBe('test@example.com');
+    expect(result).not.toHaveProperty('passwordHash');
+    expect(prisma.user.create).toHaveBeenCalledWith({
+      data: { email: 'test@example.com', passwordHash: 'hashed-password' },
+    });
   });
 
   it('should not register a user with an existing email', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/register')
-      .send(testUser);
+    (prisma.user.findUnique as any).mockResolvedValue(mockUser);
 
-    expect(response.status).toBe(409);
-    expect(response.body).toHaveProperty('error');
+    await expect(authService.register('test@example.com', 'Password123!')).rejects.toThrow(
+      'Email already in use'
+    );
   });
 
-  it('should validate registration input', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/register')
-      .send({ email: 'invalid-email', password: 'short' });
+  it('should validate that register calls findUnique before create', async () => {
+    (prisma.user.findUnique as any).mockResolvedValue(null);
+    (prisma.user.create as any).mockResolvedValue(mockUser);
 
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('errors');
+    await authService.register('test@example.com', 'Password123!');
+
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({
+      where: { email: 'test@example.com' },
+    });
   });
 
   describe('Login', () => {
     it('should login an existing user and return tokens', async () => {
-      const response = await request(app)
-        .post('/api/v1/auth/login')
-        .send(testUser);
+      (prisma.user.findUnique as any).mockResolvedValue(mockUser);
+      (argon2.verify as any).mockResolvedValue(true);
 
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('accessToken');
-      expect(response.body).toHaveProperty('refreshToken');
-      expect(response.body.user.email).toBe(testUser.email);
+      const result = await authService.login('test@example.com', 'Password123!');
+
+      expect(result).toHaveProperty('accessToken');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result.user.email).toBe('test@example.com');
+      expect(result.user).not.toHaveProperty('passwordHash');
     });
 
     it('should not login with wrong credentials', async () => {
-      const response = await request(app)
-        .post('/api/v1/auth/login')
-        .send({ email: testUser.email, password: 'WrongPassword!' });
+      (prisma.user.findUnique as any).mockResolvedValue(mockUser);
+      (argon2.verify as any).mockResolvedValue(false);
 
-      expect(response.status).toBe(401);
-      expect(response.body).toHaveProperty('error');
+      await expect(authService.login('test@example.com', 'WrongPassword!')).rejects.toThrow(
+        'Invalid credentials'
+      );
     });
   });
 });

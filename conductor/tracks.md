@@ -29,3 +29,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Frontend for Auth and Products using Vite, React, and Indigo/Blue theme**
   *Link: [./archive/frontend_auth_products_20260210/](./archive/frontend_auth_products_20260210/)*
+
+---
+
+## Active Tracks
+
+- [ ] **Track: Fix current application - API path mismatch, auth data contract misalignment, and test configuration**
+  *Link: [./tracks/fix_current_application_20260213/](./tracks/fix_current_application_20260213/)*

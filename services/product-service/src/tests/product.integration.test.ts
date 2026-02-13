@@ -22,14 +22,18 @@ describe('Product Controller', () => {
     JWT_SECRET
   );
 
-  beforeAll(async () => {
-    try {
-      await prisma.product.deleteMany();
-      await prisma.category.deleteMany();
-    } catch (e) {}
-  });
+  const createdProductIds: string[] = [];
+  const createdCategoryIds: string[] = [];
 
   afterAll(async () => {
+    try {
+      if (createdProductIds.length) {
+        await prisma.product.deleteMany({ where: { id: { in: createdProductIds } } });
+      }
+      if (createdCategoryIds.length) {
+        await prisma.category.deleteMany({ where: { id: { in: createdCategoryIds } } });
+      }
+    } catch (e) {}
     await prisma.$disconnect();
   });
 
@@ -38,6 +42,7 @@ describe('Product Controller', () => {
       name: `Controller Category ${suffix}`,
       slug: `controller-category-${suffix}-${Date.now()}`,
     });
+    createdCategoryIds.push(cat.id);
     return cat.id;
   };
 
@@ -55,6 +60,7 @@ describe('Product Controller', () => {
       });
 
     expect(res.status).toBe(201);
+    if (res.body.id) createdProductIds.push(res.body.id);
   });
 
   it('should update own product', async () => {
@@ -69,7 +75,8 @@ describe('Product Controller', () => {
         categoryId: catId
       }
     });
-    
+    createdProductIds.push(product.id);
+
     const res = await request(app)
       .put(`/api/v1/products/${product.id}`)
       .set('Authorization', `Bearer ${vendorToken}`)
@@ -91,6 +98,7 @@ describe('Product Controller', () => {
         categoryId: catId
       }
     });
+    createdProductIds.push(product.id);
     
     const res = await request(app)
       .put(`/api/v1/products/${product.id}`)

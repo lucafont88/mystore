@@ -1,0 +1,8 @@
+{
+  "track_id": "fix_current_application_20260213",
+  "type": "bugfix",
+  "status": "in_progress",
+  "created_at": "2026-02-13T10:00:00Z",
+  "updated_at": "2026-02-13T10:00:00Z",
+  "description": "Fix current application: API path mismatch, registration/login data contract misalignment, and test configuration"
+}
