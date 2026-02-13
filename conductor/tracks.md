@@ -34,5 +34,11 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-- [ ] **Track: Fix current application - API path mismatch, auth data contract misalignment, and test configuration**
-  *Link: [./tracks/fix_current_application_20260213/](./tracks/fix_current_application_20260213/)*
+_No active tracks._
+
+---
+
+## Recently Completed
+
+- [x] **Track: Fix current application - API path mismatch, auth data contract misalignment, and test configuration**
+  *Commit: `8176c6d` | Link: [./archive/fix_current_application_20260213/](./archive/fix_current_application_20260213/)*
