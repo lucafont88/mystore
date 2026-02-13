@@ -1,6 +1,5 @@
-node_modules
-services/*/node_modules
-dist
+**/node_modules
+**/dist
 .git
 .env
 *.log
