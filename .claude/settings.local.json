@@ -3,7 +3,27 @@
     "allow": [
       "Bash(grep:*)",
       "Bash(xargs:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(pnpm run build:shared:*)",
+      "Bash(pnpm --filter auth-service exec npx tsc:*)",
+      "Bash(pnpm --filter product-service exec npx tsc:*)",
+      "Bash(pnpm --filter api-gateway exec npx tsc:*)",
+      "Bash(pnpm --filter @ecommerce/store-app exec npx tsc:*)",
+      "Bash(CI=true pnpm test:*)",
+      "Bash(pnpm --filter @ecommerce/store-app build:*)",
+      "Bash(curl:*)",
+      "Bash(timeout:*)",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_fill_form",
+      "mcp__plugin_playwright_playwright__browser_close",
+      "mcp__plugin_playwright_playwright__browser_network_requests",
+      "Bash(git -C c:Devmystore status)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git mv:*)",
+      "Bash(del \"c:\\\\Dev\\\\mystore\\\\NUL\")"
     ]
   }
 }
