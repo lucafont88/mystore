@@ -34,7 +34,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-_No active tracks._
+- [ ] **Track: Shop Page Service - Vendor HTML pages with MinIO storage and RabbitMQ integration**
+  *Link: [./tracks/shop_page_service_20260213/](./tracks/shop_page_service_20260213/)*
 
 ---
 

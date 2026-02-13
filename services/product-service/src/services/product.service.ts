@@ -1,6 +1,7 @@
 import slugify from 'slugify';
 import productRepository from '../repositories/product.repository';
 import { Product, Prisma } from '../generated/client';
+import { publishProductCreated, publishProductUpdated, publishProductDeleted } from '../events/publisher';
 
 export class ProductService {
   async createProduct(data: any): Promise<Product> {
@@ -17,10 +18,13 @@ export class ProductService {
       finalSlug = `${slug}-${Date.now()}`;
     }
 
-    return productRepository.create({
+    const product = await productRepository.create({
       ...data,
       slug: finalSlug,
     });
+
+    publishProductCreated(product).catch(() => {});
+    return product;
   }
 
   async updateProduct(id: string, data: any, userId: string, isAdmin: boolean = false): Promise<Product> {
@@ -41,7 +45,9 @@ export class ProductService {
       data.slug = slugify(data.name, { lower: true, strict: true });
     }
 
-    return productRepository.update(id, data);
+    const updated = await productRepository.update(id, data);
+    publishProductUpdated(updated).catch(() => {});
+    return updated;
   }
 
   async deleteProduct(id: string, userId: string, isAdmin: boolean = false): Promise<Product> {
@@ -54,7 +60,9 @@ export class ProductService {
       throw new Error('Ownership verification failed');
     }
 
-    return productRepository.delete(id);
+    const deleted = await productRepository.delete(id);
+    publishProductDeleted(deleted.id).catch(() => {});
+    return deleted;
   }
 
   async getProductById(id: string): Promise<Product | null> {

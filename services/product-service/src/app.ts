@@ -1,5 +1,5 @@
 // IMPORTANTE: initObservability DEVE essere chiamato PRIMA di qualsiasi altro import
-import { initObservability } from '@ecommerce/shared';
+import { initObservability, MessagingConnection } from '@ecommerce/shared';
 
 const { logger, middlewares, shutdown } = initObservability({
   serviceName: 'product-service',
@@ -18,6 +18,8 @@ dotenv.config({ path: path.join(__dirname, '../../../.env') });
 import helmet from 'helmet';
 import cors from 'cors';
 import routes from './routes';
+import { initProductPublisher } from './events/publisher';
+import { setupProductValidationResponder } from './events/responder';
 
 const app: express.Application = express();
 const PORT = process.env.PRODUCT_SERVICE_PORT || 3002;
@@ -40,8 +42,20 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 if (process.env.NODE_ENV !== 'test') {
-  const server = app.listen(PORT, () => {
+  const server = app.listen(PORT, async () => {
     logger.info(`Product Service is running on port ${PORT}`);
+
+    // Initialize RabbitMQ
+    const rabbitmqUrl = process.env.RABBITMQ_URL || 'amqp://guest:guest@localhost:5672';
+    try {
+      const mqConnection = new MessagingConnection({ url: rabbitmqUrl }, logger);
+      await mqConnection.connect();
+      await initProductPublisher(mqConnection, logger);
+      await setupProductValidationResponder(mqConnection, logger);
+      logger.info('RabbitMQ connected and handlers ready');
+    } catch (err) {
+      logger.warn({ err }, 'RabbitMQ not available, running without messaging');
+    }
   });
 
   process.on('SIGTERM', async () => {
