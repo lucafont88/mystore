@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, afterAll } from 'vitest';
 import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../../../../.env') });
@@ -8,14 +8,18 @@ import productRepository from '../repositories/product.repository';
 import categoryRepository from '../repositories/category.repository';
 
 describe('Product Repository', () => {
-  beforeAll(async () => {
-    try {
-      await prisma.product.deleteMany();
-      await prisma.category.deleteMany();
-    } catch (e) {}
-  });
+  const createdProductIds: string[] = [];
+  const createdCategoryIds: string[] = [];
 
   afterAll(async () => {
+    try {
+      if (createdProductIds.length) {
+        await prisma.product.deleteMany({ where: { id: { in: createdProductIds } } });
+      }
+      if (createdCategoryIds.length) {
+        await prisma.category.deleteMany({ where: { id: { in: createdCategoryIds } } });
+      }
+    } catch (e) {}
     await prisma.$disconnect();
   });
 
@@ -25,6 +29,7 @@ describe('Product Repository', () => {
       name: 'Test Category',
       slug: slug,
     });
+    createdCategoryIds.push(cat.id);
     return cat.id;
   };
 
@@ -43,6 +48,7 @@ describe('Product Repository', () => {
     };
 
     const product = await productRepository.create(data);
+    createdProductIds.push(product.id);
 
     expect(product).toHaveProperty('id');
     expect(product.name).toBe(data.name);
@@ -62,6 +68,7 @@ describe('Product Repository', () => {
         categoryId: catId
       }
     });
+    createdProductIds.push(existing.id);
     const product = await productRepository.findById(existing.id);
 
     expect(product?.id).toBe(existing.id);
@@ -69,9 +76,8 @@ describe('Product Repository', () => {
   });
 
   it('should find products with filters (pagination)', async () => {
-    // Ensure at least one product exists
     const catId = await setupPrerequisites('list');
-    await prisma.product.create({
+    const product = await prisma.product.create({
       data: {
         name: 'List Item',
         slug: `list-item-${Date.now()}`,
@@ -81,6 +87,7 @@ describe('Product Repository', () => {
         categoryId: catId
       }
     });
+    createdProductIds.push(product.id);
 
     const result = await productRepository.findAll({ skip: 0, take: 10 });
     expect(result.items.length).toBeGreaterThanOrEqual(1);
@@ -100,6 +107,7 @@ describe('Product Repository', () => {
         categoryId: catId
       }
     });
+    createdProductIds.push(existing.id);
     const updated = await productRepository.update(existing.id, { stockQuantity: 20 });
 
     expect(updated.stockQuantity).toBe(20);
@@ -118,6 +126,7 @@ describe('Product Repository', () => {
         categoryId: catId
       }
     });
+    // No need to track - test deletes it
     await productRepository.delete(target.id);
 
     const check = await prisma.product.findUnique({ where: { id: target.id } });

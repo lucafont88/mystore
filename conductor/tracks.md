@@ -28,4 +28,17 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./archive/jest_to_vitest_migration_20260209/](./archive/jest_to_vitest_migration_20260209/)*
 
 - [x] **Track: Frontend for Auth and Products using Vite, React, and Indigo/Blue theme**
-  *Link: [./tracks/frontend_auth_products_20260210/](./tracks/frontend_auth_products_20260210/)*
+  *Link: [./archive/frontend_auth_products_20260210/](./archive/frontend_auth_products_20260210/)*
+
+---
+
+## Active Tracks
+
+_No active tracks._
+
+---
+
+## Recently Completed
+
+- [x] **Track: Fix current application - API path mismatch, auth data contract misalignment, and test configuration**
+  *Commit: `8176c6d` | Link: [./archive/fix_current_application_20260213/](./archive/fix_current_application_20260213/)*

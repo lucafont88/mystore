@@ -2,26 +2,37 @@ import { api } from './api';
 import { LoginInput, RegisterInput } from '../lib/validators';
 import { useAuthStore } from '../stores/authStore';
 
-export interface AuthResponse {
+export interface RegisterResponse {
+  id: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LoginResponse {
   user: {
     id: string;
     email: string;
-    firstName: string;
-    lastName: string;
+    role: string;
   };
-  token: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export const authService = {
   login: async (data: LoginInput) => {
-    const response = await api.post<AuthResponse>('/auth/login', data);
-    useAuthStore.getState().login(response.user, response.token);
+    const response = await api.post<LoginResponse>('/auth/login', data);
+    useAuthStore.getState().login(response.user, response.accessToken);
     return response;
   },
 
   register: async (data: RegisterInput) => {
-    const response = await api.post<AuthResponse>('/auth/register', data);
-    useAuthStore.getState().login(response.user, response.token);
+    const { email, password } = data;
+    const response = await api.post<RegisterResponse>('/auth/register', { email, password });
+    // After registration, auto-login to get tokens
+    const loginResponse = await api.post<LoginResponse>('/auth/login', { email, password });
+    useAuthStore.getState().login(loginResponse.user, loginResponse.accessToken);
     return response;
   },
 
