@@ -15,4 +15,7 @@ file da utilizzare. Per ogni feature devi aggiungere un elemento al file `tracks
 6. **Regole**: segui sempre le regole contenute nel file `.claude/rules/`.
 
 
-Se hai domande o hai bisogno di ulteriori dettagli, chiedimi pure!
+Se hai domande o hai bisogno di ulteriori dettagli, chiedimi pure! Se scrivo qualcosa di sbagliato, corregimi. Non darmi sempre ragione!
+
+## Regole
+- **Non modificare i file** `.claude/claude.md` e `.claude/rules/`.
