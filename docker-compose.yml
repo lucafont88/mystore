@@ -30,6 +30,21 @@ services:
     networks:
       - mystore-network
 
+  minio:
+    image: minio/minio:latest
+    container_name: mystore-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - mystore-network
+
   auth-service:
     build:
       context: .
@@ -64,9 +79,37 @@ services:
       - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
       - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     depends_on:
       - postgres
       - redis
+      - rabbitmq
+    networks:
+      - mystore-network
+
+  shop-page-service:
+    build:
+      context: .
+      dockerfile: services/shop-page-service/Dockerfile
+    container_name: shop-page-service
+    ports:
+      - "${SHOP_PAGE_SERVICE_PORT:-3003}:3003"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - SHOP_PAGE_SERVICE_PORT=3003
+      - SHOP_PAGE_DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/shop_pages_db?schema=public
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - MINIO_BUCKET=shop-pages
+    depends_on:
+      - postgres
+      - rabbitmq
+      - minio
     networks:
       - mystore-network
 
@@ -82,9 +125,11 @@ services:
       - API_GATEWAY_PORT=3000
       - AUTH_SERVICE_URL=http://auth-service:3001
       - PRODUCT_SERVICE_URL=http://product-service:3002
+      - SHOP_PAGE_SERVICE_URL=http://shop-page-service:3003
     depends_on:
       - auth-service
       - product-service
+      - shop-page-service
     networks:
       - mystore-network
 
@@ -94,3 +139,4 @@ networks:
 
 volumes:
   postgres_data:
+  minio_data:

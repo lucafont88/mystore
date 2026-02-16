@@ -23,7 +23,25 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git mv:*)",
-      "Bash(del \"c:\\\\Dev\\\\mystore\\\\NUL\")"
+      "Bash(del \"c:\\\\Dev\\\\mystore\\\\NUL\")",
+      "Bash(pnpm --filter @ecommerce/shared build:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm approve-builds:*)",
+      "Bash(pnpm --filter shop-page-service exec prisma generate:*)",
+      "Bash(pnpm --filter product-service exec tsc:*)",
+      "Bash(pnpm --filter shop-page-service exec tsc:*)",
+      "Bash(docker ps:*)",
+      "Bash(dotenv -e .env -- pnpm --filter shop-page-service exec prisma migrate dev:*)",
+      "Bash(pnpm exec dotenv:*)",
+      "Bash(pnpm --filter shop-page-service test:*)",
+      "Bash(pnpm --filter product-service test:*)",
+      "Bash(pnpm --filter auth-service test:*)",
+      "Bash(git push:*)",
+      "Bash(docker build:*)",
+      "Bash(docker compose up:*)",
+      "Bash(docker exec:*)",
+      "Bash(ping:*)",
+      "Bash(docker compose restart:*)"
     ]
   }
 }

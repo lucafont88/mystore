@@ -34,11 +34,14 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-_No active tracks._
+*(Nessun track attivo)*
 
 ---
 
 ## Recently Completed
+
+- [x] **Track: Shop Page Service - Vendor HTML pages with MinIO storage and RabbitMQ integration**
+  *Link: [./archive/shop_page_service_20260213/](./archive/shop_page_service_20260213/)*
 
 - [x] **Track: Fix current application - API path mismatch, auth data contract misalignment, and test configuration**
   *Commit: `8176c6d` | Link: [./archive/fix_current_application_20260213/](./archive/fix_current_application_20260213/)*
