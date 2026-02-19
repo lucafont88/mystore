@@ -79,6 +79,20 @@ class ShopPageRepository {
     });
   }
 
+  async getBuilder(id: string): Promise<{ builder: any; vendorId: string } | null> {
+    return prisma.shopPage.findUnique({
+      where: { id },
+      select: { builder: true, vendorId: true },
+    });
+  }
+
+  async updateBuilder(id: string, builder: any): Promise<ShopPage> {
+    return prisma.shopPage.update({
+      where: { id },
+      data: { builder },
+    });
+  }
+
   async getProductIds(shopPageId: string): Promise<string[]> {
     const products = await prisma.shopPageProduct.findMany({
       where: { shopPageId },

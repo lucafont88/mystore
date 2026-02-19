@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ShoppingCart, User, Search, Globe, LogOut, Package } from 'lucide-react';
+import { ShoppingCart, User, Search, Globe, LogOut, Package, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -45,6 +45,12 @@ export function Header() {
           <Link to="/products" className="transition-colors hover:text-foreground/80 text-foreground/60">
             {t('common:products', 'Prodotti')}
           </Link>
+          {isAuthenticated && user?.role?.toUpperCase() === 'VENDOR' && (
+            <Link to="/shop-pages" className="flex items-center gap-1 transition-colors hover:text-foreground/80 text-foreground/60">
+              <FileText className="h-4 w-4" />
+              {t('shopPages:title', 'Le mie pagine')}
+            </Link>
+          )}
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-4">

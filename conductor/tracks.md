@@ -34,7 +34,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-*(Nessun track attivo)*
+- [ ] **Track: Shop Page Frontend V1 - Vendor page management with 3-column layout, DnD sidebar, HTML editor with preview**
+  *Link: [./tracks/shop_page_frontend_v1_20260216/](./tracks/shop_page_frontend_v1_20260216/)*
 
 ---
 

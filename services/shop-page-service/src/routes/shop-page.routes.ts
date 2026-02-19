@@ -13,6 +13,8 @@ router.get('/', authenticate, authorize(['VENDOR']), shopPageController.list.bin
 router.get('/:id', authenticate, authorize(['VENDOR']), shopPageController.getById.bind(shopPageController));
 router.put('/:id', authenticate, authorize(['VENDOR']), shopPageController.update.bind(shopPageController));
 router.put('/:id/content', authenticate, authorize(['VENDOR']), shopPageController.saveContent.bind(shopPageController));
+router.get('/:id/builder', authenticate, authorize(['VENDOR']), shopPageController.getBuilder.bind(shopPageController));
+router.put('/:id/builder', authenticate, authorize(['VENDOR']), shopPageController.saveBuilder.bind(shopPageController));
 router.put('/:id/publish', authenticate, authorize(['VENDOR']), shopPageController.publish.bind(shopPageController));
 router.put('/:id/unpublish', authenticate, authorize(['VENDOR']), shopPageController.unpublish.bind(shopPageController));
 router.delete('/:id', authenticate, authorize(['VENDOR']), shopPageController.delete.bind(shopPageController));

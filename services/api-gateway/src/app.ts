@@ -21,16 +21,18 @@ const PORT = process.env.API_GATEWAY_PORT || 3000;
 app.use(helmet());
 app.use(cors());
 
-// Body parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 // Observability Middlewares
 app.use(middlewares.requestLogger);
 app.use(middlewares.metrics);
 
-// Routes
+// Proxy routes MUST be mounted BEFORE body parsers.
+// express.json() consumes the request stream, making it unavailable
+// for http-proxy-middleware to forward to downstream services.
 app.use(routes);
+
+// Body parsing (only for non-proxied routes like health check)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {

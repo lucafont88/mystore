@@ -14,3 +14,12 @@ export const userKeys = {
 export const cartKeys = {
   all: ['cart'] as const,
 };
+
+export const shopPageKeys = {
+  all: ['shopPages'] as const,
+  lists: () => [...shopPageKeys.all, 'list'] as const,
+  details: () => [...shopPageKeys.all, 'detail'] as const,
+  detail: (id: string) => [...shopPageKeys.details(), id] as const,
+  builders: () => [...shopPageKeys.all, 'builder'] as const,
+  builder: (id: string) => [...shopPageKeys.builders(), id] as const,
+};

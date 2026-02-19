@@ -90,11 +90,21 @@ export class ShopPageService {
     await shopPageRepository.delete(id);
   }
 
-  async getPage(id: string, vendorId: string): Promise<ShopPage & { products: any[] }> {
+  async getPage(id: string, vendorId: string): Promise<ShopPage & { products: any[]; htmlContent: string }> {
     const page = await shopPageRepository.findById(id);
     if (!page) throw new Error('Page not found');
     if (page.vendorId !== vendorId) throw new Error('Ownership verification failed');
-    return page;
+
+    let htmlContent = '';
+    if (page.htmlKey) {
+      try {
+        htmlContent = await minioService.getHtml(page.htmlKey);
+      } catch {
+        // MinIO fetch failed — return empty content
+      }
+    }
+
+    return { ...page, htmlContent };
   }
 
   async listPages(vendorId: string, filters: { skip?: number; take?: number; status?: string }) {
@@ -115,6 +125,21 @@ export class ShopPageService {
     if (page.vendorId !== vendorId) throw new Error('Ownership verification failed');
 
     await shopPageRepository.removeProduct(id, productId);
+  }
+
+  async getBuilder(id: string, vendorId: string): Promise<any> {
+    const result = await shopPageRepository.getBuilder(id);
+    if (!result) throw new Error('Page not found');
+    if (result.vendorId !== vendorId) throw new Error('Ownership verification failed');
+    return result.builder ?? { blocks: [] };
+  }
+
+  async saveBuilder(id: string, builderData: any, vendorId: string): Promise<ShopPage> {
+    const page = await shopPageRepository.findById(id);
+    if (!page) throw new Error('Page not found');
+    if (page.vendorId !== vendorId) throw new Error('Ownership verification failed');
+
+    return shopPageRepository.updateBuilder(id, builderData);
   }
 
   async getPublicPage(slug: string): Promise<{ page: ShopPage; html: string } | null> {

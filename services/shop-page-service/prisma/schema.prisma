@@ -22,6 +22,7 @@ model ShopPage {
   status      PageStatus       @default(NEW_PAGE)
   vendorId    String
   htmlKey     String?
+  builder     Json?
   publishedAt DateTime?
   products    ShopPageProduct[]
   createdAt   DateTime         @default(now())

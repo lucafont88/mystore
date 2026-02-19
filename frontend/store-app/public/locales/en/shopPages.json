@@ -1,0 +1,88 @@
+{
+  "title": "My pages",
+  "createNew": "Create new page",
+  "noPages": "You haven't created any pages yet.",
+  "noPageSelected": "Select a page from the sidebar to start editing.",
+  "tabs": {
+    "htmlSource": "HTML Source",
+    "preview": "Preview",
+    "siteBuilder": "Site Builder"
+  },
+  "editor": {
+    "placeholder": "Write your HTML code here...",
+    "previewEmpty": "The preview will appear here when you enter HTML code."
+  },
+  "config": {
+    "title": "Configuration",
+    "placeholder": "Page settings will be available here in future versions."
+  },
+  "status": {
+    "NEW_PAGE": "New",
+    "DRAFT": "Draft",
+    "PUBLISHED": "Published"
+  },
+  "accessDenied": {
+    "title": "Access denied",
+    "message": "This section is reserved for vendors. Log in with a vendor account to manage your pages."
+  },
+  "newPage": {
+    "title": "New page",
+    "defaultHtml": "<h1>My new page</h1>\n<p>Start writing your content here.</p>"
+  },
+  "createPrompt": "Enter the name for the new page:",
+  "renamePrompt": "Enter the new name for the page:",
+  "deleteConfirm": "Are you sure you want to delete the page \"{{title}}\"?",
+  "renamePage": "Rename",
+  "deletePage": "Delete",
+  "builder": {
+    "library": {
+      "title": "Blocks"
+    },
+    "canvas": {
+      "empty": "Drag blocks here to start building your page",
+      "removeBlock": "Remove block",
+      "productPlaceholder": "Product Block",
+      "dropHere": "Drop here"
+    },
+    "inspector": {
+      "title": "Properties",
+      "noSelection": "Select a block to edit its properties",
+      "productId": "Product ID",
+      "text": "Button Text",
+      "link": "Link URL",
+      "variant": "Style",
+      "gap": "Gap (px)",
+      "justify": "Justify",
+      "padding": "Padding (px)",
+      "margin": "Margin (px)",
+      "backgroundColor": "Background Color",
+      "rows": "Rows",
+      "cols": "Columns",
+      "variants": {
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "outline": "Outline"
+      },
+      "htmlContent": "HTML Content",
+      "justifyOptions": {
+        "start": "Start",
+        "center": "Center",
+        "end": "End",
+        "between": "Space Between"
+      }
+    },
+    "blocks": {
+      "product": "Product",
+      "button": "Button",
+      "row": "Row",
+      "box": "Box",
+      "table": "Table",
+      "html": "HTML"
+    },
+    "defaultButtonText": "Click me",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+}

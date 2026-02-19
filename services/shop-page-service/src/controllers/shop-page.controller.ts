@@ -59,13 +59,13 @@ export class ShopPageController {
 
   async saveContent(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { html } = req.body;
-      if (!html) {
+      const { htmlContent } = req.body;
+      if (!htmlContent) {
         res.status(400).json({ error: 'HTML content is required' });
         return;
       }
 
-      const page = await shopPageService.saveContent(req.params.id as string, html, req.user!.id);
+      const page = await shopPageService.saveContent(req.params.id as string, htmlContent, req.user!.id);
       res.status(200).json(page);
     } catch (error: any) {
       const status = error.message === 'Page not found' ? 404
@@ -135,6 +135,40 @@ export class ShopPageController {
     try {
       await shopPageService.removeProduct(req.params.id as string, req.params.productId as string, req.user!.id);
       res.status(204).send();
+    } catch (error: any) {
+      const status = error.message === 'Page not found' ? 404
+        : error.message === 'Ownership verification failed' ? 403
+        : 400;
+      res.status(status).json({ error: error.message });
+    }
+  }
+
+  async getBuilder(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const builder = await shopPageService.getBuilder(req.params.id as string, req.user!.id);
+      res.status(200).json(builder);
+    } catch (error: any) {
+      const status = error.message === 'Page not found' ? 404
+        : error.message === 'Ownership verification failed' ? 403
+        : 400;
+      res.status(status).json({ error: error.message });
+    }
+  }
+
+  async saveBuilder(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const { blocks } = req.body;
+      if (!blocks || !Array.isArray(blocks)) {
+        res.status(400).json({ error: 'blocks array is required' });
+        return;
+      }
+
+      const page = await shopPageService.saveBuilder(
+        req.params.id as string,
+        { blocks },
+        req.user!.id
+      );
+      res.status(200).json(page);
     } catch (error: any) {
       const status = error.message === 'Page not found' ? 404
         : error.message === 'Ownership verification failed' ? 403
