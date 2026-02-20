@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Code, Eye, LayoutGrid } from 'lucide-react';
+import { Code, Eye, Globe, LayoutGrid } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { SiteBuilder } from '../builder/SiteBuilder';
 import { HtmlSourceEditor } from './HtmlSourceEditor';
 
@@ -31,20 +32,32 @@ export function PageEditor({
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="flex h-full flex-col">
-      <TabsList className="mx-4 mt-4 w-fit">
-        <TabsTrigger value="builder" className="gap-2">
-          <LayoutGrid className="h-4 w-4" />
-          {t('tabs.siteBuilder')}
-        </TabsTrigger>
-        <TabsTrigger value="source" className="gap-2">
-          <Code className="h-4 w-4" />
-          {t('tabs.htmlSource')}
-        </TabsTrigger>
-        <TabsTrigger value="preview" className="gap-2">
-          <Eye className="h-4 w-4" />
-          {t('tabs.preview')}
-        </TabsTrigger>
-      </TabsList>
+      <div className="mx-4 mt-4 flex items-center justify-between">
+        <TabsList className="w-fit">
+          <TabsTrigger value="builder" className="gap-2">
+            <LayoutGrid className="h-4 w-4" />
+            {t('tabs.siteBuilder')}
+          </TabsTrigger>
+          <TabsTrigger value="source" className="gap-2">
+            <Code className="h-4 w-4" />
+            {t('tabs.htmlSource')}
+          </TabsTrigger>
+          <TabsTrigger value="preview" className="gap-2">
+            <Eye className="h-4 w-4" />
+            {t('tabs.preview')}
+          </TabsTrigger>
+        </TabsList>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Eye className="h-3.5 w-3.5" />
+            {t('editor.previewDraft')}
+          </Button>
+          <Button size="sm" className="gap-1.5">
+            <Globe className="h-3.5 w-3.5" />
+            {t('editor.publish')}
+          </Button>
+        </div>
+      </div>
 
       <TabsContent value="builder" className="flex-1 p-0">
         <SiteBuilder

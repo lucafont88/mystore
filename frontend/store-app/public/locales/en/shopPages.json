@@ -10,7 +10,9 @@
   },
   "editor": {
     "placeholder": "Write your HTML code here...",
-    "previewEmpty": "The preview will appear here when you enter HTML code."
+    "previewEmpty": "The preview will appear here when you enter HTML code.",
+    "previewDraft": "Preview Draft",
+    "publish": "Publish"
   },
   "config": {
     "title": "Configuration",

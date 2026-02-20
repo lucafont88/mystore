@@ -10,7 +10,9 @@
   },
   "editor": {
     "placeholder": "Scrivi il tuo codice HTML qui...",
-    "previewEmpty": "L'anteprima apparirà qui quando inserisci del codice HTML."
+    "previewEmpty": "L'anteprima apparirà qui quando inserisci del codice HTML.",
+    "previewDraft": "Anteprima bozza",
+    "publish": "Pubblica"
   },
   "config": {
     "title": "Configurazione",

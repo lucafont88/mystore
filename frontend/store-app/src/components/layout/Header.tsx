@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ShoppingCart, User, Search, Globe, LogOut, Package, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,8 @@ export function Header() {
   const { user, logout, isAuthenticated } = useAuthStore();
   const { setOpen, getTotalItems } = useCartStore();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isShopPages = location.pathname.startsWith('/shop-pages');
   const [search, setSearch] = useState('');
 
   // Debounced search logic could be added here
@@ -80,15 +82,17 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Cart Button */}
-            <Button variant="ghost" size="icon" className="relative" onClick={() => setOpen(true)}>
-              <ShoppingCart className="h-5 w-5" />
-              {getTotalItems() > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-                  {getTotalItems()}
-                </span>
-              )}
-            </Button>
+            {/* Cart Button — hidden on shop pages */}
+            {!isShopPages && (
+              <Button variant="ghost" size="icon" className="relative" onClick={() => setOpen(true)}>
+                <ShoppingCart className="h-5 w-5" />
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </Button>
+            )}
 
             {/* User Menu */}
             {isAuthenticated ? (
