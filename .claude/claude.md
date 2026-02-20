@@ -17,5 +17,28 @@ file da utilizzare. Per ogni feature devi aggiungere un elemento al file `tracks
 
 Se hai domande o hai bisogno di ulteriori dettagli, chiedimi pure! Se scrivo qualcosa di sbagliato, corregimi. Non darmi sempre ragione!
 
+## Architettura
+- Monorepo pnpm: frontend (`frontend/store-app`) + microservizi (`services/*`) + shared (`shared/`)
+- Backend services girano in Docker. Dopo modifiche al codice backend: `docker compose build <service> && docker compose up -d <service>`
+- API Gateway (porta 3000) proxya ai servizi: auth-service (3001), product-service (3002), shop-page-service (3003)
+- Frontend Vite (porta 5173) proxya `/api` → API Gateway (3000) via `vite.config.ts`
+
+## Stack Frontend
+- React 18 + TypeScript + Vite
+- Zustand (state), TanStack Query (server state), shadcn/ui + Tailwind CSS
+- Radix TabsContent smonta componenti quando il tab non è attivo (no forceMount)
+
+## Stack Backend
+- Express + TypeScript + Prisma (PostgreSQL) + MinIO (object storage)
+- JWT auth: `authenticate` + `authorize(['VENDOR'])` middleware su tutti gli endpoint protetti
+- HTML delle shop pages è salvato in MinIO (campo `htmlKey` nel DB), non direttamente nel DB
+
+## Gotchas
+- Mai fare setState durante il render in React — usare sempre useEffect
+- Il campo body per saveContent è `htmlContent` (non `html`) sia nel frontend che nel controller backend
+- `getPages` backend ritorna `{ items, total }` (paginato), non un array diretto
+- `getPage` backend include `htmlContent` letto da MinIO nella risposta
+- Ricorda dopo il una cambiamento nel backend di aggiornare le immagini docker e restare il container con la nuova immagine
+
 ## Regole
 - **Non modificare i file** `.claude/claude.md` e `.claude/rules/`.
