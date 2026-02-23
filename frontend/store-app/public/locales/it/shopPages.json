@@ -1,0 +1,90 @@
+{
+  "title": "Le mie pagine",
+  "createNew": "Crea nuova pagina",
+  "noPages": "Non hai ancora creato nessuna pagina.",
+  "noPageSelected": "Seleziona una pagina dalla sidebar per iniziare a modificarla.",
+  "tabs": {
+    "htmlSource": "Sorgente HTML",
+    "preview": "Anteprima",
+    "siteBuilder": "Site Builder"
+  },
+  "editor": {
+    "placeholder": "Scrivi il tuo codice HTML qui...",
+    "previewEmpty": "L'anteprima apparirà qui quando inserisci del codice HTML.",
+    "previewDraft": "Anteprima bozza",
+    "publish": "Pubblica"
+  },
+  "config": {
+    "title": "Configurazione",
+    "placeholder": "Le impostazioni della pagina saranno disponibili qui nelle prossime versioni."
+  },
+  "status": {
+    "NEW_PAGE": "Nuova",
+    "DRAFT": "Bozza",
+    "PUBLISHED": "Pubblicata"
+  },
+  "accessDenied": {
+    "title": "Accesso negato",
+    "message": "Questa sezione è riservata ai venditori. Accedi con un account venditore per gestire le tue pagine."
+  },
+  "newPage": {
+    "title": "Nuova pagina",
+    "defaultHtml": "<h1>La mia nuova pagina</h1>\n<p>Inizia a scrivere il tuo contenuto qui.</p>"
+  },
+  "createPrompt": "Inserisci il nome della nuova pagina:",
+  "renamePrompt": "Inserisci il nuovo nome della pagina:",
+  "deleteConfirm": "Sei sicuro di voler eliminare la pagina \"{{title}}\"?",
+  "renamePage": "Rinomina",
+  "deletePage": "Elimina",
+  "builder": {
+    "library": {
+      "title": "Blocchi"
+    },
+    "canvas": {
+      "empty": "Trascina i blocchi qui per iniziare a costruire la tua pagina",
+      "removeBlock": "Rimuovi blocco",
+      "productPlaceholder": "Blocco Prodotto",
+      "dropHere": "Rilascia qui"
+    },
+    "inspector": {
+      "title": "Proprietà",
+      "noSelection": "Seleziona un blocco per modificarne le proprietà",
+      "productId": "ID Prodotto",
+      "text": "Testo Pulsante",
+      "link": "URL Link",
+      "variant": "Stile",
+      "gap": "Spaziatura (px)",
+      "justify": "Allineamento",
+      "padding": "Padding (px)",
+      "margin": "Margine (px)",
+      "backgroundColor": "Colore di Sfondo",
+      "rows": "Righe",
+      "cols": "Colonne",
+      "variants": {
+        "primary": "Primario",
+        "secondary": "Secondario",
+        "outline": "Contorno"
+      },
+      "htmlContent": "Contenuto HTML",
+      "justifyOptions": {
+        "start": "Inizio",
+        "center": "Centro",
+        "end": "Fine",
+        "between": "Spazio tra"
+      }
+    },
+    "blocks": {
+      "product": "Prodotto",
+      "button": "Pulsante",
+      "row": "Riga",
+      "box": "Contenitore",
+      "table": "Tabella",
+      "html": "HTML"
+    },
+    "defaultButtonText": "Cliccami",
+    "saving": "Salvataggio...",
+    "saved": "Salvato",
+    "save": "Salva",
+    "cancel": "Annulla"
+  }
+}

@@ -1021,6 +1021,7 @@ export namespace Prisma {
     status: number
     vendorId: number
     htmlKey: number
+    builder: number
     publishedAt: number
     createdAt: number
     updatedAt: number
@@ -1062,6 +1063,7 @@ export namespace Prisma {
     status?: true
     vendorId?: true
     htmlKey?: true
+    builder?: true
     publishedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -1148,6 +1150,7 @@ export namespace Prisma {
     status: $Enums.PageStatus
     vendorId: string
     htmlKey: string | null
+    builder: JsonValue | null
     publishedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1178,6 +1181,7 @@ export namespace Prisma {
     status?: boolean
     vendorId?: boolean
     htmlKey?: boolean
+    builder?: boolean
     publishedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1193,6 +1197,7 @@ export namespace Prisma {
     status?: boolean
     vendorId?: boolean
     htmlKey?: boolean
+    builder?: boolean
     publishedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1206,6 +1211,7 @@ export namespace Prisma {
     status?: boolean
     vendorId?: boolean
     htmlKey?: boolean
+    builder?: boolean
     publishedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1230,6 +1236,7 @@ export namespace Prisma {
       status: $Enums.PageStatus
       vendorId: string
       htmlKey: string | null
+      builder: Prisma.JsonValue | null
       publishedAt: Date | null
       createdAt: Date
       updatedAt: Date
@@ -1634,6 +1641,7 @@ export namespace Prisma {
     readonly status: FieldRef<"ShopPage", 'PageStatus'>
     readonly vendorId: FieldRef<"ShopPage", 'String'>
     readonly htmlKey: FieldRef<"ShopPage", 'String'>
+    readonly builder: FieldRef<"ShopPage", 'Json'>
     readonly publishedAt: FieldRef<"ShopPage", 'DateTime'>
     readonly createdAt: FieldRef<"ShopPage", 'DateTime'>
     readonly updatedAt: FieldRef<"ShopPage", 'DateTime'>
@@ -2974,6 +2982,7 @@ export namespace Prisma {
     status: 'status',
     vendorId: 'vendorId',
     htmlKey: 'htmlKey',
+    builder: 'builder',
     publishedAt: 'publishedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -3001,12 +3010,29 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   export const NullsOrder: {
@@ -3047,6 +3073,13 @@ export namespace Prisma {
    * Reference to a field of type 'PageStatus[]'
    */
   export type ListEnumPageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PageStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
     
 
 
@@ -3106,6 +3139,7 @@ export namespace Prisma {
     status?: EnumPageStatusFilter<"ShopPage"> | $Enums.PageStatus
     vendorId?: StringFilter<"ShopPage"> | string
     htmlKey?: StringNullableFilter<"ShopPage"> | string | null
+    builder?: JsonNullableFilter<"ShopPage">
     publishedAt?: DateTimeNullableFilter<"ShopPage"> | Date | string | null
     createdAt?: DateTimeFilter<"ShopPage"> | Date | string
     updatedAt?: DateTimeFilter<"ShopPage"> | Date | string
@@ -3120,6 +3154,7 @@ export namespace Prisma {
     status?: SortOrder
     vendorId?: SortOrder
     htmlKey?: SortOrderInput | SortOrder
+    builder?: SortOrderInput | SortOrder
     publishedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3137,6 +3172,7 @@ export namespace Prisma {
     status?: EnumPageStatusFilter<"ShopPage"> | $Enums.PageStatus
     vendorId?: StringFilter<"ShopPage"> | string
     htmlKey?: StringNullableFilter<"ShopPage"> | string | null
+    builder?: JsonNullableFilter<"ShopPage">
     publishedAt?: DateTimeNullableFilter<"ShopPage"> | Date | string | null
     createdAt?: DateTimeFilter<"ShopPage"> | Date | string
     updatedAt?: DateTimeFilter<"ShopPage"> | Date | string
@@ -3151,6 +3187,7 @@ export namespace Prisma {
     status?: SortOrder
     vendorId?: SortOrder
     htmlKey?: SortOrderInput | SortOrder
+    builder?: SortOrderInput | SortOrder
     publishedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3170,6 +3207,7 @@ export namespace Prisma {
     status?: EnumPageStatusWithAggregatesFilter<"ShopPage"> | $Enums.PageStatus
     vendorId?: StringWithAggregatesFilter<"ShopPage"> | string
     htmlKey?: StringNullableWithAggregatesFilter<"ShopPage"> | string | null
+    builder?: JsonNullableWithAggregatesFilter<"ShopPage">
     publishedAt?: DateTimeNullableWithAggregatesFilter<"ShopPage"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ShopPage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopPage"> | Date | string
@@ -3241,6 +3279,7 @@ export namespace Prisma {
     status?: $Enums.PageStatus
     vendorId: string
     htmlKey?: string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3255,6 +3294,7 @@ export namespace Prisma {
     status?: $Enums.PageStatus
     vendorId: string
     htmlKey?: string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3269,6 +3309,7 @@ export namespace Prisma {
     status?: EnumPageStatusFieldUpdateOperationsInput | $Enums.PageStatus
     vendorId?: StringFieldUpdateOperationsInput | string
     htmlKey?: NullableStringFieldUpdateOperationsInput | string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3283,6 +3324,7 @@ export namespace Prisma {
     status?: EnumPageStatusFieldUpdateOperationsInput | $Enums.PageStatus
     vendorId?: StringFieldUpdateOperationsInput | string
     htmlKey?: NullableStringFieldUpdateOperationsInput | string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3297,6 +3339,7 @@ export namespace Prisma {
     status?: $Enums.PageStatus
     vendorId: string
     htmlKey?: string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3310,6 +3353,7 @@ export namespace Prisma {
     status?: EnumPageStatusFieldUpdateOperationsInput | $Enums.PageStatus
     vendorId?: StringFieldUpdateOperationsInput | string
     htmlKey?: NullableStringFieldUpdateOperationsInput | string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3323,6 +3367,7 @@ export namespace Prisma {
     status?: EnumPageStatusFieldUpdateOperationsInput | $Enums.PageStatus
     vendorId?: StringFieldUpdateOperationsInput | string
     htmlKey?: NullableStringFieldUpdateOperationsInput | string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3419,6 +3464,28 @@ export namespace Prisma {
     notIn?: $Enums.PageStatus[] | ListEnumPageStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPageStatusFilter<$PrismaModel> | $Enums.PageStatus
   }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
@@ -3465,6 +3532,7 @@ export namespace Prisma {
     status?: SortOrder
     vendorId?: SortOrder
     htmlKey?: SortOrder
+    builder?: SortOrder
     publishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3540,6 +3608,31 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPageStatusFilter<$PrismaModel>
     _max?: NestedEnumPageStatusFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -3845,6 +3938,28 @@ export namespace Prisma {
     _min?: NestedEnumPageStatusFilter<$PrismaModel>
     _max?: NestedEnumPageStatusFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
@@ -3960,6 +4075,7 @@ export namespace Prisma {
     status?: $Enums.PageStatus
     vendorId: string
     htmlKey?: string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3973,6 +4089,7 @@ export namespace Prisma {
     status?: $Enums.PageStatus
     vendorId: string
     htmlKey?: string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4002,6 +4119,7 @@ export namespace Prisma {
     status?: EnumPageStatusFieldUpdateOperationsInput | $Enums.PageStatus
     vendorId?: StringFieldUpdateOperationsInput | string
     htmlKey?: NullableStringFieldUpdateOperationsInput | string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4015,6 +4133,7 @@ export namespace Prisma {
     status?: EnumPageStatusFieldUpdateOperationsInput | $Enums.PageStatus
     vendorId?: StringFieldUpdateOperationsInput | string
     htmlKey?: NullableStringFieldUpdateOperationsInput | string | null
+    builder?: NullableJsonNullValueInput | InputJsonValue
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

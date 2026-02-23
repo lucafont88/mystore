@@ -34,11 +34,14 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-*(Nessun track attivo)*
+*(nessun track attivo)*
 
 ---
 
 ## Recently Completed
+
+- [x] **Track: Shop Page Frontend V1 - Vendor page management with 3-column layout, DnD sidebar, HTML editor with preview, Site Builder, bug fixes, Preview Draft/Publish buttons**
+  *Link: [./archive/shop_page_frontend_v1_20260216/](./archive/shop_page_frontend_v1_20260216/)*
 
 - [x] **Track: Shop Page Service - Vendor HTML pages with MinIO storage and RabbitMQ integration**
   *Link: [./archive/shop_page_service_20260213/](./archive/shop_page_service_20260213/)*
