@@ -5,7 +5,10 @@
     "cart": "Cart",
     "account": "Account",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "bundles": "Bundles",
+    "myProducts": "My products",
+    "myBundles": "My bundles"
   },
   "actions": {
     "add": "Add",

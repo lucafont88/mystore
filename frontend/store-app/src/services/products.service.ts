@@ -17,6 +17,6 @@ export const productsService = {
   },
 
   getCategories: async () => {
-    return api.get<any[]>('/products/categories');
+    return api.get<any[]>('/categories');
   },
 };

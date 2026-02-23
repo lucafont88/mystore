@@ -1,0 +1,21 @@
+{
+  "accessDenied": "Access denied",
+  "products": {
+    "title": "My products",
+    "create": "New product",
+    "createTitle": "New product",
+    "empty": "You haven't created any products yet.",
+    "types": {
+      "PHYSICAL": "Physical",
+      "DIGITAL_FILE": "File",
+      "DIGITAL_LICENSE": "License",
+      "DIGITAL_ACCESS": "Access"
+    }
+  },
+  "bundles": {
+    "title": "My bundles",
+    "create": "New bundle",
+    "createTitle": "New bundle",
+    "empty": "You haven't created any bundles yet."
+  }
+}

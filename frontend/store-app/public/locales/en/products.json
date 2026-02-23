@@ -1,0 +1,15 @@
+{
+  "bundles": {
+    "title": "Bundles",
+    "empty": "No bundles available at the moment.",
+    "backToList": "Back to bundles",
+    "addToCart": "Add to cart",
+    "includedProducts": "Included products"
+  },
+  "productTypes": {
+    "PHYSICAL": "Physical",
+    "DIGITAL_FILE": "Download",
+    "DIGITAL_LICENSE": "License",
+    "DIGITAL_ACCESS": "Access"
+  }
+}

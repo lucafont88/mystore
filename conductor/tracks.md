@@ -34,7 +34,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-*(nessun track attivo)*
+- [ ] **Track: Digital Products (downloadable files, license keys, access/subscriptions) & fixed Product Bundles with mixed physical+digital support**
+  *Link: [./tracks/digital_products_bundles_20260223/](./tracks/digital_products_bundles_20260223/)*
 
 ---
 

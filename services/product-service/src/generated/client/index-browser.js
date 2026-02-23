@@ -144,8 +144,69 @@ exports.Prisma.ProductScalarFieldEnum = {
   categoryId: 'categoryId',
   images: 'images',
   isFeatured: 'isFeatured',
+  productType: 'productType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DigitalFileScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  fileKey: 'fileKey',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  maxDownloads: 'maxDownloads',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DigitalLicenseScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LicenseKeyScalarFieldEnum = {
+  id: 'id',
+  digitalLicenseId: 'digitalLicenseId',
+  key: 'key',
+  isRedeemed: 'isRedeemed',
+  redeemedAt: 'redeemedAt',
+  redeemedBy: 'redeemedBy',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DigitalAccessScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  accessDurationDays: 'accessDurationDays',
+  accessUrl: 'accessUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BundleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  price: 'price',
+  vendorId: 'vendorId',
+  categoryId: 'categoryId',
+  images: 'images',
+  isFeatured: 'isFeatured',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BundleItemScalarFieldEnum = {
+  id: 'id',
+  bundleId: 'bundleId',
+  productId: 'productId',
+  quantity: 'quantity'
 };
 
 exports.Prisma.SortOrder = {
@@ -162,11 +223,22 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.ProductType = exports.$Enums.ProductType = {
+  PHYSICAL: 'PHYSICAL',
+  DIGITAL_FILE: 'DIGITAL_FILE',
+  DIGITAL_LICENSE: 'DIGITAL_LICENSE',
+  DIGITAL_ACCESS: 'DIGITAL_ACCESS'
+};
 
 exports.Prisma.ModelName = {
   Category: 'Category',
-  Product: 'Product'
+  Product: 'Product',
+  DigitalFile: 'DigitalFile',
+  DigitalLicense: 'DigitalLicense',
+  LicenseKey: 'LicenseKey',
+  DigitalAccess: 'DigitalAccess',
+  Bundle: 'Bundle',
+  BundleItem: 'BundleItem'
 };
 
 /**

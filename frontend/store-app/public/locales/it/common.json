@@ -5,7 +5,10 @@
     "cart": "Carrello",
     "account": "Account",
     "login": "Accedi",
-    "register": "Registrati"
+    "register": "Registrati",
+    "bundles": "Bundle",
+    "myProducts": "I miei prodotti",
+    "myBundles": "I miei bundle"
   },
   "actions": {
     "add": "Aggiungi",

@@ -1,0 +1,21 @@
+{
+  "accessDenied": "Accesso negato",
+  "products": {
+    "title": "I miei prodotti",
+    "create": "Nuovo prodotto",
+    "createTitle": "Nuovo prodotto",
+    "empty": "Non hai ancora creato prodotti.",
+    "types": {
+      "PHYSICAL": "Fisico",
+      "DIGITAL_FILE": "File",
+      "DIGITAL_LICENSE": "Licenza",
+      "DIGITAL_ACCESS": "Accesso"
+    }
+  },
+  "bundles": {
+    "title": "I miei bundle",
+    "create": "Nuovo bundle",
+    "createTitle": "Nuovo bundle",
+    "empty": "Non hai ancora creato bundle."
+  }
+}

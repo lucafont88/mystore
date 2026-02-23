@@ -47,11 +47,22 @@ export function Header() {
           <Link to="/products" className="transition-colors hover:text-foreground/80 text-foreground/60">
             {t('common:products', 'Prodotti')}
           </Link>
+          <Link to="/bundles" className="transition-colors hover:text-foreground/80 text-foreground/60">
+            {t('common:bundles', 'Bundle')}
+          </Link>
           {isAuthenticated && user?.role?.toUpperCase() === 'VENDOR' && (
-            <Link to="/shop-pages" className="flex items-center gap-1 transition-colors hover:text-foreground/80 text-foreground/60">
-              <FileText className="h-4 w-4" />
-              {t('shopPages:title', 'Le mie pagine')}
-            </Link>
+            <>
+              <Link to="/shop-pages" className="flex items-center gap-1 transition-colors hover:text-foreground/80 text-foreground/60">
+                <FileText className="h-4 w-4" />
+                {t('shopPages:title', 'Le mie pagine')}
+              </Link>
+              <Link to="/vendor/products" className="transition-colors hover:text-foreground/80 text-foreground/60">
+                {t('common:myProducts', 'I miei prodotti')}
+              </Link>
+              <Link to="/vendor/bundles" className="transition-colors hover:text-foreground/80 text-foreground/60">
+                {t('common:myBundles', 'I miei bundle')}
+              </Link>
+            </>
           )}
         </nav>
 

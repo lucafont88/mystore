@@ -15,6 +15,19 @@ export const cartKeys = {
   all: ['cart'] as const,
 };
 
+export const bundleKeys = {
+  all: ['bundles'] as const,
+  lists: () => [...bundleKeys.all, 'list'] as const,
+  list: (filters: string) => [...bundleKeys.lists(), { filters }] as const,
+  details: () => [...bundleKeys.all, 'detail'] as const,
+  detail: (id: string) => [...bundleKeys.details(), id] as const,
+};
+
+export const licenseKeyKeys = {
+  all: ['licenseKeys'] as const,
+  byProduct: (productId: string) => [...licenseKeyKeys.all, productId] as const,
+};
+
 export const shopPageKeys = {
   all: ['shopPages'] as const,
   lists: () => [...shopPageKeys.all, 'list'] as const,

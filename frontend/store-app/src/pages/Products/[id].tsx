@@ -76,15 +76,15 @@ export default function ProductDetailPage() {
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <span className="text-sm font-medium">Stato:</span>
-              <span className={product.stock > 0 ? 'text-green-600' : 'text-destructive'}>
-                {product.stock > 0 ? 'Disponibile' : 'Esaurito'}
+              <span className={product.stockQuantity > 0 ? 'text-green-600' : 'text-destructive'}>
+                {product.stockQuantity > 0 ? 'Disponibile' : 'Esaurito'}
               </span>
             </div>
             
             <Button
               size="lg"
               className="w-full md:w-auto"
-              disabled={product.stock === 0}
+              disabled={product.stockQuantity === 0}
               onClick={handleAddToCart}
             >
               {t('common:actions.add')}

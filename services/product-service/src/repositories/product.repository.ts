@@ -1,5 +1,5 @@
 import prisma from '../config/db';
-import { Product, Prisma } from '../generated/client';
+import { Product, ProductType, Prisma } from '../generated/client';
 
 export interface ProductFilter {
   skip?: number;
@@ -9,6 +9,7 @@ export interface ProductFilter {
   minPrice?: number;
   maxPrice?: number;
   search?: string;
+  productType?: ProductType;
 }
 
 export interface PaginatedProducts {
@@ -16,39 +17,44 @@ export interface PaginatedProducts {
   total: number;
 }
 
+const productInclude = {
+  category: true,
+  digitalFile: true,
+  digitalLicense: true,
+  digitalAccess: true,
+} as const;
+
 export class ProductRepository {
   async create(data: Prisma.ProductCreateInput | Prisma.ProductUncheckedCreateInput): Promise<Product> {
     return prisma.product.create({
       // @ts-ignore
       data,
+      include: productInclude,
     });
   }
 
   async findById(id: string): Promise<(Product & { category: any }) | null> {
     return prisma.product.findUnique({
       where: { id },
-      include: {
-        category: true,
-      },
+      include: productInclude,
     }) as Promise<(Product & { category: any }) | null>;
   }
 
   async findBySlug(slug: string): Promise<Product | null> {
     return prisma.product.findUnique({
       where: { slug },
-      include: {
-        category: true,
-      },
+      include: productInclude,
     });
   }
 
   async findAll(filter: ProductFilter): Promise<PaginatedProducts> {
-    const { skip = 0, take = 10, categoryId, vendorId, minPrice, maxPrice, search } = filter;
+    const { skip = 0, take = 10, categoryId, vendorId, minPrice, maxPrice, search, productType } = filter;
 
     const where: Prisma.ProductWhereInput = {};
 
     if (categoryId) where.categoryId = categoryId;
     if (vendorId) where.vendorId = vendorId;
+    if (productType) where.productType = productType;
     if (minPrice || maxPrice) {
       where.price = {
         gte: minPrice,
@@ -67,9 +73,7 @@ export class ProductRepository {
         where,
         skip,
         take,
-        include: {
-          category: true,
-        },
+        include: productInclude,
         orderBy: { createdAt: 'desc' },
       }),
       prisma.product.count({ where }),
@@ -82,6 +86,7 @@ export class ProductRepository {
     return prisma.product.update({
       where: { id },
       data,
+      include: productInclude,
     });
   }
 

@@ -20,6 +20,7 @@ import cors from 'cors';
 import routes from './routes';
 import { initProductPublisher } from './events/publisher';
 import { setupProductValidationResponder } from './events/responder';
+import { ensureBucket } from './config/minio';
 
 const app: express.Application = express();
 const PORT = process.env.PRODUCT_SERVICE_PORT || 3002;
@@ -44,6 +45,14 @@ app.get('/health', (req: Request, res: Response) => {
 if (process.env.NODE_ENV !== 'test') {
   const server = app.listen(PORT, async () => {
     logger.info(`Product Service is running on port ${PORT}`);
+
+    // Initialize MinIO bucket
+    try {
+      await ensureBucket();
+      logger.info('MinIO bucket ready');
+    } catch (err) {
+      logger.warn({ err }, 'MinIO not available, digital file features disabled');
+    }
 
     // Initialize RabbitMQ
     const rabbitmqUrl = process.env.RABBITMQ_URL || 'amqp://guest:guest@localhost:5672';

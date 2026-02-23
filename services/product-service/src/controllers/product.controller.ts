@@ -64,6 +64,7 @@ export class ProductController {
         categoryId: req.query.categoryId as string,
         vendorId: req.query.vendorId as string,
         search: req.query.search as string,
+        productType: req.query.productType as string | undefined,
       };
       const result = await productService.listProducts(filters);
       res.status(200).json(result);
