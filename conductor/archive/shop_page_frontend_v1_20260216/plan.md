@@ -5,28 +5,28 @@
 - [x] Task: Create shadcn/ui Tabs component wrapper
 - [x] Task: Create ShopPage TypeScript types
 - [x] Task: Create i18n translation files (IT/EN)
-- [ ] Task: Conductor - User Manual Verification 'Phase 1'
+- [x] Task: Conductor - User Manual Verification 'Phase 1'
 
 ## Phase 2: Services & Data Layer
 - [x] Task: Create shopPages.service.ts with mock data
 - [x] Task: Create useShopPagesQuery.ts query hooks
-- [ ] Task: Conductor - User Manual Verification 'Phase 2'
+- [x] Task: Conductor - User Manual Verification 'Phase 2'
 
 ## Phase 3: UI Components
 - [x] Task: Create PagesSidebar with DnD reordering
 - [x] Task: Create PageEditor with HTML/Preview tabs
 - [x] Task: Create PageConfig placeholder
-- [ ] Task: Conductor - User Manual Verification 'Phase 3'
+- [x] Task: Conductor - User Manual Verification 'Phase 3'
 
 ## Phase 4: Page Assembly & Routing
 - [x] Task: Create ShopPages/index.tsx main page with VENDOR guard
 - [x] Task: Add /shop-pages route to router
 - [x] Task: Add vendor navigation link in Header
-- [ ] Task: Conductor - User Manual Verification 'Phase 4'
+- [x] Task: Conductor - User Manual Verification 'Phase 4'
 
 ## Phase 5: Build & Verification
 - [x] Task: Verify build compiles without errors
-- [ ] Task: Manual verification of all features
+- [x] Task: Manual verification of all features
 
 ## Phase 6: Site Builder — No-code page builder
 - [x] Task: Create builder types (types/builder.ts)
@@ -45,4 +45,16 @@
 - [x] Task: Modify index.tsx to pass pageId, manage tab state, hide PageConfig in builder mode
 - [x] Task: i18n translations for builder (IT + EN)
 - [x] Task: Build verification — pnpm build compiles without errors
-- [ ] Task: Conductor - User Manual Verification 'Phase 6'
+- [x] Task: Conductor - User Manual Verification 'Phase 6'
+
+## Phase 7: Bug fixes & UI Polish
+- [x] Task: Fix builder empty on first load (fallbackHtml from htmlContent)
+- [x] Task: Fix data not persisting (remove mock fallback, direct API calls)
+- [x] Task: Fix infinite re-render (setState during render → useEffect)
+- [x] Task: Fix field mismatch (html → htmlContent) in backend controller
+- [x] Task: Fix response format mismatch (paginated {items,total} vs array)
+- [x] Task: Fix getPage to include htmlContent from MinIO
+- [x] Task: Fix 404 on builder endpoints (Docker image rebuild)
+- [x] Task: Add Preview Draft + Publish buttons in PageEditor
+- [x] Task: Hide cart icon in Header on /shop-pages routes
+- [x] Task: Build verification — tsc --noEmit passes

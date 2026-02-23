@@ -1,8 +1,0 @@
-{
-  "track_id": "shop_page_frontend_v1_20260216",
-  "type": "feature",
-  "status": "in_progress",
-  "created_at": "2026-02-16T10:00:00Z",
-  "updated_at": "2026-02-16T10:00:00Z",
-  "description": "Frontend V1 for shop-page-service: vendor page management with 3-column layout, DnD sidebar, HTML editor with preview"
-}
