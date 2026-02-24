@@ -45,16 +45,28 @@ app.get('/health', (req: Request, res: Response) => {
 
 // Graceful shutdown
 if (process.env.NODE_ENV !== 'test') {
-  const server = app.listen(PORT, () => {
-    logger.info(`API Gateway started on port ${PORT}`);
-  });
+  const start = async () => {
+    // Setup Swagger UI (fetches specs from services after they start)
+    const { setupSwagger } = await import('./config/swagger');
+    await setupSwagger(app);
+    logger.info('Swagger UI available at /api-docs');
 
-  process.on('SIGTERM', async () => {
-    logger.info('SIGTERM received, shutting down gracefully');
-    server.close(async () => {
-      await shutdown();
-      process.exit(0);
+    const server = app.listen(PORT, () => {
+      logger.info(`API Gateway started on port ${PORT}`);
     });
+
+    process.on('SIGTERM', async () => {
+      logger.info('SIGTERM received, shutting down gracefully');
+      server.close(async () => {
+        await shutdown();
+        process.exit(0);
+      });
+    });
+  };
+
+  start().catch((err) => {
+    logger.error({ err }, 'Failed to start API Gateway');
+    process.exit(1);
   });
 }
 

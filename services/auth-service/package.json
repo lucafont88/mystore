@@ -28,7 +28,9 @@
     "helmet": "^8.1.0",
     "ioredis": "^5.9.2",
     "jsonwebtoken": "^9.0.3",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
@@ -37,6 +39,8 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.2.2",
     "@types/supertest": "^6.0.3",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "@vitest/coverage-v8": "^4.0.18",
     "nodemon": "^3.1.11",
     "prisma": "^5.22.0",

@@ -34,6 +34,10 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+// Swagger spec endpoint
+import swaggerSpec from './config/swagger';
+app.get('/api/v1/docs.json', (_req: Request, res: Response) => res.json(swaggerSpec));
+
 // Routes
 app.use('/api/v1', routes);
 
