@@ -26,6 +26,7 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     addItem({
       productId: product.id,
+      vendorId: product.vendorId,
       name: product.name,
       price: product.price,
       quantity: 1,

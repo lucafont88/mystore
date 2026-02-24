@@ -59,7 +59,8 @@
       "Bash(PRODUCT_DATABASE_URL=\"postgresql://user:password@localhost:5432/products_db?schema=public\" npx prisma migrate:*)",
       "Bash(npx shadcn@latest add:*)",
       "Bash(python3 -m json.tool:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(pnpm prisma generate:*)"
     ]
   }
 }

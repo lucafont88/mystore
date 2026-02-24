@@ -4,6 +4,7 @@ import { ProductType } from '@/types/product';
 
 export interface CartItem {
   productId: string;
+  vendorId: string;
   name: string;
   price: number;
   quantity: number;

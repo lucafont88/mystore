@@ -9,6 +9,7 @@ describe('cart store', () => {
   it('should add an item to the cart', () => {
     const product = {
       productId: '1',
+      vendorId: 'vendor-1',
       name: 'Test Product',
       price: 10,
       quantity: 1,
@@ -27,6 +28,7 @@ describe('cart store', () => {
   it('should increment quantity if item already exists', () => {
     const product = {
       productId: '1',
+      vendorId: 'vendor-1',
       name: 'Test Product',
       price: 10,
       quantity: 1,
@@ -45,6 +47,7 @@ describe('cart store', () => {
   it('should remove an item', () => {
     const product = {
       productId: '1',
+      vendorId: 'vendor-1',
       name: 'Test Product',
       price: 10,
       quantity: 1,

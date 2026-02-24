@@ -10,6 +10,7 @@ const services: ServiceSpec[] = [
   { name: 'auth-service', url: `${process.env.AUTH_SERVICE_URL || 'http://localhost:3001'}/api/v1/docs.json` },
   { name: 'product-service', url: `${process.env.PRODUCT_SERVICE_URL || 'http://localhost:3002'}/api/v1/docs.json` },
   { name: 'shop-page-service', url: `${process.env.SHOP_PAGE_SERVICE_URL || 'http://localhost:3003'}/api/v1/docs.json` },
+  { name: 'order-service', url: `${process.env.ORDER_SERVICE_URL || 'http://localhost:3004'}/api/v1/docs.json` },
 ];
 
 let mergedSpec: Record<string, any> = buildEmptySpec();

@@ -1,5 +1,18 @@
 {
   "accessDenied": "Accesso negato",
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Benvenuto nella tua area vendor",
+    "totalRevenue": "Ricavi totali",
+    "totalOrders": "Ordini totali",
+    "products": "Prodotti",
+    "bundles": "Bundle",
+    "totalActive": "Totale attivi",
+    "salesChart": "Andamento vendite",
+    "noSalesData": "Nessun dato di vendita per questo periodo",
+    "myPages": "Le mie pagine",
+    "managePages": "Gestisci le tue pagine"
+  },
   "products": {
     "title": "I miei prodotti",
     "create": "Nuovo prodotto",

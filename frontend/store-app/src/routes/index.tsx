@@ -14,6 +14,7 @@ import VendorCreateBundlePage from '@/pages/Vendor/Bundles/create';
 import VendorEditBundlePage from '@/pages/Vendor/Bundles/[id]';
 import BundlesPage from '@/pages/Bundles';
 import BundleDetailPage from '@/pages/Bundles/[id]';
+import VendorDashboardPage from '@/pages/Vendor/Dashboard';
 import { Layout } from '@/components/layout/Layout';
 
 export const router = createBrowserRouter([
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: 'shop-pages',
         element: <ShopPagesPage />,
+      },
+      {
+        path: 'vendor/dashboard',
+        element: <VendorDashboardPage />,
       },
       {
         path: 'vendor/products',

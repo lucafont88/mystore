@@ -23,6 +23,7 @@ export default function BundleDetailPage() {
   const handleAddToCart = () => {
     addItem({
       productId: bundle.id,
+      vendorId: bundle.vendorId,
       name: bundle.name,
       price: Number(bundle.price),
       quantity: 1,

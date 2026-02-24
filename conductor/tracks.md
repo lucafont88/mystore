@@ -37,6 +37,9 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [ ] **Track: Digital Products (downloadable files, license keys, access/subscriptions) & fixed Product Bundles with mixed physical+digital support**
   *Link: [./tracks/digital_products_bundles_20260223/](./tracks/digital_products_bundles_20260223/)*
 
+- [ ] **Track: Order Service + Vendor Dashboard - Order microservice with checkout integration, vendor sales stats API, dashboard with sales chart, and bundle integration in products page**
+  *Link: [./tracks/order_service_vendor_dashboard_20260224/](./tracks/order_service_vendor_dashboard_20260224/)*
+
 ---
 
 ## Recently Completed

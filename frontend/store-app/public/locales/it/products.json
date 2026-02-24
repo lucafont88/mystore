@@ -6,6 +6,9 @@
     "addToCart": "Aggiungi al carrello",
     "includedProducts": "Prodotti inclusi"
   },
+  "filters": {
+    "includeBundles": "Includi bundle"
+  },
   "productTypes": {
     "PHYSICAL": "Fisico",
     "DIGITAL_FILE": "Download",
