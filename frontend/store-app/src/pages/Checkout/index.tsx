@@ -2,15 +2,20 @@ import { useState } from 'react';
 import { useCartStore } from '@/stores/cartStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2, CreditCard, Package, ShoppingBag } from 'lucide-react';
+import { CheckCircle2, CreditCard, Package, ShoppingBag, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { ordersService } from '@/services/orders.service';
+import { useAuthStore } from '@/stores/authStore';
 
 type CheckoutStep = 'shipping' | 'payment' | 'review';
 
 export default function CheckoutPage() {
   const [step, setStep] = useState<CheckoutStep>('shipping');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { items, getTotalPrice, clearCart } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
 
   const formattedTotal = new Intl.NumberFormat('it-IT', {
@@ -24,13 +29,36 @@ export default function CheckoutPage() {
     { id: 'review', label: 'Riepilogo', icon: ShoppingBag },
   ];
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 'shipping') setStep('payment');
     else if (step === 'payment') setStep('review');
     else if (step === 'review') {
-      clearCart();
-      alert('Ordine completato con successo!');
-      navigate('/');
+      if (!isAuthenticated) {
+        navigate('/login');
+        return;
+      }
+
+      setIsSubmitting(true);
+      setError(null);
+      try {
+        await ordersService.createOrder({
+          items: items.map((item) => ({
+            productId: item.productId,
+            vendorId: item.vendorId,
+            productName: item.name,
+            productType: item.productType || 'PHYSICAL',
+            unitPrice: item.price,
+            quantity: item.quantity,
+          })),
+        });
+        clearCart();
+        navigate('/');
+        alert('Ordine completato con successo!');
+      } catch (err: any) {
+        setError(err.message || 'Errore durante la creazione dell\'ordine');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -126,11 +154,18 @@ export default function CheckoutPage() {
             </CardContent>
           </Card>
 
+          {error && (
+            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+              {error}
+            </div>
+          )}
+
           <div className="flex justify-between">
-            <Button variant="outline" onClick={handleBack} disabled={step === 'shipping'}>
+            <Button variant="outline" onClick={handleBack} disabled={step === 'shipping' || isSubmitting}>
               Indietro
             </Button>
-            <Button onClick={handleNext}>
+            <Button onClick={handleNext} disabled={isSubmitting}>
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {step === 'review' ? 'Completa Ordine' : 'Continua'}
             </Button>
           </div>

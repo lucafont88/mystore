@@ -1,0 +1,34 @@
+{
+  "accessDenied": "Access denied",
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to your vendor area",
+    "totalRevenue": "Total revenue",
+    "totalOrders": "Total orders",
+    "products": "Products",
+    "bundles": "Bundles",
+    "totalActive": "Total active",
+    "salesChart": "Sales trend",
+    "noSalesData": "No sales data for this period",
+    "myPages": "My pages",
+    "managePages": "Manage your pages"
+  },
+  "products": {
+    "title": "My products",
+    "create": "New product",
+    "createTitle": "New product",
+    "empty": "You haven't created any products yet.",
+    "types": {
+      "PHYSICAL": "Physical",
+      "DIGITAL_FILE": "File",
+      "DIGITAL_LICENSE": "License",
+      "DIGITAL_ACCESS": "Access"
+    }
+  },
+  "bundles": {
+    "title": "My bundles",
+    "create": "New bundle",
+    "createTitle": "New bundle",
+    "empty": "You haven't created any bundles yet."
+  }
+}

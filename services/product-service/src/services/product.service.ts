@@ -5,7 +5,8 @@ import { publishProductCreated, publishProductUpdated, publishProductDeleted } f
 
 export class ProductService {
   async createProduct(data: any): Promise<Product> {
-    if (data.stockQuantity < 0) {
+    const isDigital = data.productType && data.productType !== 'PHYSICAL';
+    if (!isDigital && data.stockQuantity < 0) {
       throw new Error('Stock quantity cannot be negative');
     }
 
@@ -37,7 +38,8 @@ export class ProductService {
       throw new Error('Ownership verification failed');
     }
 
-    if (data.stockQuantity !== undefined && data.stockQuantity < 0) {
+    const isDigital = product.productType !== 'PHYSICAL';
+    if (!isDigital && data.stockQuantity !== undefined && data.stockQuantity < 0) {
       throw new Error('Stock quantity cannot be negative');
     }
 

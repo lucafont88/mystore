@@ -8,6 +8,13 @@ datasource db {
   url      = env("PRODUCT_DATABASE_URL")
 }
 
+enum ProductType {
+  PHYSICAL
+  DIGITAL_FILE
+  DIGITAL_LICENSE
+  DIGITAL_ACCESS
+}
+
 model Category {
   id          String     @id @default(uuid())
   name        String
@@ -17,6 +24,7 @@ model Category {
   parent      Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
   children    Category[] @relation("CategoryToCategory")
   products    Product[]
+  bundles     Bundle[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
@@ -24,20 +32,109 @@ model Category {
 }
 
 model Product {
-  id            String   @id @default(uuid())
+  id            String      @id @default(uuid())
   name          String
-  slug          String   @unique
+  slug          String      @unique
   description   String?
-  price         Decimal  @db.Decimal(10, 2)
-  sku           String   @unique
-  stockQuantity Int      @default(0)
+  price         Decimal     @db.Decimal(10, 2)
+  sku           String      @unique
+  stockQuantity Int         @default(0)
   vendorId      String
   categoryId    String
-  category      Category @relation(fields: [categoryId], references: [id])
+  category      Category    @relation(fields: [categoryId], references: [id])
   images        String[]
-  isFeatured    Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  isFeatured    Boolean     @default(false)
+  productType   ProductType @default(PHYSICAL)
+
+  digitalFile    DigitalFile?
+  digitalLicense DigitalLicense?
+  digitalAccess  DigitalAccess?
+  bundleItems    BundleItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("products")
+}
+
+model DigitalFile {
+  id           String   @id @default(uuid())
+  productId    String   @unique
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  fileKey      String
+  fileName     String
+  fileSize     Int
+  mimeType     String
+  maxDownloads Int      @default(5)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("digital_files")
+}
+
+model DigitalLicense {
+  id        String       @id @default(uuid())
+  productId String       @unique
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  keys      LicenseKey[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@map("digital_licenses")
+}
+
+model LicenseKey {
+  id               String         @id @default(uuid())
+  digitalLicenseId String
+  digitalLicense   DigitalLicense @relation(fields: [digitalLicenseId], references: [id], onDelete: Cascade)
+  key              String
+  isRedeemed       Boolean        @default(false)
+  redeemedAt       DateTime?
+  redeemedBy       String?
+  createdAt        DateTime       @default(now())
+
+  @@map("license_keys")
+}
+
+model DigitalAccess {
+  id                 String   @id @default(uuid())
+  productId          String   @unique
+  product            Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  accessDurationDays Int
+  accessUrl          String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("digital_accesses")
+}
+
+model Bundle {
+  id          String       @id @default(uuid())
+  name        String
+  slug        String       @unique
+  description String?
+  price       Decimal      @db.Decimal(10, 2)
+  vendorId    String
+  categoryId  String
+  category    Category     @relation(fields: [categoryId], references: [id])
+  images      String[]
+  isFeatured  Boolean      @default(false)
+  isActive    Boolean      @default(true)
+  items       BundleItem[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("bundles")
+}
+
+model BundleItem {
+  id        String  @id @default(uuid())
+  bundleId  String
+  bundle    Bundle  @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  quantity  Int     @default(1)
+
+  @@unique([bundleId, productId])
+  @@map("bundle_items")
 }

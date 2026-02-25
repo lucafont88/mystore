@@ -12,8 +12,11 @@ const productProxy = createProxyMiddleware({
   target: PRODUCT_SERVICE_URL,
   changeOrigin: true,
   pathRewrite: (reqPath: string, req: any) => {
-    const isCategory = req.originalUrl.includes('/categories');
-    const prefix = isCategory ? '/api/v1/categories' : '/api/v1/products';
+    const url = req.originalUrl;
+    let prefix = '/api/v1/products';
+    if (url.includes('/categories')) prefix = '/api/v1/categories';
+    else if (url.includes('/digital-products')) prefix = '/api/v1/digital-products';
+    else if (url.includes('/bundles')) prefix = '/api/v1/bundles';
     return reqPath.startsWith('/api/v1') ? reqPath : `${prefix}${reqPath}`;
   },
   on: {

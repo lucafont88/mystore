@@ -13,7 +13,7 @@ packages:
   - 'services/auth-service'
   - 'services/product-service'
   - 'services/shop-page-service'
-  # - 'services/order-service'        # TODO: v2
+  - 'services/order-service'
   # - 'services/cart-service'         # TODO: v2
   # - 'services/payment-service'      # TODO: v2
   # - 'services/notification-service' # TODO: v3

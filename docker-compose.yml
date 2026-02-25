@@ -10,6 +10,7 @@ services:
       POSTGRES_DB: auth_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
     networks:
       - mystore-network
 
@@ -80,10 +81,16 @@ services:
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
       - REDIS_URL=redis://redis:6379
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - MINIO_BUCKET=digital-products
     depends_on:
       - postgres
       - redis
       - rabbitmq
+      - minio
     networks:
       - mystore-network
 
@@ -113,6 +120,24 @@ services:
     networks:
       - mystore-network
 
+  order-service:
+    build:
+      context: .
+      dockerfile: services/order-service/Dockerfile
+    container_name: order-service
+    ports:
+      - "${ORDER_SERVICE_PORT:-3004}:3004"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - ORDER_SERVICE_PORT=3004
+      - ORDER_DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/orders_db?schema=public
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+    depends_on:
+      - postgres
+    networks:
+      - mystore-network
+
   api-gateway:
     build:
       context: .
@@ -126,10 +151,14 @@ services:
       - AUTH_SERVICE_URL=http://auth-service:3001
       - PRODUCT_SERVICE_URL=http://product-service:3002
       - SHOP_PAGE_SERVICE_URL=http://shop-page-service:3003
+      - ORDER_SERVICE_URL=http://order-service:3004
+      - SWAGGER_USER=${SWAGGER_USER:-admin}
+      - SWAGGER_PASSWORD=${SWAGGER_PASSWORD:-admin}
     depends_on:
       - auth-service
       - product-service
       - shop-page-service
+      - order-service
     networks:
       - mystore-network
 
