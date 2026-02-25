@@ -56,8 +56,8 @@ export default function HomePage() {
               <div className="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mb-4">
                 <Truck className="h-6 w-6" />
               </div>
-              <h3 className="text-xl font-bold mb-2 text-foreground">Spedizione Gratuita</h3>
-              <p className="text-muted-foreground text-sm">Per ordini superiori a 50€, la spedizione la offriamo noi.</p>
+              <h3 className="text-xl font-bold mb-2 text-foreground">Creazione dei Negozi Semplice e Veloce</h3>
+              <p className="text-muted-foreground text-sm">La creazione del negozio è semplice e veloce, permettendo di iniziare a vendere in pochi minuti.</p>
             </div>
           </div>
         </div>
