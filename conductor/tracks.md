@@ -30,25 +30,33 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Frontend for Auth and Products using Vite, React, and Indigo/Blue theme**
   *Link: [./archive/frontend_auth_products_20260210/](./archive/frontend_auth_products_20260210/)*
 
----
-
-## Active Tracks
-
-- [ ] **Track: Digital Products (downloadable files, license keys, access/subscriptions) & fixed Product Bundles with mixed physical+digital support**
-  *Link: [./tracks/digital_products_bundles_20260223/](./tracks/digital_products_bundles_20260223/)*
-
-- [ ] **Track: Order Service + Vendor Dashboard - Order microservice with checkout integration, vendor sales stats API, dashboard with sales chart, and bundle integration in products page**
-  *Link: [./tracks/order_service_vendor_dashboard_20260224/](./tracks/order_service_vendor_dashboard_20260224/)*
-
----
-
-## Recently Completed
-
-- [x] **Track: Shop Page Frontend V1 - Vendor page management with 3-column layout, DnD sidebar, HTML editor with preview, Site Builder, bug fixes, Preview Draft/Publish buttons**
-  *Link: [./archive/shop_page_frontend_v1_20260216/](./archive/shop_page_frontend_v1_20260216/)*
-
 - [x] **Track: Shop Page Service - Vendor HTML pages with MinIO storage and RabbitMQ integration**
   *Link: [./archive/shop_page_service_20260213/](./archive/shop_page_service_20260213/)*
 
 - [x] **Track: Fix current application - API path mismatch, auth data contract misalignment, and test configuration**
   *Commit: `8176c6d` | Link: [./archive/fix_current_application_20260213/](./archive/fix_current_application_20260213/)*
+
+- [x] **Track: Shop Page Frontend V1 - Vendor page management with 3-column layout, DnD sidebar, HTML editor with preview, Site Builder, bug fixes, Preview Draft/Publish buttons**
+  *Link: [./archive/shop_page_frontend_v1_20260216/](./archive/shop_page_frontend_v1_20260216/)*
+
+- [x] **Track: Digital Products (downloadable files, license keys, access/subscriptions) & fixed Product Bundles with mixed physical+digital support**
+  *Link: [./archive/digital_products_bundles_20260223/](./archive/digital_products_bundles_20260223/)*
+
+- [x] **Track: Order Service + Vendor Dashboard - Order microservice with checkout integration, vendor sales stats API, dashboard with sales chart, and bundle integration in products page**
+  *Link: [./archive/order_service_vendor_dashboard_20260224/](./archive/order_service_vendor_dashboard_20260224/)*
+
+---
+
+## Active Tracks
+
+*Nessun track attivo al momento.*
+
+---
+
+## Recently Completed
+
+- [x] **Track: Digital Products & Product Bundles**
+  *Link: [./archive/digital_products_bundles_20260223/](./archive/digital_products_bundles_20260223/)*
+
+- [x] **Track: Order Service + Vendor Dashboard**
+  *Link: [./archive/order_service_vendor_dashboard_20260224/](./archive/order_service_vendor_dashboard_20260224/)*
