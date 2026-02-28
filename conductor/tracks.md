@@ -49,7 +49,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-*Nessun track attivo al momento.*
+- [ ] **Track: Cache Redis Prodotti - Cache-aside pattern per categorie con Redis DB 1, TTL dinamico alle 03:30 AM, graceful fallback**
+  *Link: [./tracks/redis_cache_categories_20260226/](./tracks/redis_cache_categories_20260226/)*
 
 ---
 

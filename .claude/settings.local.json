@@ -60,7 +60,12 @@
       "Bash(npx shadcn@latest add:*)",
       "Bash(python3 -m json.tool:*)",
       "Bash(python3:*)",
-      "Bash(pnpm prisma generate:*)"
+      "Bash(pnpm prisma generate:*)",
+      "Bash(docker info)",
+      "Bash(docker context ls)",
+      "Bash(docker --context default compose -f c:/Dev/mystore/docker-compose.yml build product-service)",
+      "Bash(Start-Process \"C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe\")",
+      "Bash(HASH='$argon2id$v=19$m=65536,t=3,p=4$qhc9nwjYNRSy+fY5UbH0ZA$kYfkxho5HXCI7tFdLTKIs6WHKUakS+0dYOd24CuNHjg')"
     ]
   }
 }

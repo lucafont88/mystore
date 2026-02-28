@@ -15,6 +15,9 @@ import VendorEditBundlePage from '@/pages/Vendor/Bundles/[id]';
 import BundlesPage from '@/pages/Bundles';
 import BundleDetailPage from '@/pages/Bundles/[id]';
 import VendorDashboardPage from '@/pages/Vendor/Dashboard';
+import AdminLayout from '@/pages/Admin';
+import AdminDashboardPage from '@/pages/Admin/Dashboard';
+import AdminCategoriesPage from '@/pages/Admin/Categories';
 import { Layout } from '@/components/layout/Layout';
 
 export const router = createBrowserRouter([
@@ -85,6 +88,14 @@ export const router = createBrowserRouter([
       {
         path: 'vendor/bundles/:id',
         element: <VendorEditBundlePage />,
+      },
+      {
+        path: 'admin',
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <AdminDashboardPage /> },
+          { path: 'categories', element: <AdminCategoriesPage /> },
+        ],
       },
     ],
   },
