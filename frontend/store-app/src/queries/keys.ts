@@ -28,6 +28,12 @@ export const licenseKeyKeys = {
   byProduct: (productId: string) => [...licenseKeyKeys.all, productId] as const,
 };
 
+export const categoryKeys = {
+  all: ['categories'] as const,
+  lists: () => [...categoryKeys.all, 'list'] as const,
+  detail: (id: string) => [...categoryKeys.all, 'detail', id] as const,
+};
+
 export const shopPageKeys = {
   all: ['shopPages'] as const,
   lists: () => [...shopPageKeys.all, 'list'] as const,

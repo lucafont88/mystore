@@ -19,6 +19,11 @@ export interface PaginatedOrders {
   total: number;
 }
 
+export interface AdminStatsResult {
+  totalOrders: number;
+  ordersByDay: { date: string; orders: number }[];
+}
+
 const orderInclude = {
   items: true,
 } as const;
@@ -65,6 +70,38 @@ export class OrderRepository {
       data: { status },
       include: orderInclude,
     });
+  }
+
+  async getAdminStats(startDate: Date, endDate: Date): Promise<AdminStatsResult> {
+    const totalOrders = await prisma.order.count({
+      where: {
+        createdAt: { gte: startDate, lte: endDate },
+        status: { notIn: ['CANCELLED', 'REFUNDED'] },
+      },
+    });
+
+    // Aggregate orders by day using in-memory grouping
+    const orders = await prisma.order.findMany({
+      where: {
+        createdAt: { gte: startDate, lte: endDate },
+        status: { notIn: ['CANCELLED', 'REFUNDED'] },
+      },
+      select: { createdAt: true },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    const byDay: Record<string, number> = {};
+    for (const order of orders) {
+      const dateKey = order.createdAt.toISOString().split('T')[0];
+      byDay[dateKey] = (byDay[dateKey] ?? 0) + 1;
+    }
+
+    const ordersByDay = Object.entries(byDay).map(([date, count]) => ({
+      date,
+      orders: count,
+    }));
+
+    return { totalOrders, ordersByDay };
   }
 
   async getVendorStats(filter: VendorStatsFilter): Promise<any> {

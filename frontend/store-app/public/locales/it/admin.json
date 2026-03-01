@@ -1,0 +1,44 @@
+{
+  "accessDenied": "Accesso negato. Devi essere un amministratore.",
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "categories": "Gestione Categorie"
+  },
+  "dashboard": {
+    "title": "Pannello di controllo",
+    "welcome": "Benvenuto nell'area amministrazione",
+    "subtitle": "Gestisci le risorse della piattaforma"
+  },
+  "stats": {
+    "totalOrders": "Ordini totali",
+    "ordersChart": "Andamento ordini",
+    "noData": "Nessun dato per questo periodo",
+    "week": "Settimana",
+    "month": "Mese",
+    "quarter": "Trimestre",
+    "year": "Anno"
+  },
+  "categories": {
+    "title": "Gestione Categorie",
+    "create": "Nuova Categoria",
+    "edit": "Modifica Categoria",
+    "delete": "Elimina",
+    "confirmDelete": "Sei sicuro di voler eliminare questa categoria? L'azione non può essere annullata.",
+    "confirmDeleteTitle": "Conferma eliminazione",
+    "name": "Nome",
+    "namePlaceholder": "Es. Elettronica",
+    "description": "Descrizione",
+    "descriptionPlaceholder": "Descrizione opzionale della categoria",
+    "parent": "Categoria padre",
+    "noParent": "Nessuna (categoria principale)",
+    "slug": "Slug",
+    "children": "Sottocategorie",
+    "noCategories": "Nessuna categoria trovata.",
+    "saving": "Salvataggio...",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "deleteConfirm": "Elimina",
+    "loading": "Caricamento categorie...",
+    "errorLoad": "Errore nel caricamento delle categorie"
+  }
+}

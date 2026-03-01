@@ -53,6 +53,12 @@ export function Header() {
               {t('vendor:dashboard.title', 'Dashboard')}
             </Link>
           )}
+          {isAuthenticated && user?.role?.toUpperCase() === 'ADMIN' && (
+            <Link to="/admin" className="flex items-center gap-1 transition-colors hover:text-foreground/80 text-foreground/60">
+              <LayoutDashboard className="h-4 w-4" />
+              Admin
+            </Link>
+          )}
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-4">

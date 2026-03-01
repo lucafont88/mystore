@@ -1,0 +1,44 @@
+{
+  "accessDenied": "Access denied. You must be an administrator.",
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "categories": "Category Management"
+  },
+  "dashboard": {
+    "title": "Control Panel",
+    "welcome": "Welcome to the administration area",
+    "subtitle": "Manage platform resources"
+  },
+  "stats": {
+    "totalOrders": "Total orders",
+    "ordersChart": "Orders trend",
+    "noData": "No data for this period",
+    "week": "Week",
+    "month": "Month",
+    "quarter": "Quarter",
+    "year": "Year"
+  },
+  "categories": {
+    "title": "Category Management",
+    "create": "New Category",
+    "edit": "Edit Category",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this category? This action cannot be undone.",
+    "confirmDeleteTitle": "Confirm deletion",
+    "name": "Name",
+    "namePlaceholder": "E.g. Electronics",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional category description",
+    "parent": "Parent category",
+    "noParent": "None (top-level category)",
+    "slug": "Slug",
+    "children": "Subcategories",
+    "noCategories": "No categories found.",
+    "saving": "Saving...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "deleteConfirm": "Delete",
+    "loading": "Loading categories...",
+    "errorLoad": "Error loading categories"
+  }
+}

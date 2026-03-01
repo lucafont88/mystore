@@ -100,6 +100,8 @@ router.get('/', authenticate, orderController.list.bind(orderController));
  */
 router.get('/vendor/stats', authenticate, authorize(['VENDOR']), orderController.vendorStats.bind(orderController));
 
+router.get('/admin/stats', authenticate, authorize(['ADMIN']), orderController.adminStats.bind(orderController));
+
 /**
  * @swagger
  * /api/v1/orders/{id}:

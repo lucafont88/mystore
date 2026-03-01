@@ -51,6 +51,11 @@ export interface VendorStats {
   salesByDay: { date: string; revenue: number; orders: number }[];
 }
 
+export interface AdminStats {
+  totalOrders: number;
+  ordersByDay: { date: string; orders: number }[];
+}
+
 export const ordersService = {
   createOrder: async (data: CreateOrderPayload): Promise<Order> => {
     return api.post<Order>('/orders', data);
@@ -66,5 +71,9 @@ export const ordersService = {
 
   getVendorStats: async (period: string): Promise<VendorStats> => {
     return api.get<VendorStats>('/orders/vendor/stats', { params: { period } });
+  },
+
+  getAdminStats: async (period: string): Promise<AdminStats> => {
+    return api.get<AdminStats>('/orders/admin/stats', { params: { period } });
   },
 };
