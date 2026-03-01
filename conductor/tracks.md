@@ -45,19 +45,13 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Order Service + Vendor Dashboard - Order microservice with checkout integration, vendor sales stats API, dashboard with sales chart, and bundle integration in products page**
   *Link: [./archive/order_service_vendor_dashboard_20260224/](./archive/order_service_vendor_dashboard_20260224/)*
 
+- [x] **Track: Cache Redis Prodotti - Cache-aside pattern per categorie con Redis DB 1, TTL dinamico alle 03:30 AM, graceful fallback + Admin Dashboard con sidebar, CRUD categorie, BarChart ordini**
+  *Link: [./archive/redis_cache_categories_20260226/](./archive/redis_cache_categories_20260226/)*
+
 ---
 
 ## Active Tracks
 
-- [ ] **Track: Cache Redis Prodotti - Cache-aside pattern per categorie con Redis DB 1, TTL dinamico alle 03:30 AM, graceful fallback**
-  *Link: [./tracks/redis_cache_categories_20260226/](./tracks/redis_cache_categories_20260226/)*
+Nessun track attivo.
 
 ---
-
-## Recently Completed
-
-- [x] **Track: Digital Products & Product Bundles**
-  *Link: [./archive/digital_products_bundles_20260223/](./archive/digital_products_bundles_20260223/)*
-
-- [x] **Track: Order Service + Vendor Dashboard**
-  *Link: [./archive/order_service_vendor_dashboard_20260224/](./archive/order_service_vendor_dashboard_20260224/)*
