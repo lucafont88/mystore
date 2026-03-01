@@ -1,6 +1,6 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, Tag } from 'lucide-react';
+import { LayoutDashboard, Tag, Users } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
 
 export default function AdminLayout() {
@@ -36,6 +36,19 @@ export default function AdminLayout() {
             >
               <LayoutDashboard className="h-4 w-4" />
               {t('sidebar.dashboard')}
+            </NavLink>
+            <NavLink
+              to="/admin/users"
+              className={({ isActive }) =>
+                `flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-foreground/70 hover:bg-gray-200 hover:text-foreground'
+                }`
+              }
+            >
+              <Users className="h-4 w-4" />
+              {t('sidebar.users')}
             </NavLink>
             <NavLink
               to="/admin/categories"

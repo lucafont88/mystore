@@ -2,6 +2,7 @@
   "accessDenied": "Access denied. You must be an administrator.",
   "sidebar": {
     "dashboard": "Dashboard",
+    "users": "Manage Users",
     "categories": "Category Management"
   },
   "dashboard": {
@@ -17,6 +18,32 @@
     "month": "Month",
     "quarter": "Quarter",
     "year": "Year"
+  },
+  "users": {
+    "title": "User Management",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "lastLogin": "Last access",
+    "createdAt": "Created on",
+    "actions": "Actions",
+    "active": "Active",
+    "banned": "Banned",
+    "changeRole": "Change Role",
+    "ban": "Ban",
+    "unban": "Unban",
+    "resetPassword": "Reset Password",
+    "confirmBan": "Are you sure you want to ban this account?",
+    "confirmUnban": "Are you sure you want to unban this account?",
+    "confirmReset": "A temporary password will be generated. The user can log in with this password.",
+    "tempPasswordLabel": "Temporary password",
+    "tempPasswordCopied": "Copied!",
+    "loading": "Loading users...",
+    "errorLoad": "Error loading users",
+    "saving": "Saving...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "categories": {
     "title": "Category Management",

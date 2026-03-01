@@ -2,6 +2,7 @@
   "accessDenied": "Accesso negato. Devi essere un amministratore.",
   "sidebar": {
     "dashboard": "Dashboard",
+    "users": "Gestisci Utenti",
     "categories": "Gestione Categorie"
   },
   "dashboard": {
@@ -17,6 +18,32 @@
     "month": "Mese",
     "quarter": "Trimestre",
     "year": "Anno"
+  },
+  "users": {
+    "title": "Gestione Utenti",
+    "email": "Email",
+    "role": "Ruolo",
+    "status": "Stato",
+    "lastLogin": "Ultimo accesso",
+    "createdAt": "Creato il",
+    "actions": "Azioni",
+    "active": "Attivo",
+    "banned": "Bannato",
+    "changeRole": "Cambia Ruolo",
+    "ban": "Banna",
+    "unban": "Sbanna",
+    "resetPassword": "Reset Password",
+    "confirmBan": "Sei sicuro di voler bannare questo account?",
+    "confirmUnban": "Sei sicuro di voler sbannare questo account?",
+    "confirmReset": "Verrà generata una password temporanea. L'utente potrà accedere con questa password.",
+    "tempPasswordLabel": "Password temporanea",
+    "tempPasswordCopied": "Copiata!",
+    "loading": "Caricamento utenti...",
+    "errorLoad": "Errore nel caricamento degli utenti",
+    "saving": "Salvataggio...",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "confirm": "Conferma"
   },
   "categories": {
     "title": "Gestione Categorie",

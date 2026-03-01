@@ -52,6 +52,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-Nessun track attivo.
+- [ ] **Track: Admin Panel - Dashboard, Gestione Categorie, Gestione Utenti e future sezioni amministrative**
+  *Link: [./tracks/admin_panel_20260301/](./tracks/admin_panel_20260301/)*
 
 ---

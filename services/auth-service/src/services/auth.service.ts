@@ -42,11 +42,18 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
 
+    if (user.isBanned) {
+      throw new Error('Account bannato');
+    }
+
     const isPasswordValid = await argon2.verify(user.passwordHash, password);
 
     if (!isPasswordValid) {
       throw new Error('Invalid credentials');
     }
+
+    // Aggiorna lastLoginAt in background (fire-and-forget)
+    prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } }).catch(() => {});
 
     const payload = { id: user.id, email: user.email, role: user.role };
     const accessToken = generateAccessToken(payload);
