@@ -42,3 +42,4 @@ Se hai domande o hai bisogno di ulteriori dettagli, chiedimi pure! Se scrivo qua
 
 ## Regole
 - **Non modificare i file** `.claude/claude.md` e `.claude/rules/`.
+- **Usa il file MEMORY.md** Se hai bisogno di ricordare qualcosa.
