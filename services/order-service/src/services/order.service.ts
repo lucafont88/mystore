@@ -101,6 +101,10 @@ export class OrderService {
     });
   }
 
+  async getAllVendorsStats(): Promise<any> {
+    return orderRepository.getAllVendorsStats();
+  }
+
   async getAdminStats(period: string): Promise<any> {
     const now = new Date();
     let startDate: Date;

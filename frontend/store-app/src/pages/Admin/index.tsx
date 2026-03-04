@@ -2,6 +2,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LayoutDashboard, Tag, Users } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 export default function AdminLayout() {
   const { t } = useTranslation('admin');
@@ -16,6 +17,7 @@ export default function AdminLayout() {
   }
 
   return (
+    <TooltipProvider>
     <div className="flex min-h-[calc(100vh-4rem)]">
       <aside className="w-64 shrink-0 border-r bg-gray-50">
         <div className="p-4">
@@ -71,5 +73,6 @@ export default function AdminLayout() {
         <Outlet />
       </main>
     </div>
+    </TooltipProvider>
   );
 }

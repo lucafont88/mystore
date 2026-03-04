@@ -65,6 +65,15 @@ export class OrderController {
       res.status(400).json({ error: error.message });
     }
   }
+
+  async adminVendorsStats(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const stats = await orderService.getAllVendorsStats();
+      res.status(200).json(stats);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  }
 }
 
 export default new OrderController();

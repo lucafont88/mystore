@@ -33,7 +33,7 @@ export class AuthService {
     return userWithoutPassword;
   }
 
-  async login(email: string, password: string): Promise<LoginResponse> {
+  async login(email: string, password: string, ip: string = 'unknown'): Promise<LoginResponse> {
     const user = await prisma.user.findUnique({
       where: { email },
     });
@@ -52,8 +52,23 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
 
-    // Aggiorna lastLoginAt in background (fire-and-forget)
-    prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } }).catch(() => {});
+    // Aggiorna lastLoginAt e salva IP in background (fire-and-forget)
+    Promise.all([
+      prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } }),
+      prisma.userIpLog.create({ data: { userId: user.id, ipAddress: ip } })
+        .then(async () => {
+          const logs = await prisma.userIpLog.findMany({
+            where: { userId: user.id },
+            orderBy: { createdAt: 'desc' },
+            select: { id: true },
+          });
+          if (logs.length > 20) {
+            await prisma.userIpLog.deleteMany({
+              where: { id: { in: logs.slice(20).map((l) => l.id) } },
+            });
+          }
+        }),
+    ]).catch(() => {});
 
     const payload = { id: user.id, email: user.email, role: user.role };
     const accessToken = generateAccessToken(payload);

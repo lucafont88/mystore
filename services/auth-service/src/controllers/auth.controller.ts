@@ -32,9 +32,13 @@ export class AuthController {
     }
 
     const { email, password } = req.body;
+    const ip =
+      (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
+      req.socket.remoteAddress ||
+      'unknown';
 
     try {
-      const result = await authService.login(email, password);
+      const result = await authService.login(email, password, ip);
       res.status(200).json(result);
     } catch (error: any) {
       if (error.message === 'Invalid credentials') {

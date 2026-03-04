@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminUsersService } from '../services/adminUsers.service';
 
 const USERS_KEY = ['admin-users'] as const;
+const VENDOR_STATS_KEY = ['admin-vendor-stats'] as const;
 
 export function useAdminUsersQuery() {
   return useQuery({
@@ -35,5 +36,13 @@ export function useToggleBanMutation() {
 export function useResetPasswordMutation() {
   return useMutation({
     mutationFn: (id: string) => adminUsersService.resetPassword(id),
+  });
+}
+
+export function useAdminVendorStatsQuery() {
+  return useQuery({
+    queryKey: VENDOR_STATS_KEY,
+    queryFn: () => adminUsersService.getVendorStats(),
+    staleTime: 5 * 60 * 1000,
   });
 }

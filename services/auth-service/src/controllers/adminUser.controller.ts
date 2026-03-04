@@ -14,10 +14,27 @@ export class AdminUserController {
           isBanned: true,
           lastLoginAt: true,
           createdAt: true,
+          ipLogs: {
+            orderBy: { createdAt: 'desc' },
+            take: 20,
+            select: { ipAddress: true, createdAt: true },
+          },
         },
         orderBy: { createdAt: 'desc' },
       });
-      res.status(200).json(users);
+
+      const result = users.map((u) => ({
+        id: u.id,
+        email: u.email,
+        role: u.role,
+        isBanned: u.isBanned,
+        lastLoginAt: u.lastLoginAt,
+        createdAt: u.createdAt,
+        lastIp: u.ipLogs[0]?.ipAddress ?? null,
+        ipHistory: u.ipLogs,
+      }));
+
+      res.status(200).json(result);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }

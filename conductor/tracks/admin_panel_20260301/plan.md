@@ -37,15 +37,44 @@ Sviluppo progressivo dell'Admin Panel: Dashboard, Gestione Categorie, Gestione U
 - [x] Route `/admin/users` aggiunta
 - [x] Traduzioni IT e EN aggiornate
 
+### Phase 7 — IP Tracking (auth-service)
+- [x] Aggiunto modello `UserIpLog` con relazione User 1:N + indice `[userId, createdAt DESC]`
+- [x] Migrazione `20260304090000_add_user_ip_logs`
+- [x] `auth.controller.ts`: estrae IP da `x-forwarded-for` o `req.socket.remoteAddress`
+- [x] `auth.service.ts`: `login()` salva IP in `user_ip_logs` (fire-and-forget, cap 20 log per utente)
+- [x] `adminUser.controller.ts`: `listUsers()` include `lastIp` + `ipHistory` (ultimi 20)
+- [x] Docker rebuild auth-service --no-cache + prisma migrate deploy
+
+### Phase 8 — Vendor Sales Stats (order-service)
+- [x] `order.repository.ts`: aggiunto `getAllVendorsStats()` — query bulk `groupBy` + `$queryRaw COUNT(DISTINCT)`
+- [x] `order.service.ts`: aggiunto `getAllVendorsStats()`
+- [x] `order.controller.ts`: aggiunto `adminVendorsStats()`
+- [x] `order.routes.ts`: aggiunto `GET /admin/vendors/stats` (ADMIN only)
+- [x] Docker rebuild order-service
+
+### Phase 9 — Frontend: colonne IP + Vendite
+- [x] Installato `@radix-ui/react-tooltip`
+- [x] Creato `components/ui/tooltip.tsx` (shadcn/ui pattern)
+- [x] `pages/admin/index.tsx`: aggiunto `TooltipProvider` wrapper
+- [x] `services/adminUsers.service.ts`: aggiunto `IpLogEntry`, `lastIp`, `ipHistory`, `VendorStatsMap`, `getVendorStats()`
+- [x] `queries/useAdminUsersQuery.ts`: aggiunto `useAdminVendorStatsQuery()`
+- [x] `pages/admin/Users/index.tsx`: colonna "Ultimo IP" con tooltip storico, colonna "Vendite" per VENDOR
+- [x] i18n IT+EN: `lastIp`, `ipHistory`, `sales`, `orders`
+
 ## File chiave
 
 | File | Tipo |
 |------|------|
 | `services/auth-service/prisma/schema.prisma` | Schema DB |
-| `services/auth-service/src/services/auth.service.ts` | Login logic |
-| `services/auth-service/src/controllers/adminUser.controller.ts` | Controller |
+| `services/auth-service/src/services/auth.service.ts` | Login logic + IP save |
+| `services/auth-service/src/controllers/auth.controller.ts` | IP extraction |
+| `services/auth-service/src/controllers/adminUser.controller.ts` | Controller + IP response |
 | `services/auth-service/src/routes/adminUser.routes.ts` | Route |
+| `services/order-service/src/repositories/order.repository.ts` | getAllVendorsStats() |
+| `services/order-service/src/controllers/order.controller.ts` | adminVendorsStats() |
+| `services/order-service/src/routes/order.routes.ts` | Route bulk stats |
+| `frontend/store-app/src/components/ui/tooltip.tsx` | Tooltip UI component |
 | `frontend/store-app/src/services/adminUsers.service.ts` | API service |
 | `frontend/store-app/src/queries/useAdminUsersQuery.ts` | Query hooks |
-| `frontend/store-app/src/pages/Admin/Users/index.tsx` | UI page |
-| `frontend/store-app/src/pages/Admin/index.tsx` | Sidebar layout |
+| `frontend/store-app/src/pages/admin/Users/index.tsx` | UI page |
+| `frontend/store-app/src/pages/admin/index.tsx` | Sidebar layout + TooltipProvider |

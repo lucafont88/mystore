@@ -18,6 +18,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model UserIpLog
+ * 
+ */
+export type UserIpLog = $Result.DefaultSelection<Prisma.$UserIpLogPayload>
 
 /**
  * Enums
@@ -170,6 +175,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs>;
+
+  /**
+   * `prisma.userIpLog`: Exposes CRUD operations for the **UserIpLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserIpLogs
+    * const userIpLogs = await prisma.userIpLog.findMany()
+    * ```
+    */
+  get userIpLog(): Prisma.UserIpLogDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -611,7 +626,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User'
+    User: 'User',
+    UserIpLog: 'UserIpLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -627,7 +643,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user"
+      modelProps: "user" | "userIpLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -698,6 +714,76 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserIpLog: {
+        payload: Prisma.$UserIpLogPayload<ExtArgs>
+        fields: Prisma.UserIpLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserIpLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserIpLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload>
+          }
+          findFirst: {
+            args: Prisma.UserIpLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserIpLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload>
+          }
+          findMany: {
+            args: Prisma.UserIpLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload>[]
+          }
+          create: {
+            args: Prisma.UserIpLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload>
+          }
+          createMany: {
+            args: Prisma.UserIpLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserIpLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload>[]
+          }
+          delete: {
+            args: Prisma.UserIpLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload>
+          }
+          update: {
+            args: Prisma.UserIpLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserIpLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserIpLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserIpLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserIpLogPayload>
+          }
+          aggregate: {
+            args: Prisma.UserIpLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserIpLog>
+          }
+          groupBy: {
+            args: Prisma.UserIpLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserIpLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserIpLogCountArgs<ExtArgs>
+            result: $Utils.Optional<UserIpLogCountAggregateOutputType> | number
           }
         }
       }
@@ -856,6 +942,36 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    ipLogs: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ipLogs?: boolean | UserCountOutputTypeCountIpLogsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountIpLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserIpLogWhereInput
+  }
 
 
   /**
@@ -1050,6 +1166,8 @@ export namespace Prisma {
     lastLoginAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ipLogs?: boolean | User$ipLogsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1074,10 +1192,17 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ipLogs?: boolean | User$ipLogsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      ipLogs: Prisma.$UserIpLogPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       email: string
@@ -1451,6 +1576,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    ipLogs<T extends User$ipLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$ipLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1501,6 +1627,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1515,6 +1645,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1528,6 +1662,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -1573,6 +1711,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -1617,6 +1759,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -1655,6 +1801,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -1696,6 +1846,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The data needed to update a User.
      */
     data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
@@ -1728,6 +1882,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -1750,6 +1908,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -1766,6 +1928,26 @@ export namespace Prisma {
   }
 
   /**
+   * User.ipLogs
+   */
+  export type User$ipLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    where?: UserIpLogWhereInput
+    orderBy?: UserIpLogOrderByWithRelationInput | UserIpLogOrderByWithRelationInput[]
+    cursor?: UserIpLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserIpLogScalarFieldEnum | UserIpLogScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1773,6 +1955,931 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserIpLog
+   */
+
+  export type AggregateUserIpLog = {
+    _count: UserIpLogCountAggregateOutputType | null
+    _min: UserIpLogMinAggregateOutputType | null
+    _max: UserIpLogMaxAggregateOutputType | null
+  }
+
+  export type UserIpLogMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    ipAddress: string | null
+    createdAt: Date | null
+  }
+
+  export type UserIpLogMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    ipAddress: string | null
+    createdAt: Date | null
+  }
+
+  export type UserIpLogCountAggregateOutputType = {
+    id: number
+    userId: number
+    ipAddress: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type UserIpLogMinAggregateInputType = {
+    id?: true
+    userId?: true
+    ipAddress?: true
+    createdAt?: true
+  }
+
+  export type UserIpLogMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    ipAddress?: true
+    createdAt?: true
+  }
+
+  export type UserIpLogCountAggregateInputType = {
+    id?: true
+    userId?: true
+    ipAddress?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type UserIpLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserIpLog to aggregate.
+     */
+    where?: UserIpLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserIpLogs to fetch.
+     */
+    orderBy?: UserIpLogOrderByWithRelationInput | UserIpLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserIpLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserIpLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserIpLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserIpLogs
+    **/
+    _count?: true | UserIpLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserIpLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserIpLogMaxAggregateInputType
+  }
+
+  export type GetUserIpLogAggregateType<T extends UserIpLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserIpLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserIpLog[P]>
+      : GetScalarType<T[P], AggregateUserIpLog[P]>
+  }
+
+
+
+
+  export type UserIpLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserIpLogWhereInput
+    orderBy?: UserIpLogOrderByWithAggregationInput | UserIpLogOrderByWithAggregationInput[]
+    by: UserIpLogScalarFieldEnum[] | UserIpLogScalarFieldEnum
+    having?: UserIpLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserIpLogCountAggregateInputType | true
+    _min?: UserIpLogMinAggregateInputType
+    _max?: UserIpLogMaxAggregateInputType
+  }
+
+  export type UserIpLogGroupByOutputType = {
+    id: string
+    userId: string
+    ipAddress: string
+    createdAt: Date
+    _count: UserIpLogCountAggregateOutputType | null
+    _min: UserIpLogMinAggregateOutputType | null
+    _max: UserIpLogMaxAggregateOutputType | null
+  }
+
+  type GetUserIpLogGroupByPayload<T extends UserIpLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserIpLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserIpLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserIpLogGroupByOutputType[P]>
+            : GetScalarType<T[P], UserIpLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserIpLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userIpLog"]>
+
+  export type UserIpLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userIpLog"]>
+
+  export type UserIpLogSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+  }
+
+  export type UserIpLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserIpLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserIpLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserIpLog"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      ipAddress: string
+      createdAt: Date
+    }, ExtArgs["result"]["userIpLog"]>
+    composites: {}
+  }
+
+  type UserIpLogGetPayload<S extends boolean | null | undefined | UserIpLogDefaultArgs> = $Result.GetResult<Prisma.$UserIpLogPayload, S>
+
+  type UserIpLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<UserIpLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: UserIpLogCountAggregateInputType | true
+    }
+
+  export interface UserIpLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserIpLog'], meta: { name: 'UserIpLog' } }
+    /**
+     * Find zero or one UserIpLog that matches the filter.
+     * @param {UserIpLogFindUniqueArgs} args - Arguments to find a UserIpLog
+     * @example
+     * // Get one UserIpLog
+     * const userIpLog = await prisma.userIpLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserIpLogFindUniqueArgs>(args: SelectSubset<T, UserIpLogFindUniqueArgs<ExtArgs>>): Prisma__UserIpLogClient<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one UserIpLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {UserIpLogFindUniqueOrThrowArgs} args - Arguments to find a UserIpLog
+     * @example
+     * // Get one UserIpLog
+     * const userIpLog = await prisma.userIpLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserIpLogFindUniqueOrThrowArgs>(args: SelectSubset<T, UserIpLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserIpLogClient<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first UserIpLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserIpLogFindFirstArgs} args - Arguments to find a UserIpLog
+     * @example
+     * // Get one UserIpLog
+     * const userIpLog = await prisma.userIpLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserIpLogFindFirstArgs>(args?: SelectSubset<T, UserIpLogFindFirstArgs<ExtArgs>>): Prisma__UserIpLogClient<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first UserIpLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserIpLogFindFirstOrThrowArgs} args - Arguments to find a UserIpLog
+     * @example
+     * // Get one UserIpLog
+     * const userIpLog = await prisma.userIpLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserIpLogFindFirstOrThrowArgs>(args?: SelectSubset<T, UserIpLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserIpLogClient<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more UserIpLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserIpLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserIpLogs
+     * const userIpLogs = await prisma.userIpLog.findMany()
+     * 
+     * // Get first 10 UserIpLogs
+     * const userIpLogs = await prisma.userIpLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userIpLogWithIdOnly = await prisma.userIpLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserIpLogFindManyArgs>(args?: SelectSubset<T, UserIpLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a UserIpLog.
+     * @param {UserIpLogCreateArgs} args - Arguments to create a UserIpLog.
+     * @example
+     * // Create one UserIpLog
+     * const UserIpLog = await prisma.userIpLog.create({
+     *   data: {
+     *     // ... data to create a UserIpLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserIpLogCreateArgs>(args: SelectSubset<T, UserIpLogCreateArgs<ExtArgs>>): Prisma__UserIpLogClient<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many UserIpLogs.
+     * @param {UserIpLogCreateManyArgs} args - Arguments to create many UserIpLogs.
+     * @example
+     * // Create many UserIpLogs
+     * const userIpLog = await prisma.userIpLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserIpLogCreateManyArgs>(args?: SelectSubset<T, UserIpLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserIpLogs and returns the data saved in the database.
+     * @param {UserIpLogCreateManyAndReturnArgs} args - Arguments to create many UserIpLogs.
+     * @example
+     * // Create many UserIpLogs
+     * const userIpLog = await prisma.userIpLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserIpLogs and only return the `id`
+     * const userIpLogWithIdOnly = await prisma.userIpLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserIpLogCreateManyAndReturnArgs>(args?: SelectSubset<T, UserIpLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a UserIpLog.
+     * @param {UserIpLogDeleteArgs} args - Arguments to delete one UserIpLog.
+     * @example
+     * // Delete one UserIpLog
+     * const UserIpLog = await prisma.userIpLog.delete({
+     *   where: {
+     *     // ... filter to delete one UserIpLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserIpLogDeleteArgs>(args: SelectSubset<T, UserIpLogDeleteArgs<ExtArgs>>): Prisma__UserIpLogClient<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one UserIpLog.
+     * @param {UserIpLogUpdateArgs} args - Arguments to update one UserIpLog.
+     * @example
+     * // Update one UserIpLog
+     * const userIpLog = await prisma.userIpLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserIpLogUpdateArgs>(args: SelectSubset<T, UserIpLogUpdateArgs<ExtArgs>>): Prisma__UserIpLogClient<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more UserIpLogs.
+     * @param {UserIpLogDeleteManyArgs} args - Arguments to filter UserIpLogs to delete.
+     * @example
+     * // Delete a few UserIpLogs
+     * const { count } = await prisma.userIpLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserIpLogDeleteManyArgs>(args?: SelectSubset<T, UserIpLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserIpLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserIpLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserIpLogs
+     * const userIpLog = await prisma.userIpLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserIpLogUpdateManyArgs>(args: SelectSubset<T, UserIpLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserIpLog.
+     * @param {UserIpLogUpsertArgs} args - Arguments to update or create a UserIpLog.
+     * @example
+     * // Update or create a UserIpLog
+     * const userIpLog = await prisma.userIpLog.upsert({
+     *   create: {
+     *     // ... data to create a UserIpLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserIpLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserIpLogUpsertArgs>(args: SelectSubset<T, UserIpLogUpsertArgs<ExtArgs>>): Prisma__UserIpLogClient<$Result.GetResult<Prisma.$UserIpLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of UserIpLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserIpLogCountArgs} args - Arguments to filter UserIpLogs to count.
+     * @example
+     * // Count the number of UserIpLogs
+     * const count = await prisma.userIpLog.count({
+     *   where: {
+     *     // ... the filter for the UserIpLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserIpLogCountArgs>(
+      args?: Subset<T, UserIpLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserIpLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserIpLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserIpLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserIpLogAggregateArgs>(args: Subset<T, UserIpLogAggregateArgs>): Prisma.PrismaPromise<GetUserIpLogAggregateType<T>>
+
+    /**
+     * Group by UserIpLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserIpLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserIpLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserIpLogGroupByArgs['orderBy'] }
+        : { orderBy?: UserIpLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserIpLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserIpLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserIpLog model
+   */
+  readonly fields: UserIpLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserIpLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserIpLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserIpLog model
+   */ 
+  interface UserIpLogFieldRefs {
+    readonly id: FieldRef<"UserIpLog", 'String'>
+    readonly userId: FieldRef<"UserIpLog", 'String'>
+    readonly ipAddress: FieldRef<"UserIpLog", 'String'>
+    readonly createdAt: FieldRef<"UserIpLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserIpLog findUnique
+   */
+  export type UserIpLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserIpLog to fetch.
+     */
+    where: UserIpLogWhereUniqueInput
+  }
+
+  /**
+   * UserIpLog findUniqueOrThrow
+   */
+  export type UserIpLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserIpLog to fetch.
+     */
+    where: UserIpLogWhereUniqueInput
+  }
+
+  /**
+   * UserIpLog findFirst
+   */
+  export type UserIpLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserIpLog to fetch.
+     */
+    where?: UserIpLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserIpLogs to fetch.
+     */
+    orderBy?: UserIpLogOrderByWithRelationInput | UserIpLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserIpLogs.
+     */
+    cursor?: UserIpLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserIpLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserIpLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserIpLogs.
+     */
+    distinct?: UserIpLogScalarFieldEnum | UserIpLogScalarFieldEnum[]
+  }
+
+  /**
+   * UserIpLog findFirstOrThrow
+   */
+  export type UserIpLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserIpLog to fetch.
+     */
+    where?: UserIpLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserIpLogs to fetch.
+     */
+    orderBy?: UserIpLogOrderByWithRelationInput | UserIpLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserIpLogs.
+     */
+    cursor?: UserIpLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserIpLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserIpLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserIpLogs.
+     */
+    distinct?: UserIpLogScalarFieldEnum | UserIpLogScalarFieldEnum[]
+  }
+
+  /**
+   * UserIpLog findMany
+   */
+  export type UserIpLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserIpLogs to fetch.
+     */
+    where?: UserIpLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserIpLogs to fetch.
+     */
+    orderBy?: UserIpLogOrderByWithRelationInput | UserIpLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserIpLogs.
+     */
+    cursor?: UserIpLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserIpLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserIpLogs.
+     */
+    skip?: number
+    distinct?: UserIpLogScalarFieldEnum | UserIpLogScalarFieldEnum[]
+  }
+
+  /**
+   * UserIpLog create
+   */
+  export type UserIpLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserIpLog.
+     */
+    data: XOR<UserIpLogCreateInput, UserIpLogUncheckedCreateInput>
+  }
+
+  /**
+   * UserIpLog createMany
+   */
+  export type UserIpLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserIpLogs.
+     */
+    data: UserIpLogCreateManyInput | UserIpLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserIpLog createManyAndReturn
+   */
+  export type UserIpLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many UserIpLogs.
+     */
+    data: UserIpLogCreateManyInput | UserIpLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserIpLog update
+   */
+  export type UserIpLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserIpLog.
+     */
+    data: XOR<UserIpLogUpdateInput, UserIpLogUncheckedUpdateInput>
+    /**
+     * Choose, which UserIpLog to update.
+     */
+    where: UserIpLogWhereUniqueInput
+  }
+
+  /**
+   * UserIpLog updateMany
+   */
+  export type UserIpLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserIpLogs.
+     */
+    data: XOR<UserIpLogUpdateManyMutationInput, UserIpLogUncheckedUpdateManyInput>
+    /**
+     * Filter which UserIpLogs to update
+     */
+    where?: UserIpLogWhereInput
+  }
+
+  /**
+   * UserIpLog upsert
+   */
+  export type UserIpLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserIpLog to update in case it exists.
+     */
+    where: UserIpLogWhereUniqueInput
+    /**
+     * In case the UserIpLog found by the `where` argument doesn't exist, create a new UserIpLog with this data.
+     */
+    create: XOR<UserIpLogCreateInput, UserIpLogUncheckedCreateInput>
+    /**
+     * In case the UserIpLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserIpLogUpdateInput, UserIpLogUncheckedUpdateInput>
+  }
+
+  /**
+   * UserIpLog delete
+   */
+  export type UserIpLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
+    /**
+     * Filter which UserIpLog to delete.
+     */
+    where: UserIpLogWhereUniqueInput
+  }
+
+  /**
+   * UserIpLog deleteMany
+   */
+  export type UserIpLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserIpLogs to delete
+     */
+    where?: UserIpLogWhereInput
+  }
+
+  /**
+   * UserIpLog without action
+   */
+  export type UserIpLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserIpLog
+     */
+    select?: UserIpLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIpLogInclude<ExtArgs> | null
   }
 
 
@@ -1802,6 +2909,16 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const UserIpLogScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    ipAddress: 'ipAddress',
+    createdAt: 'createdAt'
+  };
+
+  export type UserIpLogScalarFieldEnum = (typeof UserIpLogScalarFieldEnum)[keyof typeof UserIpLogScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -1911,6 +3028,7 @@ export namespace Prisma {
     lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    ipLogs?: UserIpLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -1922,6 +3040,7 @@ export namespace Prisma {
     lastLoginAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ipLogs?: UserIpLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -1936,6 +3055,7 @@ export namespace Prisma {
     lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    ipLogs?: UserIpLogListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -1966,6 +3086,56 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type UserIpLogWhereInput = {
+    AND?: UserIpLogWhereInput | UserIpLogWhereInput[]
+    OR?: UserIpLogWhereInput[]
+    NOT?: UserIpLogWhereInput | UserIpLogWhereInput[]
+    id?: StringFilter<"UserIpLog"> | string
+    userId?: StringFilter<"UserIpLog"> | string
+    ipAddress?: StringFilter<"UserIpLog"> | string
+    createdAt?: DateTimeFilter<"UserIpLog"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type UserIpLogOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserIpLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UserIpLogWhereInput | UserIpLogWhereInput[]
+    OR?: UserIpLogWhereInput[]
+    NOT?: UserIpLogWhereInput | UserIpLogWhereInput[]
+    userId?: StringFilter<"UserIpLog"> | string
+    ipAddress?: StringFilter<"UserIpLog"> | string
+    createdAt?: DateTimeFilter<"UserIpLog"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type UserIpLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+    _count?: UserIpLogCountOrderByAggregateInput
+    _max?: UserIpLogMaxOrderByAggregateInput
+    _min?: UserIpLogMinOrderByAggregateInput
+  }
+
+  export type UserIpLogScalarWhereWithAggregatesInput = {
+    AND?: UserIpLogScalarWhereWithAggregatesInput | UserIpLogScalarWhereWithAggregatesInput[]
+    OR?: UserIpLogScalarWhereWithAggregatesInput[]
+    NOT?: UserIpLogScalarWhereWithAggregatesInput | UserIpLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserIpLog"> | string
+    userId?: StringWithAggregatesFilter<"UserIpLog"> | string
+    ipAddress?: StringWithAggregatesFilter<"UserIpLog"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"UserIpLog"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -1975,6 +3145,7 @@ export namespace Prisma {
     lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    ipLogs?: UserIpLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -1986,6 +3157,7 @@ export namespace Prisma {
     lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    ipLogs?: UserIpLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -1997,6 +3169,7 @@ export namespace Prisma {
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipLogs?: UserIpLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -2008,6 +3181,7 @@ export namespace Prisma {
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipLogs?: UserIpLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -2041,6 +3215,54 @@ export namespace Prisma {
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserIpLogCreateInput = {
+    id?: string
+    ipAddress: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutIpLogsInput
+  }
+
+  export type UserIpLogUncheckedCreateInput = {
+    id?: string
+    userId: string
+    ipAddress: string
+    createdAt?: Date | string
+  }
+
+  export type UserIpLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutIpLogsNestedInput
+  }
+
+  export type UserIpLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserIpLogCreateManyInput = {
+    id?: string
+    userId: string
+    ipAddress: string
+    createdAt?: Date | string
+  }
+
+  export type UserIpLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserIpLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -2092,9 +3314,19 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type UserIpLogListRelationFilter = {
+    every?: UserIpLogWhereInput
+    some?: UserIpLogWhereInput
+    none?: UserIpLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type UserIpLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -2194,6 +3426,46 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type UserRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type UserIpLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserIpLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserIpLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserIpLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserIpLogCreateWithoutUserInput, UserIpLogUncheckedCreateWithoutUserInput> | UserIpLogCreateWithoutUserInput[] | UserIpLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserIpLogCreateOrConnectWithoutUserInput | UserIpLogCreateOrConnectWithoutUserInput[]
+    createMany?: UserIpLogCreateManyUserInputEnvelope
+    connect?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+  }
+
+  export type UserIpLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserIpLogCreateWithoutUserInput, UserIpLogUncheckedCreateWithoutUserInput> | UserIpLogCreateWithoutUserInput[] | UserIpLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserIpLogCreateOrConnectWithoutUserInput | UserIpLogCreateOrConnectWithoutUserInput[]
+    createMany?: UserIpLogCreateManyUserInputEnvelope
+    connect?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -2212,6 +3484,48 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type UserIpLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserIpLogCreateWithoutUserInput, UserIpLogUncheckedCreateWithoutUserInput> | UserIpLogCreateWithoutUserInput[] | UserIpLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserIpLogCreateOrConnectWithoutUserInput | UserIpLogCreateOrConnectWithoutUserInput[]
+    upsert?: UserIpLogUpsertWithWhereUniqueWithoutUserInput | UserIpLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserIpLogCreateManyUserInputEnvelope
+    set?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+    disconnect?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+    delete?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+    connect?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+    update?: UserIpLogUpdateWithWhereUniqueWithoutUserInput | UserIpLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserIpLogUpdateManyWithWhereWithoutUserInput | UserIpLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserIpLogScalarWhereInput | UserIpLogScalarWhereInput[]
+  }
+
+  export type UserIpLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserIpLogCreateWithoutUserInput, UserIpLogUncheckedCreateWithoutUserInput> | UserIpLogCreateWithoutUserInput[] | UserIpLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserIpLogCreateOrConnectWithoutUserInput | UserIpLogCreateOrConnectWithoutUserInput[]
+    upsert?: UserIpLogUpsertWithWhereUniqueWithoutUserInput | UserIpLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserIpLogCreateManyUserInputEnvelope
+    set?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+    disconnect?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+    delete?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+    connect?: UserIpLogWhereUniqueInput | UserIpLogWhereUniqueInput[]
+    update?: UserIpLogUpdateWithWhereUniqueWithoutUserInput | UserIpLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserIpLogUpdateManyWithWhereWithoutUserInput | UserIpLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserIpLogScalarWhereInput | UserIpLogScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutIpLogsInput = {
+    create?: XOR<UserCreateWithoutIpLogsInput, UserUncheckedCreateWithoutIpLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutIpLogsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutIpLogsNestedInput = {
+    create?: XOR<UserCreateWithoutIpLogsInput, UserUncheckedCreateWithoutIpLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutIpLogsInput
+    upsert?: UserUpsertWithoutIpLogsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutIpLogsInput, UserUpdateWithoutIpLogsInput>, UserUncheckedUpdateWithoutIpLogsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2347,15 +3661,155 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type UserIpLogCreateWithoutUserInput = {
+    id?: string
+    ipAddress: string
+    createdAt?: Date | string
+  }
+
+  export type UserIpLogUncheckedCreateWithoutUserInput = {
+    id?: string
+    ipAddress: string
+    createdAt?: Date | string
+  }
+
+  export type UserIpLogCreateOrConnectWithoutUserInput = {
+    where: UserIpLogWhereUniqueInput
+    create: XOR<UserIpLogCreateWithoutUserInput, UserIpLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserIpLogCreateManyUserInputEnvelope = {
+    data: UserIpLogCreateManyUserInput | UserIpLogCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserIpLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserIpLogWhereUniqueInput
+    update: XOR<UserIpLogUpdateWithoutUserInput, UserIpLogUncheckedUpdateWithoutUserInput>
+    create: XOR<UserIpLogCreateWithoutUserInput, UserIpLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserIpLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserIpLogWhereUniqueInput
+    data: XOR<UserIpLogUpdateWithoutUserInput, UserIpLogUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserIpLogUpdateManyWithWhereWithoutUserInput = {
+    where: UserIpLogScalarWhereInput
+    data: XOR<UserIpLogUpdateManyMutationInput, UserIpLogUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserIpLogScalarWhereInput = {
+    AND?: UserIpLogScalarWhereInput | UserIpLogScalarWhereInput[]
+    OR?: UserIpLogScalarWhereInput[]
+    NOT?: UserIpLogScalarWhereInput | UserIpLogScalarWhereInput[]
+    id?: StringFilter<"UserIpLog"> | string
+    userId?: StringFilter<"UserIpLog"> | string
+    ipAddress?: StringFilter<"UserIpLog"> | string
+    createdAt?: DateTimeFilter<"UserIpLog"> | Date | string
+  }
+
+  export type UserCreateWithoutIpLogsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role?: $Enums.Role
+    isBanned?: boolean
+    lastLoginAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserUncheckedCreateWithoutIpLogsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role?: $Enums.Role
+    isBanned?: boolean
+    lastLoginAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserCreateOrConnectWithoutIpLogsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutIpLogsInput, UserUncheckedCreateWithoutIpLogsInput>
+  }
+
+  export type UserUpsertWithoutIpLogsInput = {
+    update: XOR<UserUpdateWithoutIpLogsInput, UserUncheckedUpdateWithoutIpLogsInput>
+    create: XOR<UserCreateWithoutIpLogsInput, UserUncheckedCreateWithoutIpLogsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutIpLogsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutIpLogsInput, UserUncheckedUpdateWithoutIpLogsInput>
+  }
+
+  export type UserUpdateWithoutIpLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUncheckedUpdateWithoutIpLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserIpLogCreateManyUserInput = {
+    id?: string
+    ipAddress: string
+    createdAt?: Date | string
+  }
+
+  export type UserIpLogUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserIpLogUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserIpLogUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
    * Aliases for legacy arg types
    */
     /**
+     * @deprecated Use UserCountOutputTypeDefaultArgs instead
+     */
+    export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use UserDefaultArgs instead
      */
     export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserIpLogDefaultArgs instead
+     */
+    export type UserIpLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserIpLogDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

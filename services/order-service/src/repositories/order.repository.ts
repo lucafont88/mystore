@@ -24,6 +24,10 @@ export interface AdminStatsResult {
   ordersByDay: { date: string; orders: number }[];
 }
 
+export interface VendorBulkStatsResult {
+  [vendorId: string]: { totalOrders: number; totalRevenue: number };
+}
+
 const orderInclude = {
   items: true,
 } as const;
@@ -155,6 +159,41 @@ export class OrderRepository {
       totalItems,
       salesByDay: salesByDayArray,
     };
+  }
+
+  async getAllVendorsStats(): Promise<VendorBulkStatsResult> {
+    const revenueRows = await prisma.orderItem.groupBy({
+      by: ['vendorId'],
+      where: {
+        order: {
+          status: { notIn: ['CANCELLED', 'REFUNDED'] },
+        },
+      },
+      _sum: { subtotal: true },
+    });
+
+    const orderCountRows: { vendorId: string; orderCount: bigint }[] =
+      await prisma.$queryRaw`
+        SELECT oi."vendorId", COUNT(DISTINCT oi."orderId") AS "orderCount"
+        FROM "order_items" oi
+        JOIN "orders" o ON oi."orderId" = o."id"
+        WHERE o."status" NOT IN ('CANCELLED', 'REFUNDED')
+        GROUP BY oi."vendorId"
+      `;
+
+    const result: VendorBulkStatsResult = {};
+    for (const row of revenueRows) {
+      result[row.vendorId] = {
+        totalOrders: 0,
+        totalRevenue: Math.round(Number(row._sum.subtotal ?? 0) * 100) / 100,
+      };
+    }
+    for (const row of orderCountRows) {
+      if (result[row.vendorId]) {
+        result[row.vendorId].totalOrders = Number(row.orderCount);
+      }
+    }
+    return result;
   }
 }
 

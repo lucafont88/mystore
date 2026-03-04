@@ -16,9 +16,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { AdminUser } from '@/services/adminUsers.service';
 import {
   useAdminUsersQuery,
+  useAdminVendorStatsQuery,
   useChangeRoleMutation,
   useResetPasswordMutation,
   useToggleBanMutation,
@@ -47,6 +53,7 @@ function formatDate(dateStr: string | null): string {
 export default function AdminUsersPage() {
   const { t } = useTranslation('admin');
   const { data: users, isLoading, isError } = useAdminUsersQuery();
+  const { data: vendorStats } = useAdminVendorStatsQuery();
 
   const changeRoleMutation = useChangeRoleMutation();
   const toggleBanMutation = useToggleBanMutation();
@@ -100,7 +107,7 @@ export default function AdminUsersPage() {
   if (isError) return <p className="p-6 text-destructive">{t('users.errorLoad')}</p>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <h1 className="text-2xl font-bold">{t('users.title')}</h1>
 
       <div className="rounded-lg border bg-card overflow-x-auto">
@@ -110,6 +117,8 @@ export default function AdminUsersPage() {
               <th className="text-left px-4 py-3 font-medium">{t('users.email')}</th>
               <th className="text-left px-4 py-3 font-medium">{t('users.role')}</th>
               <th className="text-left px-4 py-3 font-medium">{t('users.status')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('users.lastIp')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('users.sales')}</th>
               <th className="text-left px-4 py-3 font-medium">{t('users.lastLogin')}</th>
               <th className="text-left px-4 py-3 font-medium">{t('users.createdAt')}</th>
               <th className="text-left px-4 py-3 font-medium">{t('users.actions')}</th>
@@ -135,6 +144,51 @@ export default function AdminUsersPage() {
                     </span>
                   )}
                 </td>
+
+                {/* Colonna IP con tooltip storico */}
+                <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+                  {user.lastIp ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="cursor-help underline decoration-dotted decoration-muted-foreground/50">
+                          {user.lastIp}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="max-w-xs p-2">
+                        <p className="font-semibold text-xs mb-1.5">{t('users.ipHistory')}</p>
+                        <ul className="space-y-1">
+                          {user.ipHistory.map((entry, i) => (
+                            <li key={i} className="flex justify-between gap-4 text-xs">
+                              <span className="font-mono">{entry.ipAddress}</span>
+                              <span className="text-muted-foreground whitespace-nowrap">
+                                {formatDate(entry.createdAt)}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <span>—</span>
+                  )}
+                </td>
+
+                {/* Colonna Vendite (solo per VENDOR) */}
+                <td className="px-4 py-3">
+                  {user.role === 'VENDOR' && vendorStats?.[user.id] ? (
+                    <div className="text-xs space-y-0.5">
+                      <div className="font-medium">
+                        €{vendorStats[user.id].totalRevenue.toFixed(2)}
+                      </div>
+                      <div className="text-muted-foreground">
+                        {vendorStats[user.id].totalOrders} {t('users.orders')}
+                      </div>
+                    </div>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">—</span>
+                  )}
+                </td>
+
                 <td className="px-4 py-3 text-muted-foreground">{formatDate(user.lastLoginAt)}</td>
                 <td className="px-4 py-3 text-muted-foreground">{formatDate(user.createdAt)}</td>
                 <td className="px-4 py-3">
