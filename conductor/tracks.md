@@ -50,8 +50,13 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+- [x] **Track: Admin Panel - Dashboard, Gestione Categorie, Gestione Utenti (IP tracking, vendor sales stats, ricerca email, filtro multi-ruolo)**
+  *Link: [./archive/admin_panel_20260301/](./archive/admin_panel_20260301/)*
+
+---
+
 ## Active Tracks
 
-Nessun track attivo.
+*(nessun track attivo)*
 
 ---

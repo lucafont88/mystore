@@ -1,7 +1,8 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, Tag } from 'lucide-react';
+import { LayoutDashboard, Tag, Users } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 export default function AdminLayout() {
   const { t } = useTranslation('admin');
@@ -16,6 +17,7 @@ export default function AdminLayout() {
   }
 
   return (
+    <TooltipProvider>
     <div className="flex min-h-[calc(100vh-4rem)]">
       <aside className="w-64 shrink-0 border-r bg-gray-50">
         <div className="p-4">
@@ -38,6 +40,19 @@ export default function AdminLayout() {
               {t('sidebar.dashboard')}
             </NavLink>
             <NavLink
+              to="/admin/users"
+              className={({ isActive }) =>
+                `flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-foreground/70 hover:bg-gray-200 hover:text-foreground'
+                }`
+              }
+            >
+              <Users className="h-4 w-4" />
+              {t('sidebar.users')}
+            </NavLink>
+            <NavLink
               to="/admin/categories"
               className={({ isActive }) =>
                 `flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
@@ -58,5 +73,6 @@ export default function AdminLayout() {
         <Outlet />
       </main>
     </div>
+    </TooltipProvider>
   );
 }

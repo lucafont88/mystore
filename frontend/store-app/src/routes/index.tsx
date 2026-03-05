@@ -18,6 +18,7 @@ import VendorDashboardPage from '@/pages/Vendor/Dashboard';
 import AdminLayout from '@/pages/Admin';
 import AdminDashboardPage from '@/pages/Admin/Dashboard';
 import AdminCategoriesPage from '@/pages/Admin/Categories';
+import AdminUsersPage from '@/pages/Admin/Users';
 import { Layout } from '@/components/layout/Layout';
 
 export const router = createBrowserRouter([
@@ -94,6 +95,7 @@ export const router = createBrowserRouter([
         element: <AdminLayout />,
         children: [
           { index: true, element: <AdminDashboardPage /> },
+          { path: 'users', element: <AdminUsersPage /> },
           { path: 'categories', element: <AdminCategoriesPage /> },
         ],
       },
