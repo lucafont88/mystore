@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import authService from '../services/auth.service';
+import prisma from '../config/db';
 
 export class AuthController {
   async register(req: Request, res: Response): Promise<void> {
@@ -53,7 +54,29 @@ export class AuthController {
 
   async me(req: Request, res: Response): Promise<void> {
     // @ts-ignore
-    res.status(200).json({ user: req.user });
+    const userId = req.user?.id;
+    if (!userId) {
+      res.status(401).json({ error: 'Not authenticated' });
+      return;
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        profileStatus: true,
+        isBanned: true,
+        lastLoginAt: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    res.status(200).json({ user });
   }
 }
 

@@ -6,6 +6,7 @@ export interface RegisterResponse {
   id: string;
   email: string;
   role: string;
+  profileStatus: 'COMPLETE' | 'PENDING_PROFILE';
   createdAt: string;
   updatedAt: string;
 }
@@ -15,6 +16,7 @@ export interface LoginResponse {
     id: string;
     email: string;
     role: string;
+    profileStatus: 'COMPLETE' | 'PENDING_PROFILE';
   };
   accessToken: string;
   refreshToken: string;
@@ -39,4 +41,6 @@ export const authService = {
   logout: () => {
     useAuthStore.getState().logout();
   },
+
+  getCurrentUser: () => useAuthStore.getState().user,
 };

@@ -37,11 +37,23 @@ export namespace $Enums {
 
 export type Role = (typeof Role)[keyof typeof Role]
 
+
+export const ProfileStatus: {
+  COMPLETE: 'COMPLETE',
+  PENDING_PROFILE: 'PENDING_PROFILE'
+};
+
+export type ProfileStatus = (typeof ProfileStatus)[keyof typeof ProfileStatus]
+
 }
 
 export type Role = $Enums.Role
 
 export const Role: typeof $Enums.Role
+
+export type ProfileStatus = $Enums.ProfileStatus
+
+export const ProfileStatus: typeof $Enums.ProfileStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -993,6 +1005,7 @@ export namespace Prisma {
     email: string | null
     passwordHash: string | null
     role: $Enums.Role | null
+    profileStatus: $Enums.ProfileStatus | null
     isBanned: boolean | null
     lastLoginAt: Date | null
     createdAt: Date | null
@@ -1004,6 +1017,7 @@ export namespace Prisma {
     email: string | null
     passwordHash: string | null
     role: $Enums.Role | null
+    profileStatus: $Enums.ProfileStatus | null
     isBanned: boolean | null
     lastLoginAt: Date | null
     createdAt: Date | null
@@ -1015,6 +1029,7 @@ export namespace Prisma {
     email: number
     passwordHash: number
     role: number
+    profileStatus: number
     isBanned: number
     lastLoginAt: number
     createdAt: number
@@ -1028,6 +1043,7 @@ export namespace Prisma {
     email?: true
     passwordHash?: true
     role?: true
+    profileStatus?: true
     isBanned?: true
     lastLoginAt?: true
     createdAt?: true
@@ -1039,6 +1055,7 @@ export namespace Prisma {
     email?: true
     passwordHash?: true
     role?: true
+    profileStatus?: true
     isBanned?: true
     lastLoginAt?: true
     createdAt?: true
@@ -1050,6 +1067,7 @@ export namespace Prisma {
     email?: true
     passwordHash?: true
     role?: true
+    profileStatus?: true
     isBanned?: true
     lastLoginAt?: true
     createdAt?: true
@@ -1134,6 +1152,7 @@ export namespace Prisma {
     email: string
     passwordHash: string
     role: $Enums.Role
+    profileStatus: $Enums.ProfileStatus
     isBanned: boolean
     lastLoginAt: Date | null
     createdAt: Date
@@ -1162,6 +1181,7 @@ export namespace Prisma {
     email?: boolean
     passwordHash?: boolean
     role?: boolean
+    profileStatus?: boolean
     isBanned?: boolean
     lastLoginAt?: boolean
     createdAt?: boolean
@@ -1175,6 +1195,7 @@ export namespace Prisma {
     email?: boolean
     passwordHash?: boolean
     role?: boolean
+    profileStatus?: boolean
     isBanned?: boolean
     lastLoginAt?: boolean
     createdAt?: boolean
@@ -1186,6 +1207,7 @@ export namespace Prisma {
     email?: boolean
     passwordHash?: boolean
     role?: boolean
+    profileStatus?: boolean
     isBanned?: boolean
     lastLoginAt?: boolean
     createdAt?: boolean
@@ -1208,6 +1230,7 @@ export namespace Prisma {
       email: string
       passwordHash: string
       role: $Enums.Role
+      profileStatus: $Enums.ProfileStatus
       isBanned: boolean
       lastLoginAt: Date | null
       createdAt: Date
@@ -1610,6 +1633,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'Role'>
+    readonly profileStatus: FieldRef<"User", 'ProfileStatus'>
     readonly isBanned: FieldRef<"User", 'Boolean'>
     readonly lastLoginAt: FieldRef<"User", 'DateTime'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
@@ -2902,6 +2926,7 @@ export namespace Prisma {
     email: 'email',
     passwordHash: 'passwordHash',
     role: 'role',
+    profileStatus: 'profileStatus',
     isBanned: 'isBanned',
     lastLoginAt: 'lastLoginAt',
     createdAt: 'createdAt',
@@ -2979,6 +3004,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ProfileStatus'
+   */
+  export type EnumProfileStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProfileStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProfileStatus[]'
+   */
+  export type ListEnumProfileStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProfileStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -3024,6 +3063,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     passwordHash?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
+    profileStatus?: EnumProfileStatusFilter<"User"> | $Enums.ProfileStatus
     isBanned?: BoolFilter<"User"> | boolean
     lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -3036,6 +3076,7 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
+    profileStatus?: SortOrder
     isBanned?: SortOrder
     lastLoginAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -3051,6 +3092,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     passwordHash?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
+    profileStatus?: EnumProfileStatusFilter<"User"> | $Enums.ProfileStatus
     isBanned?: BoolFilter<"User"> | boolean
     lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -3063,6 +3105,7 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
+    profileStatus?: SortOrder
     isBanned?: SortOrder
     lastLoginAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -3080,6 +3123,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     passwordHash?: StringWithAggregatesFilter<"User"> | string
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+    profileStatus?: EnumProfileStatusWithAggregatesFilter<"User"> | $Enums.ProfileStatus
     isBanned?: BoolWithAggregatesFilter<"User"> | boolean
     lastLoginAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -3141,6 +3185,7 @@ export namespace Prisma {
     email: string
     passwordHash: string
     role?: $Enums.Role
+    profileStatus?: $Enums.ProfileStatus
     isBanned?: boolean
     lastLoginAt?: Date | string | null
     createdAt?: Date | string
@@ -3153,6 +3198,7 @@ export namespace Prisma {
     email: string
     passwordHash: string
     role?: $Enums.Role
+    profileStatus?: $Enums.ProfileStatus
     isBanned?: boolean
     lastLoginAt?: Date | string | null
     createdAt?: Date | string
@@ -3165,6 +3211,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profileStatus?: EnumProfileStatusFieldUpdateOperationsInput | $Enums.ProfileStatus
     isBanned?: BoolFieldUpdateOperationsInput | boolean
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3177,6 +3224,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profileStatus?: EnumProfileStatusFieldUpdateOperationsInput | $Enums.ProfileStatus
     isBanned?: BoolFieldUpdateOperationsInput | boolean
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3189,6 +3237,7 @@ export namespace Prisma {
     email: string
     passwordHash: string
     role?: $Enums.Role
+    profileStatus?: $Enums.ProfileStatus
     isBanned?: boolean
     lastLoginAt?: Date | string | null
     createdAt?: Date | string
@@ -3200,6 +3249,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profileStatus?: EnumProfileStatusFieldUpdateOperationsInput | $Enums.ProfileStatus
     isBanned?: BoolFieldUpdateOperationsInput | boolean
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3211,6 +3261,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profileStatus?: EnumProfileStatusFieldUpdateOperationsInput | $Enums.ProfileStatus
     isBanned?: BoolFieldUpdateOperationsInput | boolean
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3287,6 +3338,13 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type EnumProfileStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProfileStatus | EnumProfileStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProfileStatus[] | ListEnumProfileStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProfileStatus[] | ListEnumProfileStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProfileStatusFilter<$PrismaModel> | $Enums.ProfileStatus
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -3334,6 +3392,7 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
+    profileStatus?: SortOrder
     isBanned?: SortOrder
     lastLoginAt?: SortOrder
     createdAt?: SortOrder
@@ -3345,6 +3404,7 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
+    profileStatus?: SortOrder
     isBanned?: SortOrder
     lastLoginAt?: SortOrder
     createdAt?: SortOrder
@@ -3356,6 +3416,7 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
+    profileStatus?: SortOrder
     isBanned?: SortOrder
     lastLoginAt?: SortOrder
     createdAt?: SortOrder
@@ -3388,6 +3449,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type EnumProfileStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProfileStatus | EnumProfileStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProfileStatus[] | ListEnumProfileStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProfileStatus[] | ListEnumProfileStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProfileStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProfileStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProfileStatusFilter<$PrismaModel>
+    _max?: NestedEnumProfileStatusFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -3474,6 +3545,10 @@ export namespace Prisma {
     set?: $Enums.Role
   }
 
+  export type EnumProfileStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProfileStatus
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -3549,6 +3624,13 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type NestedEnumProfileStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProfileStatus | EnumProfileStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProfileStatus[] | ListEnumProfileStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProfileStatus[] | ListEnumProfileStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProfileStatusFilter<$PrismaModel> | $Enums.ProfileStatus
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -3612,6 +3694,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumProfileStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProfileStatus | EnumProfileStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProfileStatus[] | ListEnumProfileStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProfileStatus[] | ListEnumProfileStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProfileStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProfileStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProfileStatusFilter<$PrismaModel>
+    _max?: NestedEnumProfileStatusFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -3714,6 +3806,7 @@ export namespace Prisma {
     email: string
     passwordHash: string
     role?: $Enums.Role
+    profileStatus?: $Enums.ProfileStatus
     isBanned?: boolean
     lastLoginAt?: Date | string | null
     createdAt?: Date | string
@@ -3725,6 +3818,7 @@ export namespace Prisma {
     email: string
     passwordHash: string
     role?: $Enums.Role
+    profileStatus?: $Enums.ProfileStatus
     isBanned?: boolean
     lastLoginAt?: Date | string | null
     createdAt?: Date | string
@@ -3752,6 +3846,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profileStatus?: EnumProfileStatusFieldUpdateOperationsInput | $Enums.ProfileStatus
     isBanned?: BoolFieldUpdateOperationsInput | boolean
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3763,6 +3858,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profileStatus?: EnumProfileStatusFieldUpdateOperationsInput | $Enums.ProfileStatus
     isBanned?: BoolFieldUpdateOperationsInput | boolean
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

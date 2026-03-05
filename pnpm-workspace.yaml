@@ -14,6 +14,7 @@ packages:
   - 'services/product-service'
   - 'services/shop-page-service'
   - 'services/order-service'
+  - 'services/user-data-service'
   # - 'services/cart-service'         # TODO: v2
   # - 'services/payment-service'      # TODO: v2
   # - 'services/notification-service' # TODO: v3

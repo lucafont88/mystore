@@ -37,7 +37,14 @@ Implementa la tabella `vendor_profiles` nel `db-utenti` con i seguenti campi min
 2. Aggiungi i nuovi servizi al `docker-compose.yml`.
 3. Crea il servizio di base `user-data-service` che gestisca la creazione del profilo una volta completata l'auth.
 4. Implementa la logica di reindirizzamento dopo la fase 1.
+5. Crea il form di completamento anagrafica (frontend) e il relativo endpoint (backend) per salvare i dati nel `db-utenti`.
+6. Poiché ora hai due database separati, ricorda che non puoi usare una transazione atomica (BEGIN...COMMIT) che coinvolga entrambi i DB simultaneamente. Se il servizio di Auth fallisce dopo che il record nel db-utenti è stato creato, dovrai implementare una logica di compensazione (o Saga pattern semplificato) per cancellare il record utente nel db-utenti se l'auth non è andata a buon fine.
+7. Assicurati che l'user_id sia coerente tra i due database. Spesso, in questi casi, è meglio generare un UUID lato applicazione prima di scrivere su entrambi i database, così da avere un ID univoco globale.
+8. I due database dovrebbero avere una relazione di tipo "one-to-one" tra l'utente autenticato e il suo profilo.
+9. I due database parlano solo attraverso i relativi service. Possono usare RabbitMQ o direttamente delle api REST. Valuta in base alle performance e alla complessità del sistema. Eventualmente proponimi più soluzioni adeguate con pro e contro.
+10. Aggiungi test per verificare l'integrità dei dati tra i due database.
 
+### Note:
 Procedi per passi, partendo dall'infrastruttura (docker e db) e poi passando allo schema del database. Chiedimi conferma prima di eseguire migrazioni distruttive.
 Ricordati di aggiornare il track ed il file `MEMORY.md` con le modifiche fatte.
 Se hai dubbi o hai bisogno di chiarimenti, chiedimi pure!

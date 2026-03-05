@@ -1,4 +1,18 @@
 services:
+  db-utenti:
+    image: postgres:15-alpine
+    container_name: db-utenti
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: user_data_db
+    volumes:
+      - db_utenti_data:/var/lib/postgresql/data
+    networks:
+      - mystore-network
+
   postgres:
     image: postgres:15-alpine
     container_name: mystore-postgres
@@ -60,9 +74,11 @@ services:
       - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
       - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     depends_on:
       - postgres
       - redis
+      - rabbitmq
     networks:
       - mystore-network
 
@@ -138,6 +154,25 @@ services:
     networks:
       - mystore-network
 
+  user-data-service:
+    build:
+      context: .
+      dockerfile: services/user-data-service/Dockerfile
+    container_name: user-data-service
+    ports:
+      - "${USER_DATA_SERVICE_PORT:-3006}:3005"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - USER_DATA_SERVICE_PORT=3005
+      - USER_DATA_DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@db-utenti:5432/user_data_db?schema=public
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      - db-utenti
+      - rabbitmq
+    networks:
+      - mystore-network
+
   api-gateway:
     build:
       context: .
@@ -152,6 +187,7 @@ services:
       - PRODUCT_SERVICE_URL=http://product-service:3002
       - SHOP_PAGE_SERVICE_URL=http://shop-page-service:3003
       - ORDER_SERVICE_URL=http://order-service:3004
+      - USER_DATA_SERVICE_URL=http://user-data-service:3005
       - SWAGGER_USER=${SWAGGER_USER:-admin}
       - SWAGGER_PASSWORD=${SWAGGER_PASSWORD:-admin}
     depends_on:
@@ -159,6 +195,7 @@ services:
       - product-service
       - shop-page-service
       - order-service
+      - user-data-service
     networks:
       - mystore-network
 
@@ -168,4 +205,5 @@ networks:
 
 volumes:
   postgres_data:
+  db_utenti_data:
   minio_data:

@@ -18,15 +18,21 @@ enum Role {
   VENDOR
 }
 
+enum ProfileStatus {
+  COMPLETE
+  PENDING_PROFILE
+}
+
 model User {
-  id            String       @id @default(uuid())
-  email         String       @unique
+  id            String        @id @default(uuid())
+  email         String        @unique
   passwordHash  String
-  role          Role         @default(CUSTOMER)
-  isBanned      Boolean      @default(false)
+  role          Role          @default(CUSTOMER)
+  profileStatus ProfileStatus @default(COMPLETE)
+  isBanned      Boolean       @default(false)
   lastLoginAt   DateTime?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   ipLogs        UserIpLog[]
 
   @@map("users")

@@ -127,6 +127,7 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   role: 'role',
+  profileStatus: 'profileStatus',
   isBanned: 'isBanned',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
@@ -159,6 +160,11 @@ exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN',
   SUPPORT: 'SUPPORT',
   VENDOR: 'VENDOR'
+};
+
+exports.ProfileStatus = exports.$Enums.ProfileStatus = {
+  COMPLETE: 'COMPLETE',
+  PENDING_PROFILE: 'PENDING_PROFILE'
 };
 
 exports.Prisma.ModelName = {

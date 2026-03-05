@@ -16,6 +16,7 @@ COPY services/auth-service/package.json ./services/auth-service/
 COPY services/product-service/package.json ./services/product-service/
 COPY services/shop-page-service/package.json ./services/shop-page-service/
 COPY services/order-service/package.json ./services/order-service/
+COPY services/user-data-service/package.json ./services/user-data-service/
 COPY frontend/store-app/package.json ./frontend/store-app/
 
 # Install dependencies for the whole workspace

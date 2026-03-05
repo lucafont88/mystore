@@ -28,7 +28,12 @@ export function RegisterForm() {
     setError(null);
     try {
       await authService.register(data);
-      navigate('/');
+      const user = authService.getCurrentUser();
+      if (user?.role === 'VENDOR' && user?.profileStatus === 'PENDING_PROFILE') {
+        navigate('/vendor/complete-profile');
+      } else {
+        navigate('/');
+      }
     } catch (err: any) {
       setError(err.message || 'Errore durante la registrazione');
     } finally {

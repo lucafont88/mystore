@@ -4,6 +4,7 @@ import adminRoutes from './admin.routes';
 import productRoutes from './product.routes';
 import shopPageRoutes from './shop-page.routes';
 import orderRoutes from './order.routes';
+import userDataRoutes from './user-data.routes';
 
 const router: Router = Router();
 
@@ -24,5 +25,8 @@ router.use('/api/v1/shop-pages', shopPageRoutes);
 
 // Forwarding /api/v1/orders to orderRoutes
 router.use('/api/v1/orders', orderRoutes);
+
+// Forwarding /api/v1/user-data to user-data-service
+router.use('/api/v1/user-data', userDataRoutes);
 
 export default router;

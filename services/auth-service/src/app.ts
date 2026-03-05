@@ -1,5 +1,5 @@
 // IMPORTANTE: initObservability DEVE essere chiamato PRIMA di qualsiasi altro import
-import { initObservability } from '@ecommerce/shared';
+import { initObservability, MessagingConnection } from '@ecommerce/shared';
 
 const { logger, middlewares, shutdown } = initObservability({
   serviceName: 'auth-service',
@@ -18,6 +18,8 @@ dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 import helmet from 'helmet';
 import cors from 'cors';
 import routes from './routes';
+import { initVendorRegisteredPublisher } from './events/vendorRegisteredPublisher';
+import { setupProfileCompletedConsumer } from './events/profileCompletedConsumer';
 
 const app: express.Application = express();
 const PORT = process.env.AUTH_SERVICE_PORT || 3001;
@@ -49,8 +51,20 @@ app.get('/api/v1/auth', (req: Request, res: Response) => {
 });
 
 if (process.env.NODE_ENV !== 'test') {
-  const server = app.listen(PORT, () => {
+  const server = app.listen(PORT, async () => {
     logger.info(`Auth Service is running on port ${PORT}`);
+
+    // Initialize RabbitMQ messaging
+    const rabbitmqUrl = process.env.RABBITMQ_URL || 'amqp://guest:guest@localhost:5672';
+    try {
+      const mqConnection = new MessagingConnection({ url: rabbitmqUrl }, logger);
+      await mqConnection.connect();
+      await initVendorRegisteredPublisher(mqConnection, logger);
+      await setupProfileCompletedConsumer(mqConnection, logger);
+      logger.info('RabbitMQ connected and handlers ready');
+    } catch (err) {
+      logger.warn({ err }, 'RabbitMQ not available, running without messaging');
+    }
   });
 
   process.on('SIGTERM', async () => {

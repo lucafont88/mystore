@@ -27,8 +27,12 @@ export function LoginForm() {
     setIsLoading(true);
     setError(null);
     try {
-      await authService.login(data);
-      navigate('/');
+      const response = await authService.login(data);
+      if (response.user.role === 'VENDOR' && response.user.profileStatus === 'PENDING_PROFILE') {
+        navigate('/vendor/complete-profile');
+      } else {
+        navigate('/');
+      }
     } catch (err: any) {
       setError(err.message || 'Errore durante il login');
     } finally {

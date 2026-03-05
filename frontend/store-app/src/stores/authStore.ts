@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface User {
+export interface User {
   id: string;
   email: string;
   role: string;
+  profileStatus?: 'COMPLETE' | 'PENDING_PROFILE';
 }
 
 interface AuthState {
@@ -15,6 +16,7 @@ interface AuthState {
   login: (user: User, token: string) => void;
   logout: () => void;
   setLoading: (isLoading: boolean) => void;
+  setProfileStatus: (status: 'COMPLETE' | 'PENDING_PROFILE') => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -27,6 +29,10 @@ export const useAuthStore = create<AuthState>()(
       login: (user, token) => set({ user, token, isAuthenticated: true }),
       logout: () => set({ user: null, token: null, isAuthenticated: false }),
       setLoading: (isLoading) => set({ isLoading }),
+      setProfileStatus: (status) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, profileStatus: status } : null,
+        })),
     }),
     {
       name: 'auth-storage',

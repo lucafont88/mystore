@@ -88,15 +88,32 @@ export interface ProductValidationResponse {
 
 export const EXCHANGES = {
   PRODUCT_EVENTS: 'product.events',
+  USER_EVENTS: 'user.events',
+  VENDOR_EVENTS: 'vendor.events',
 } as const;
 
 export const ROUTING_KEYS = {
   PRODUCT_CREATED: 'product.created',
   PRODUCT_UPDATED: 'product.updated',
   PRODUCT_DELETED: 'product.deleted',
+  VENDOR_REGISTERED: 'vendor.registered',
+  PROFILE_COMPLETED: 'profile.completed',
 } as const;
 
 export const QUEUES = {
   SHOP_PAGE_PRODUCT_EVENTS: 'shop-page.product-events',
   PRODUCT_VALIDATE: 'product.validate',
+  USER_DATA_VENDOR_REGISTERED: 'user-data.vendor-registered',
+  AUTH_PROFILE_COMPLETED: 'auth.profile-completed',
 } as const;
+
+// ── User/Vendor Event Types ──
+
+export interface VendorRegisteredPayload {
+  userId: string;
+  email: string;
+}
+
+export interface VendorProfileCompletedPayload {
+  userId: string;
+}

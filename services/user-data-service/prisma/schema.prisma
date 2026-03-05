@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("USER_DATA_DATABASE_URL")
+}
+
+enum ProfileStatusLocal {
+  PENDING
+  COMPLETE
+}
+
+model VendorProfile {
+  id           String              @id @default(uuid())
+  userId       String              @unique
+  status       ProfileStatusLocal  @default(PENDING)
+  firstName    String
+  lastName     String
+  dateOfBirth  DateTime
+  gender       String?
+  fiscalCode   String              @unique
+  businessName String
+  vatNumber    String?
+  contactEmail String
+  phoneNumber  String
+  address      Json
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@map("vendor_profiles")
+}

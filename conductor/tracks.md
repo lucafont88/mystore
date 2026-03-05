@@ -57,7 +57,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-- [ ] **Track: User Registration Fix + Vendor Onboarding — fix bug registrazione (password policy, error messages, banned 403) + selezione ruolo CUSTOMER/VENDOR al signup**
+- [ ] **Track: User Registration Fix + Vendor Onboarding — fix bug registrazione + selezione ruolo + flusso anagrafica vendor in due fasi con db-utenti + user-data-service + RabbitMQ Saga**
   *Link: [./tracks/user_registration_vendor_onboard_20260305/](./tracks/user_registration_vendor_onboard_20260305/)*
 
 ---

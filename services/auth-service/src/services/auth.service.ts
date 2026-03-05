@@ -3,6 +3,7 @@ import prisma from '../config/db';
 import { User } from '../generated/client';
 import { generateAccessToken, generateRefreshToken } from '../utils/token.util';
 import redis from '../config/redis';
+import { publishVendorRegistered } from '../events/vendorRegisteredPublisher';
 
 export interface LoginResponse {
   user: Omit<User, 'passwordHash'>;
@@ -27,8 +28,14 @@ export class AuthService {
         email,
         passwordHash,
         role,
+        profileStatus: role === 'VENDOR' ? 'PENDING_PROFILE' : 'COMPLETE',
       },
     });
+
+    // Fire-and-forget: notify user-data-service to create placeholder profile
+    if (role === 'VENDOR') {
+      publishVendorRegistered(user.id, user.email).catch(() => {});
+    }
 
     const { passwordHash: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
@@ -71,7 +78,7 @@ export class AuthService {
         }),
     ]).catch(() => {});
 
-    const payload = { id: user.id, email: user.email, role: user.role };
+    const payload = { id: user.id, email: user.email, role: user.role, profileStatus: user.profileStatus };
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
