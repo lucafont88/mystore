@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -65,6 +66,25 @@ export default function AdminUsersPage() {
   const [tempPassword, setTempPassword] = useState<string>('');
   const [copied, setCopied] = useState(false);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRoles, setSelectedRoles] = useState<Set<string>>(new Set());
+
+  const ALL_ROLES = ['ADMIN', 'VENDOR', 'CUSTOMER', 'SUPPORT'] as const;
+
+  function toggleRole(role: string) {
+    setSelectedRoles(prev => {
+      const next = new Set(prev);
+      if (next.has(role)) next.delete(role); else next.add(role);
+      return next;
+    });
+  }
+
+  const filteredUsers = users?.filter(user => {
+    const matchesSearch = user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = selectedRoles.size === 0 || selectedRoles.has(user.role);
+    return matchesSearch && matchesRole;
+  });
+
   function openDialog(type: DialogType, user: AdminUser) {
     setSelectedUser(user);
     setActiveDialog(type);
@@ -110,6 +130,32 @@ export default function AdminUsersPage() {
     <div className="space-y-6 p-6">
       <h1 className="text-2xl font-bold">{t('users.title')}</h1>
 
+      <div className="flex flex-wrap items-center gap-3">
+        <Input
+          placeholder={t('users.searchPlaceholder')}
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          className="max-w-xs"
+        />
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">{t('users.filterByRole')}</span>
+          {ALL_ROLES.map(role => (
+            <button
+              key={role}
+              type="button"
+              onClick={() => toggleRole(role)}
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-opacity cursor-pointer
+                ${selectedRoles.has(role)
+                  ? ROLE_COLORS[role]
+                  : 'bg-muted text-muted-foreground opacity-50 hover:opacity-75'
+                }`}
+            >
+              {role}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="rounded-lg border bg-card overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
@@ -125,7 +171,7 @@ export default function AdminUsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users?.map((user) => (
+            {filteredUsers?.map((user) => (
               <tr key={user.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
                 <td className="px-4 py-3 font-medium">{user.email}</td>
                 <td className="px-4 py-3">
@@ -220,6 +266,11 @@ export default function AdminUsersPage() {
             ))}
           </tbody>
         </table>
+        {filteredUsers?.length === 0 && (
+          <p className="px-4 py-6 text-center text-sm text-muted-foreground">
+            {t('users.noResults')}
+          </p>
+        )}
       </div>
 
       {/* Dialog: Cambia Ruolo */}

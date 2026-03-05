@@ -78,3 +78,19 @@ Sviluppo progressivo dell'Admin Panel: Dashboard, Gestione Categorie, Gestione U
 | `frontend/store-app/src/queries/useAdminUsersQuery.ts` | Query hooks |
 | `frontend/store-app/src/pages/admin/Users/index.tsx` | UI page |
 | `frontend/store-app/src/pages/admin/index.tsx` | Sidebar layout + TooltipProvider |
+
+## Phase 10 — Ricerca Email + Filtro Multi-Ruolo (2026-03-05) ✅
+
+Frontend-only. Aggiunta toolbar sopra la tabella utenti con:
+- Input di ricerca per email (real-time, case-insensitive)
+- Toggle button per ogni ruolo (ADMIN/VENDOR/CUSTOMER/SUPPORT), multi-selezione; vuoto = tutti
+- `filteredUsers` calcolato da `users` con entrambi i filtri in AND
+- Messaggio "nessun utente trovato" quando lista filtrata è vuota
+- 3 nuove chiavi i18n per IT + EN: `searchPlaceholder`, `filterByRole`, `noResults`
+
+File modificati:
+| File | Modifica |
+|------|----------|
+| `frontend/store-app/src/pages/admin/Users/index.tsx` | Stato + toolbar UI + logica filtro |
+| `frontend/store-app/public/locales/it/admin.json` | +3 chiavi i18n |
+| `frontend/store-app/public/locales/en/admin.json` | +3 chiavi i18n |
