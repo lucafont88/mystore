@@ -124,7 +124,7 @@ export function Header() {
                   <DropdownMenuItem asChild>
                     <Link to="/orders">I miei ordini</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => logout()} className="text-red-600 focus:text-red-600">
+                  <DropdownMenuItem onClick={() => { logout(); navigate('/'); }} className="text-red-600 focus:text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Logout</span>
                   </DropdownMenuItem>

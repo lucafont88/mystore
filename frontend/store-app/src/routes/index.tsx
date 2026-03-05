@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '@/pages/Auth/Login';
 import RegisterPage from '@/pages/Auth/Register';
 import ProductsPage from '@/pages/Products';
@@ -16,24 +16,13 @@ import BundlesPage from '@/pages/Bundles';
 import BundleDetailPage from '@/pages/Bundles/[id]';
 import VendorDashboardPage from '@/pages/Vendor/Dashboard';
 import VendorCompleteProfilePage from '@/pages/Vendor/CompleteProfile';
+import VendorProfilePage from '@/pages/Vendor/Profile';
+import VendorLayout from '@/pages/Vendor';
 import AdminLayout from '@/pages/Admin';
 import AdminDashboardPage from '@/pages/Admin/Dashboard';
 import AdminCategoriesPage from '@/pages/Admin/Categories';
 import AdminUsersPage from '@/pages/Admin/Users';
 import { Layout } from '@/components/layout/Layout';
-import { useAuthStore } from '@/stores/authStore';
-
-/**
- * Guard for vendor routes that require a complete profile.
- * If user is VENDOR with PENDING_PROFILE → redirect to complete-profile.
- */
-function VendorProfileGuard() {
-  const user = useAuthStore((s) => s.user);
-  if (user?.role === 'VENDOR' && user?.profileStatus === 'PENDING_PROFILE') {
-    return <Navigate to="/vendor/complete-profile" replace />;
-  }
-  return <Outlet />;
-}
 
 export const router = createBrowserRouter([
   {
@@ -81,8 +70,7 @@ export const router = createBrowserRouter([
         element: <VendorCompleteProfilePage />,
       },
       {
-        // Vendor routes that require profile to be complete
-        element: <VendorProfileGuard />,
+        element: <VendorLayout />,
         children: [
           { path: 'vendor/dashboard', element: <VendorDashboardPage /> },
           { path: 'vendor/products', element: <VendorProductsPage /> },
@@ -91,6 +79,7 @@ export const router = createBrowserRouter([
           { path: 'vendor/bundles', element: <VendorBundlesPage /> },
           { path: 'vendor/bundles/create', element: <VendorCreateBundlePage /> },
           { path: 'vendor/bundles/:id', element: <VendorEditBundlePage /> },
+          { path: 'vendor/profile', element: <VendorProfilePage /> },
         ],
       },
       {

@@ -1,5 +1,12 @@
 {
   "accessDenied": "Access denied",
+  "sidebar": {
+    "vendor": "Vendor",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "bundles": "Bundles",
+    "myData": "My data"
+  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome to your vendor area",
