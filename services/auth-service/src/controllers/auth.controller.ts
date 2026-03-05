@@ -10,10 +10,10 @@ export class AuthController {
       return;
     }
 
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     try {
-      const user = await authService.register(email, password);
+      const user = await authService.register(email, password, role);
       res.status(201).json(user);
     } catch (error: any) {
       if (error.message === 'Email already in use') {
@@ -43,6 +43,8 @@ export class AuthController {
     } catch (error: any) {
       if (error.message === 'Invalid credentials') {
         res.status(401).json({ error: error.message });
+      } else if (error.message === 'Account bannato') {
+        res.status(403).json({ error: error.message });
       } else {
         res.status(500).json({ error: 'Internal Server Error' });
       }

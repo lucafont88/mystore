@@ -28,8 +28,8 @@ export const authService = {
   },
 
   register: async (data: RegisterInput) => {
-    const { email, password } = data;
-    const response = await api.post<RegisterResponse>('/auth/register', { email, password });
+    const { email, password, role } = data;
+    const response = await api.post<RegisterResponse>('/auth/register', { email, password, role });
     // After registration, auto-login to get tokens
     const loginResponse = await api.post<LoginResponse>('/auth/login', { email, password });
     useAuthStore.getState().login(loginResponse.user, loginResponse.accessToken);

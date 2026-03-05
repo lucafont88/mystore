@@ -46,26 +46,6 @@ export function RegisterForm() {
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none" htmlFor="firstName">
-                Nome
-              </label>
-              <Input id="firstName" {...register('firstName')} />
-              {errors.firstName && (
-                <p className="text-xs text-destructive">{errors.firstName.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none" htmlFor="lastName">
-                Cognome
-              </label>
-              <Input id="lastName" {...register('lastName')} />
-              {errors.lastName && (
-                <p className="text-xs text-destructive">{errors.lastName.message}</p>
-              )}
-            </div>
-          </div>
           <div className="space-y-2">
             <label className="text-sm font-medium leading-none" htmlFor="email">
               Email
@@ -74,6 +54,19 @@ export function RegisterForm() {
             {errors.email && (
               <p className="text-xs text-destructive">{errors.email.message}</p>
             )}
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium leading-none">Tipo account</label>
+            <div className="flex gap-6">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" value="CUSTOMER" {...register('role')} defaultChecked />
+                <span className="text-sm">Cliente</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" value="VENDOR" {...register('role')} />
+                <span className="text-sm">Venditore</span>
+              </label>
+            </div>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium leading-none" htmlFor="password">

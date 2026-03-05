@@ -11,6 +11,10 @@ export const registerValidator = [
     .withMessage('Password must contain at least one lowercase letter')
     .matches(/[A-Z]/)
     .withMessage('Password must contain at least one uppercase letter'),
+  body('role')
+    .optional()
+    .isIn(['CUSTOMER', 'VENDOR'])
+    .withMessage('Role must be CUSTOMER or VENDOR'),
 ];
 
 export const loginValidator = [

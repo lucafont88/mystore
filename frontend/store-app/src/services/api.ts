@@ -42,7 +42,12 @@ async function request<T>(url: string, options: RequestOptions = {}): Promise<T>
       if (response.status === 401) {
         useAuthStore.getState().logout();
       }
-      throw new ApiError(data.message || 'Something went wrong', response.status, data.code);
+      const message =
+        data.message ||
+        data.error ||
+        (Array.isArray(data.errors) ? data.errors[0]?.msg : null) ||
+        'Something went wrong';
+      throw new ApiError(message, response.status, data.code);
     }
 
     return data as T;

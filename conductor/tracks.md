@@ -57,6 +57,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-*(nessun track attivo)*
+- [ ] **Track: User Registration Fix + Vendor Onboarding — fix bug registrazione (password policy, error messages, banned 403) + selezione ruolo CUSTOMER/VENDOR al signup**
+  *Link: [./tracks/user_registration_vendor_onboard_20260305/](./tracks/user_registration_vendor_onboard_20260305/)*
 
 ---

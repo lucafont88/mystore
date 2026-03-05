@@ -11,7 +11,7 @@ export interface LoginResponse {
 }
 
 export class AuthService {
-  async register(email: string, password: string): Promise<Omit<User, 'passwordHash'>> {
+  async register(email: string, password: string, role: 'CUSTOMER' | 'VENDOR' = 'CUSTOMER'): Promise<Omit<User, 'passwordHash'>> {
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -26,6 +26,7 @@ export class AuthService {
       data: {
         email,
         passwordHash,
+        role,
       },
     });
 
