@@ -75,6 +75,8 @@ services:
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
       - REDIS_URL=redis://redis:6379
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - RESEND_FROM=${RESEND_FROM:-noreply@mystore.it}
     depends_on:
       - postgres
       - redis

@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
+import argon2 from 'argon2';
 import authService from '../services/auth.service';
 import prisma from '../config/db';
+import { generateOtp, storeOtp, verifyAndConsumeOtp } from '../services/otp.service';
+import { sendOtpEmail } from '../services/email.service';
 
 export class AuthController {
   async register(req: Request, res: Response): Promise<void> {
@@ -49,6 +52,61 @@ export class AuthController {
       } else {
         res.status(500).json({ error: 'Internal Server Error' });
       }
+    }
+  }
+
+  async sendOtp(req: Request, res: Response): Promise<void> {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    const { email, password, role = 'CUSTOMER' } = req.body;
+
+    try {
+      // Controlla se l'email è già registrata
+      const existing = await prisma.user.findUnique({ where: { email } });
+      if (existing) {
+        res.status(409).json({ error: 'Email already in use' });
+        return;
+      }
+
+      // Hash della password prima di salvarla in Redis (mai plaintext)
+      const passwordHash = await argon2.hash(password);
+
+      const otp = generateOtp();
+      await storeOtp(email, otp, passwordHash, role);
+      await sendOtpEmail(email, otp);
+
+      res.status(200).json({ message: 'OTP sent' });
+    } catch (error: any) {
+      console.error('sendOtp error:', error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
+  async verifyOtp(req: Request, res: Response): Promise<void> {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    const { email, otp } = req.body;
+
+    try {
+      const payload = await verifyAndConsumeOtp(email, otp);
+      if (!payload) {
+        res.status(400).json({ error: 'OTP non valido o scaduto' });
+        return;
+      }
+
+      const user = await authService.createUser(email, payload.passwordHash, payload.role);
+      res.status(201).json(user);
+    } catch (error: any) {
+      console.error('verifyOtp error:', error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 

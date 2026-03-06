@@ -12,33 +12,34 @@ export interface LoginResponse {
 }
 
 export class AuthService {
-  async register(email: string, password: string, role: 'CUSTOMER' | 'VENDOR' = 'CUSTOMER'): Promise<Omit<User, 'passwordHash'>> {
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      throw new Error('Email already in use');
-    }
-
-    const passwordHash = await argon2.hash(password);
-
+  /**
+   * Crea un utente con passwordHash già pronto (usato da verifyOtp dopo verifica OTP).
+   */
+  async createUser(email: string, passwordHash: string, role: string = 'CUSTOMER'): Promise<Omit<User, 'passwordHash'>> {
     const user = await prisma.user.create({
       data: {
         email,
         passwordHash,
-        role,
+        role: role as 'CUSTOMER' | 'VENDOR',
         profileStatus: role === 'VENDOR' ? 'PENDING_PROFILE' : 'COMPLETE',
       },
     });
 
-    // Fire-and-forget: notify user-data-service to create placeholder profile
     if (role === 'VENDOR') {
       publishVendorRegistered(user.id, user.email).catch(() => {});
     }
 
     const { passwordHash: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
+  }
+
+  async register(email: string, password: string, role: 'CUSTOMER' | 'VENDOR' = 'CUSTOMER'): Promise<Omit<User, 'passwordHash'>> {
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      throw new Error('Email already in use');
+    }
+    const passwordHash = await argon2.hash(password);
+    return this.createUser(email, passwordHash, role);
   }
 
   async login(email: string, password: string, ip: string = 'unknown'): Promise<LoginResponse> {

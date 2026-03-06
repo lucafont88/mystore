@@ -1,6 +1,6 @@
 import { Outlet, NavLink, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, Package, Boxes, User } from 'lucide-react';
+import { LayoutDashboard, Package, Boxes, User, CreditCard } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
 
 export default function VendorLayout() {
@@ -49,6 +49,10 @@ export default function VendorLayout() {
             <NavLink to="/vendor/profile" className={navLinkClass}>
               <User className="h-4 w-4" />
               {t('sidebar.myData', 'I miei dati')}
+            </NavLink>
+            <NavLink to="/vendor/payment-methods" className={navLinkClass}>
+              <CreditCard className="h-4 w-4" />
+              {t('sidebar.paymentMethods', 'I miei metodi di pagamento')}
             </NavLink>
           </nav>
         </div>

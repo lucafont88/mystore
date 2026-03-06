@@ -38,6 +38,17 @@ export const authService = {
     return response;
   },
 
+  sendOtp: (email: string, password: string, role: string) =>
+    api.post<{ message: string }>('/auth/register/send-otp', { email, password, role }),
+
+  verifyOtp: async (email: string, otp: string, password: string) => {
+    const response = await api.post<RegisterResponse>('/auth/register/verify-otp', { email, otp });
+    // Auto-login dopo verifica OTP riuscita
+    const loginResponse = await api.post<LoginResponse>('/auth/login', { email, password });
+    useAuthStore.getState().login(loginResponse.user, loginResponse.accessToken);
+    return response;
+  },
+
   logout: () => {
     useAuthStore.getState().logout();
   },

@@ -17,6 +17,7 @@ import BundleDetailPage from '@/pages/Bundles/[id]';
 import VendorDashboardPage from '@/pages/Vendor/Dashboard';
 import VendorCompleteProfilePage from '@/pages/Vendor/CompleteProfile';
 import VendorProfilePage from '@/pages/Vendor/Profile';
+import VendorPaymentMethodsPage from '@/pages/Vendor/PaymentMethods';
 import VendorLayout from '@/pages/Vendor';
 import AdminLayout from '@/pages/Admin';
 import AdminDashboardPage from '@/pages/Admin/Dashboard';
@@ -80,6 +81,7 @@ export const router = createBrowserRouter([
           { path: 'vendor/bundles/create', element: <VendorCreateBundlePage /> },
           { path: 'vendor/bundles/:id', element: <VendorEditBundlePage /> },
           { path: 'vendor/profile', element: <VendorProfilePage /> },
+          { path: 'vendor/payment-methods', element: <VendorPaymentMethodsPage /> },
         ],
       },
       {

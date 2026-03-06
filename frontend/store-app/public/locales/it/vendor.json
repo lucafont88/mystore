@@ -3,9 +3,10 @@
   "sidebar": {
     "vendor": "Vendor",
     "dashboard": "Dashboard",
-    "products": "Prodotti",
+    "products": "I miei prodotti",
     "bundles": "Bundle",
-    "myData": "I miei dati"
+    "myData": "I miei dati",
+    "paymentMethods": "I miei metodi di pagamento"
   },
   "dashboard": {
     "title": "Dashboard",

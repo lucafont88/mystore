@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import authController from '../controllers/auth.controller';
-import { registerValidator, loginValidator } from '../validators/auth.validator';
+import { registerValidator, loginValidator, sendOtpValidator, verifyOtpValidator } from '../validators/auth.validator';
 import { authenticate } from '../middlewares/auth.middleware';
 
 const router: Router = Router();
@@ -40,6 +40,8 @@ const router: Router = Router();
  *         description: Email already in use
  */
 router.post('/register', registerValidator, authController.register);
+router.post('/register/send-otp', sendOtpValidator, authController.sendOtp.bind(authController));
+router.post('/register/verify-otp', verifyOtpValidator, authController.verifyOtp.bind(authController));
 
 /**
  * @swagger
