@@ -1,9 +1,9 @@
-import resend from '../config/mailer';
+import { getResend } from '../config/mailer';
 
 export async function sendOtpEmail(to: string, otp: string): Promise<void> {
-  const from = process.env.RESEND_FROM || 'noreply@mystore.it';
+  const from = process.env.RESEND_FROM || 'noreply@zelkomarket.com';
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from,
     to,
     subject: 'Il tuo codice di verifica MyStore',
