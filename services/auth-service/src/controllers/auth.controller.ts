@@ -7,6 +7,16 @@ import { generateOtp, storeOtp, verifyAndConsumeOtp } from '../services/otp.serv
 import { sendOtpEmail } from '../services/email.service';
 
 export class AuthController {
+  async checkEmail(req: Request, res: Response): Promise<void> {
+    const email = req.query.email as string;
+    if (!email) {
+      res.status(400).json({ error: 'Email is required' });
+      return;
+    }
+    const user = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+    res.status(200).json({ exists: !!user });
+  }
+
   async register(req: Request, res: Response): Promise<void> {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

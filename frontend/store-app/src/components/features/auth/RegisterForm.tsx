@@ -8,14 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { useState, useEffect, useRef } from 'react';
 import { authService } from '@/services/auth.service';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
-const otpSchema = z.object({
-  otp: z.string().length(6, 'Inserisci il codice a 6 cifre').regex(/^\d+$/, 'Solo cifre'),
-});
-type OtpInput = z.infer<typeof otpSchema>;
-
-const RESEND_COOLDOWN = 60; // secondi
+const RESEND_COOLDOWN = 60;
 
 export function RegisterForm() {
   const { t } = useTranslation(['auth', 'common']);
@@ -26,6 +21,10 @@ export function RegisterForm() {
 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Email existence check
+  const [emailExists, setEmailExists] = useState(false);
+  const [emailChecking, setEmailChecking] = useState(false);
 
   const [cooldown, setCooldown] = useState(0);
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -49,16 +48,33 @@ export function RegisterForm() {
     }, 1000);
   };
 
-  // Step 1: dati registrazione
+  // Step 1
   const {
     register: registerStep1,
     handleSubmit: handleStep1,
+    getValues,
     formState: { errors: errorsStep1 },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
   });
 
+  const handleEmailBlur = async () => {
+    const email = getValues('email');
+    // Only check if email looks valid (basic format)
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    setEmailChecking(true);
+    try {
+      const { exists } = await authService.checkEmail(email);
+      setEmailExists(exists);
+    } catch {
+      // silently ignore network errors on blur check
+    } finally {
+      setEmailChecking(false);
+    }
+  };
+
   const onStep1Submit = async (data: RegisterInput) => {
+    if (emailExists) return;
     setIsLoading(true);
     setError(null);
     try {
@@ -67,13 +83,21 @@ export function RegisterForm() {
       setStep(2);
       startCooldown();
     } catch (err: any) {
-      setError(err.message || 'Errore durante la registrazione');
+      setError(err.message || t('register.error'));
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Step 2: OTP
+  // Step 2 schema
+  const otpSchema = z.object({
+    otp: z
+      .string()
+      .length(6, t('otp.invalidCode'))
+      .regex(/^\d+$/, t('otp.onlyDigits')),
+  });
+  type OtpInput = z.infer<typeof otpSchema>;
+
   const {
     register: registerStep2,
     handleSubmit: handleStep2,
@@ -96,7 +120,7 @@ export function RegisterForm() {
         navigate('/');
       }
     } catch (err: any) {
-      setError(err.message || 'Codice non valido o scaduto');
+      setError(err.message || t('otp.error'));
     } finally {
       setIsLoading(false);
     }
@@ -111,56 +135,85 @@ export function RegisterForm() {
       resetOtpForm();
       startCooldown();
     } catch (err: any) {
-      setError(err.message || 'Errore nel reinvio del codice');
+      setError(err.message || t('otp.resendError'));
     } finally {
       setIsLoading(false);
     }
   };
 
+  // ---- Step 1 ----
   if (step === 1) {
     return (
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{t('register.title', 'Registrati')}</CardTitle>
-          <CardDescription>
-            {t('register.description', 'Crea un nuovo account per iniziare a fare acquisti')}
-          </CardDescription>
+          <CardTitle>{t('register.title')}</CardTitle>
+          <CardDescription>{t('register.description')}</CardDescription>
         </CardHeader>
         <form onSubmit={handleStep1(onStep1Submit)}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none" htmlFor="email">Email</label>
-              <Input id="email" type="email" {...registerStep1('email')} />
-              {errorsStep1.email && <p className="text-xs text-destructive">{errorsStep1.email.message}</p>}
+              <Input
+                id="email"
+                type="email"
+                {...registerStep1('email', {
+                  onBlur: handleEmailBlur,
+                  onChange: () => setEmailExists(false),
+                })}
+              />
+              {errorsStep1.email && (
+                <p className="text-xs text-destructive">{errorsStep1.email.message}</p>
+              )}
+              {!errorsStep1.email && emailExists && (
+                <p className="text-xs text-destructive">
+                  {t('register.emailExistsPlain')}{' '}
+                  <Link to="/login" className="underline font-medium">
+                    {t('common:navigation.login')}
+                  </Link>
+                </p>
+              )}
+              {emailChecking && (
+                <p className="text-xs text-muted-foreground">{t('common:actions.loading')}</p>
+              )}
             </div>
+
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none">Tipo account</label>
+              <label className="text-sm font-medium leading-none">{t('register.accountType')}</label>
               <div className="flex gap-6">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="radio" value="CUSTOMER" {...registerStep1('role')} defaultChecked />
-                  <span className="text-sm">Cliente</span>
+                  <span className="text-sm">{t('register.customer')}</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="radio" value="VENDOR" {...registerStep1('role')} />
-                  <span className="text-sm">Venditore</span>
+                  <span className="text-sm">{t('register.vendor')}</span>
                 </label>
               </div>
             </div>
+
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none" htmlFor="password">Password</label>
               <Input id="password" type="password" {...registerStep1('password')} />
-              {errorsStep1.password && <p className="text-xs text-destructive">{errorsStep1.password.message}</p>}
+              {errorsStep1.password && (
+                <p className="text-xs text-destructive">{errorsStep1.password.message}</p>
+              )}
             </div>
+
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none" htmlFor="confirmPassword">Conferma Password</label>
+              <label className="text-sm font-medium leading-none" htmlFor="confirmPassword">
+                Conferma Password
+              </label>
               <Input id="confirmPassword" type="password" {...registerStep1('confirmPassword')} />
-              {errorsStep1.confirmPassword && <p className="text-xs text-destructive">{errorsStep1.confirmPassword.message}</p>}
+              {errorsStep1.confirmPassword && (
+                <p className="text-xs text-destructive">{errorsStep1.confirmPassword.message}</p>
+              )}
             </div>
+
             {error && <p className="text-sm text-destructive">{error}</p>}
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? t('common:actions.loading') : 'Continua'}
+            <Button type="submit" className="w-full" disabled={isLoading || emailExists || emailChecking}>
+              {isLoading ? t('common:actions.loading') : t('register.continue')}
             </Button>
           </CardFooter>
         </form>
@@ -168,18 +221,21 @@ export function RegisterForm() {
     );
   }
 
+  // ---- Step 2 ----
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle>Verifica la tua email</CardTitle>
+        <CardTitle>{t('otp.title')}</CardTitle>
         <CardDescription>
-          Abbiamo inviato un codice a 6 cifre a <strong>{registrationData?.email}</strong>. Il codice è valido per 10 minuti.
+          {t('otp.description', { email: registrationData?.email })}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleStep2(onStep2Submit)}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium leading-none" htmlFor="otp">Codice OTP</label>
+            <label className="text-sm font-medium leading-none" htmlFor="otp">
+              {t('otp.label')}
+            </label>
             <Input
               id="otp"
               type="text"
@@ -189,31 +245,37 @@ export function RegisterForm() {
               className="text-center text-2xl tracking-widest font-mono"
               {...registerStep2('otp')}
             />
-            {errorsStep2.otp && <p className="text-xs text-destructive">{errorsStep2.otp.message}</p>}
+            {errorsStep2.otp && (
+              <p className="text-xs text-destructive">{errorsStep2.otp.message}</p>
+            )}
           </div>
+
           {error && <p className="text-sm text-destructive">{error}</p>}
+
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>Non hai ricevuto il codice?</span>
+            <span>{t('otp.noCode')}</span>
             <button
               type="button"
               onClick={handleResend}
               disabled={cooldown > 0 || isLoading}
               className="text-primary underline underline-offset-2 disabled:opacity-50 disabled:no-underline disabled:cursor-not-allowed"
             >
-              {cooldown > 0 ? `Reinvia tra ${cooldown}s` : 'Reinvia codice'}
+              {cooldown > 0
+                ? t('otp.resendCooldown', { seconds: cooldown })
+                : t('otp.resend')}
             </button>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-2">
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? t('common:actions.loading') : 'Verifica e registrati'}
+            {isLoading ? t('common:actions.loading') : t('otp.verify')}
           </Button>
           <button
             type="button"
-            onClick={() => { setStep(1); setError(null); }}
+            onClick={() => { setStep(1); setError(null); setEmailExists(false); }}
             className="text-xs text-muted-foreground underline underline-offset-2"
           >
-            ← Torna indietro
+            {t('otp.back')}
           </button>
         </CardFooter>
       </form>

@@ -38,6 +38,9 @@ export const authService = {
     return response;
   },
 
+  checkEmail: (email: string) =>
+    api.get<{ exists: boolean }>(`/auth/check-email?email=${encodeURIComponent(email)}`),
+
   sendOtp: (email: string, password: string, role: string) =>
     api.post<{ message: string }>('/auth/register/send-otp', { email, password, role }),
 

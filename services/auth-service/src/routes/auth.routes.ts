@@ -39,6 +39,7 @@ const router: Router = Router();
  *       409:
  *         description: Email already in use
  */
+router.get('/check-email', authController.checkEmail.bind(authController));
 router.post('/register', registerValidator, authController.register);
 router.post('/register/send-otp', sendOtpValidator, authController.sendOtp.bind(authController));
 router.post('/register/verify-otp', verifyOtpValidator, authController.verifyOtp.bind(authController));
