@@ -10,8 +10,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
-              <Package className="h-6 w-6 text-primary" />
-              <span className="font-bold">MyStore</span>
+              <img src='/Zelko_logo_img_white_bg.png' alt="Zelko Market" width={40} height={40} />
+              <span className="font-bold">Zelko Market</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               La tua destinazione per lo shopping online di qualità, sicuro e veloce.
