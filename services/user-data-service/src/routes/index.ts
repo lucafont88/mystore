@@ -1,5 +1,7 @@
 import { Router } from 'express';
+import express from 'express';
 import vendorProfileController from '../controllers/vendorProfile.controller';
+import stripeIdentityController from '../controllers/stripeIdentity.controller';
 import { vendorProfileValidator } from '../validators/vendorProfile.validator';
 import { authenticate } from '../middleware/auth.middleware';
 import { authorize } from '../middleware/role.middleware';
@@ -27,6 +29,38 @@ router.put(
   authorize(['VENDOR']),
   vendorProfileValidator,
   vendorProfileController.upsertProfile.bind(vendorProfileController)
+);
+
+/**
+ * POST /api/v1/vendor/identity/session
+ * Creates a Stripe Identity verification session for the authenticated vendor
+ */
+router.post(
+  '/vendor/identity/session',
+  authenticate,
+  authorize(['VENDOR']),
+  stripeIdentityController.createSession.bind(stripeIdentityController)
+);
+
+/**
+ * GET /api/v1/vendor/identity/status
+ * Polls Stripe API to check current verification status for the authenticated vendor
+ */
+router.get(
+  '/vendor/identity/status',
+  authenticate,
+  authorize(['VENDOR']),
+  stripeIdentityController.pollStatus.bind(stripeIdentityController)
+);
+
+/**
+ * POST /api/v1/stripe/webhook
+ * Receives Stripe webhook events (no auth, raw body required)
+ */
+router.post(
+  '/stripe/webhook',
+  express.raw({ type: '*/*' }),
+  stripeIdentityController.webhook.bind(stripeIdentityController)
 );
 
 export default router;

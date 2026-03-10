@@ -19,6 +19,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import routes from './routes';
 import { initProfileCompletedPublisher } from './events/profileCompletedPublisher';
+import { initIdentityVerifiedPublisher } from './events/identityVerifiedPublisher';
 import { setupVendorRegisteredConsumer } from './events/vendorRegisteredConsumer';
 
 const app: express.Application = express();
@@ -31,7 +32,16 @@ app.use(middlewares.requestLogger);
 // Middlewares
 app.use(helmet());
 app.use(cors());
-app.use(express.json());
+
+// Il webhook Stripe richiede raw body — deve stare PRIMA di express.json()
+// La route /stripe/webhook gestisce il proprio express.raw() internamente, ma
+// express.json() non deve processare questa path
+app.use((req, _res, next) => {
+  if (req.path === '/api/v1/stripe/webhook') {
+    return next(); // skip express.json() — la route usa express.raw()
+  }
+  express.json()(req, _res, next);
+});
 
 // Routes
 app.use('/api/v1', routes);
@@ -51,6 +61,7 @@ if (process.env.NODE_ENV !== 'test') {
       const mqConnection = new MessagingConnection({ url: rabbitmqUrl }, logger);
       await mqConnection.connect();
       await initProfileCompletedPublisher(mqConnection, logger);
+      await initIdentityVerifiedPublisher(mqConnection, logger);
       await setupVendorRegisteredConsumer(mqConnection, logger);
       logger.info('RabbitMQ connected and handlers ready');
     } catch (err) {

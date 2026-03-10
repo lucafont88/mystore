@@ -16,6 +16,7 @@ import BundlesPage from '@/pages/Bundles';
 import BundleDetailPage from '@/pages/Bundles/[id]';
 import VendorDashboardPage from '@/pages/Vendor/Dashboard';
 import VendorCompleteProfilePage from '@/pages/Vendor/CompleteProfile';
+import VendorVerifyIdentityPage from '@/pages/Vendor/VerifyIdentity';
 import VendorProfilePage from '@/pages/Vendor/Profile';
 import VendorPaymentMethodsPage from '@/pages/Vendor/PaymentMethods';
 import VendorLayout from '@/pages/Vendor';
@@ -69,6 +70,10 @@ export const router = createBrowserRouter([
       {
         path: 'vendor/complete-profile',
         element: <VendorCompleteProfilePage />,
+      },
+      {
+        path: 'vendor/verify-identity',
+        element: <VendorVerifyIdentityPage />,
       },
       {
         element: <VendorLayout />,

@@ -136,6 +136,8 @@ exports.Prisma.VendorProfileScalarFieldEnum = {
   contactEmail: 'contactEmail',
   phoneNumber: 'phoneNumber',
   address: 'address',
+  identityStatus: 'identityStatus',
+  stripeVerificationSessionId: 'stripeVerificationSessionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -167,6 +169,13 @@ exports.Prisma.NullsOrder = {
 exports.ProfileStatusLocal = exports.$Enums.ProfileStatusLocal = {
   PENDING: 'PENDING',
   COMPLETE: 'COMPLETE'
+};
+
+exports.IdentityStatus = exports.$Enums.IdentityStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  VERIFIED: 'VERIFIED',
+  FAILED: 'FAILED'
 };
 
 exports.Prisma.ModelName = {

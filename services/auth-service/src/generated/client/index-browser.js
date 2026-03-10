@@ -164,7 +164,8 @@ exports.Role = exports.$Enums.Role = {
 
 exports.ProfileStatus = exports.$Enums.ProfileStatus = {
   COMPLETE: 'COMPLETE',
-  PENDING_PROFILE: 'PENDING_PROFILE'
+  PENDING_PROFILE: 'PENDING_PROFILE',
+  PENDING_IDENTITY: 'PENDING_IDENTITY'
 };
 
 exports.Prisma.ModelName = {

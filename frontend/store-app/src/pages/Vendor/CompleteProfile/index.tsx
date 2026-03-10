@@ -62,9 +62,9 @@ export default function VendorCompleteProfilePage() {
           country: data.country,
         },
       });
-      // Optimistic update: mark profile as complete
-      setProfileStatus('COMPLETE');
-      navigate('/vendor/dashboard');
+      // Optimistic update: profilo completato, identità ancora da verificare
+      setProfileStatus('PENDING_IDENTITY');
+      navigate('/vendor/verify-identity');
     } catch (err: any) {
       setError(err.message || 'Errore nel salvataggio del profilo');
     } finally {

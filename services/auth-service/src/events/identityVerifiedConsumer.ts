@@ -4,35 +4,35 @@ import {
   EXCHANGES,
   ROUTING_KEYS,
   QUEUES,
-  VendorProfileCompletedPayload,
+  VendorIdentityVerifiedPayload,
 } from '@ecommerce/shared';
 import prisma from '../config/db';
 
-export async function setupProfileCompletedConsumer(
+export async function setupIdentityVerifiedConsumer(
   connection: MessagingConnection,
   logger: any
 ): Promise<void> {
   const consumer = new MessageConsumer(connection, logger);
 
-  await consumer.assertQueue(QUEUES.AUTH_PROFILE_COMPLETED, {
+  await consumer.assertQueue(QUEUES.AUTH_IDENTITY_VERIFIED, {
     exchange: EXCHANGES.VENDOR_EVENTS,
-    routingKeys: [ROUTING_KEYS.PROFILE_COMPLETED],
+    routingKeys: [ROUTING_KEYS.IDENTITY_VERIFIED],
     durable: true,
   });
 
-  await consumer.subscribe<VendorProfileCompletedPayload>(
-    QUEUES.AUTH_PROFILE_COMPLETED,
+  await consumer.subscribe<VendorIdentityVerifiedPayload>(
+    QUEUES.AUTH_IDENTITY_VERIFIED,
     async (envelope) => {
       const { userId } = envelope.payload;
 
       await prisma.user.update({
         where: { id: userId },
-        data: { profileStatus: 'PENDING_IDENTITY' },
+        data: { profileStatus: 'COMPLETE' },
       });
 
-      logger.info({ userId }, 'User profileStatus updated to PENDING_IDENTITY');
+      logger.info({ userId }, 'User profileStatus updated to COMPLETE after identity verification');
     }
   );
 
-  logger.info('Profile completed consumer initialized');
+  logger.info('Identity verified consumer initialized');
 }

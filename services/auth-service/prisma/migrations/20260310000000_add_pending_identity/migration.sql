@@ -1,0 +1,2 @@
+-- Add PENDING_IDENTITY value to ProfileStatus enum
+ALTER TYPE "ProfileStatus" ADD VALUE IF NOT EXISTS 'PENDING_IDENTITY';

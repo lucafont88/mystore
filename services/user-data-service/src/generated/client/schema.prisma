@@ -13,22 +13,31 @@ enum ProfileStatusLocal {
   COMPLETE
 }
 
+enum IdentityStatus {
+  PENDING
+  PROCESSING
+  VERIFIED
+  FAILED
+}
+
 model VendorProfile {
-  id           String             @id @default(uuid())
-  userId       String             @unique
-  status       ProfileStatusLocal @default(PENDING)
-  firstName    String
-  lastName     String
-  dateOfBirth  DateTime
-  gender       String?
-  fiscalCode   String             @unique
-  businessName String
-  vatNumber    String?
-  contactEmail String
-  phoneNumber  String
-  address      Json
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
+  id                          String             @id @default(uuid())
+  userId                      String             @unique
+  status                      ProfileStatusLocal @default(PENDING)
+  firstName                   String
+  lastName                    String
+  dateOfBirth                 DateTime
+  gender                      String?
+  fiscalCode                  String             @unique
+  businessName                String
+  vatNumber                   String?
+  contactEmail                String
+  phoneNumber                 String
+  address                     Json
+  identityStatus              IdentityStatus     @default(PENDING)
+  stripeVerificationSessionId String?
+  createdAt                   DateTime           @default(now())
+  updatedAt                   DateTime           @updatedAt
 
   @@map("vendor_profiles")
 }

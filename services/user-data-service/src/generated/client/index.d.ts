@@ -30,11 +30,25 @@ export namespace $Enums {
 
 export type ProfileStatusLocal = (typeof ProfileStatusLocal)[keyof typeof ProfileStatusLocal]
 
+
+export const IdentityStatus: {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  VERIFIED: 'VERIFIED',
+  FAILED: 'FAILED'
+};
+
+export type IdentityStatus = (typeof IdentityStatus)[keyof typeof IdentityStatus]
+
 }
 
 export type ProfileStatusLocal = $Enums.ProfileStatusLocal
 
 export const ProfileStatusLocal: typeof $Enums.ProfileStatusLocal
+
+export type IdentityStatus = $Enums.IdentityStatus
+
+export const IdentityStatus: typeof $Enums.IdentityStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -883,6 +897,8 @@ export namespace Prisma {
     vatNumber: string | null
     contactEmail: string | null
     phoneNumber: string | null
+    identityStatus: $Enums.IdentityStatus | null
+    stripeVerificationSessionId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -900,6 +916,8 @@ export namespace Prisma {
     vatNumber: string | null
     contactEmail: string | null
     phoneNumber: string | null
+    identityStatus: $Enums.IdentityStatus | null
+    stripeVerificationSessionId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -918,6 +936,8 @@ export namespace Prisma {
     contactEmail: number
     phoneNumber: number
     address: number
+    identityStatus: number
+    stripeVerificationSessionId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -937,6 +957,8 @@ export namespace Prisma {
     vatNumber?: true
     contactEmail?: true
     phoneNumber?: true
+    identityStatus?: true
+    stripeVerificationSessionId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -954,6 +976,8 @@ export namespace Prisma {
     vatNumber?: true
     contactEmail?: true
     phoneNumber?: true
+    identityStatus?: true
+    stripeVerificationSessionId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -972,6 +996,8 @@ export namespace Prisma {
     contactEmail?: true
     phoneNumber?: true
     address?: true
+    identityStatus?: true
+    stripeVerificationSessionId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1063,6 +1089,8 @@ export namespace Prisma {
     contactEmail: string
     phoneNumber: string
     address: JsonValue
+    identityStatus: $Enums.IdentityStatus
+    stripeVerificationSessionId: string | null
     createdAt: Date
     updatedAt: Date
     _count: VendorProfileCountAggregateOutputType | null
@@ -1098,6 +1126,8 @@ export namespace Prisma {
     contactEmail?: boolean
     phoneNumber?: boolean
     address?: boolean
+    identityStatus?: boolean
+    stripeVerificationSessionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["vendorProfile"]>
@@ -1116,6 +1146,8 @@ export namespace Prisma {
     contactEmail?: boolean
     phoneNumber?: boolean
     address?: boolean
+    identityStatus?: boolean
+    stripeVerificationSessionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["vendorProfile"]>
@@ -1134,6 +1166,8 @@ export namespace Prisma {
     contactEmail?: boolean
     phoneNumber?: boolean
     address?: boolean
+    identityStatus?: boolean
+    stripeVerificationSessionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -1156,6 +1190,8 @@ export namespace Prisma {
       contactEmail: string
       phoneNumber: string
       address: Prisma.JsonValue
+      identityStatus: $Enums.IdentityStatus
+      stripeVerificationSessionId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["vendorProfile"]>
@@ -1564,6 +1600,8 @@ export namespace Prisma {
     readonly contactEmail: FieldRef<"VendorProfile", 'String'>
     readonly phoneNumber: FieldRef<"VendorProfile", 'String'>
     readonly address: FieldRef<"VendorProfile", 'Json'>
+    readonly identityStatus: FieldRef<"VendorProfile", 'IdentityStatus'>
+    readonly stripeVerificationSessionId: FieldRef<"VendorProfile", 'String'>
     readonly createdAt: FieldRef<"VendorProfile", 'DateTime'>
     readonly updatedAt: FieldRef<"VendorProfile", 'DateTime'>
   }
@@ -1882,6 +1920,8 @@ export namespace Prisma {
     contactEmail: 'contactEmail',
     phoneNumber: 'phoneNumber',
     address: 'address',
+    identityStatus: 'identityStatus',
+    stripeVerificationSessionId: 'stripeVerificationSessionId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -1984,6 +2024,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'IdentityStatus'
+   */
+  export type EnumIdentityStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IdentityStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'IdentityStatus[]'
+   */
+  export type ListEnumIdentityStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IdentityStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2017,6 +2071,8 @@ export namespace Prisma {
     contactEmail?: StringFilter<"VendorProfile"> | string
     phoneNumber?: StringFilter<"VendorProfile"> | string
     address?: JsonFilter<"VendorProfile">
+    identityStatus?: EnumIdentityStatusFilter<"VendorProfile"> | $Enums.IdentityStatus
+    stripeVerificationSessionId?: StringNullableFilter<"VendorProfile"> | string | null
     createdAt?: DateTimeFilter<"VendorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"VendorProfile"> | Date | string
   }
@@ -2035,6 +2091,8 @@ export namespace Prisma {
     contactEmail?: SortOrder
     phoneNumber?: SortOrder
     address?: SortOrder
+    identityStatus?: SortOrder
+    stripeVerificationSessionId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2056,6 +2114,8 @@ export namespace Prisma {
     contactEmail?: StringFilter<"VendorProfile"> | string
     phoneNumber?: StringFilter<"VendorProfile"> | string
     address?: JsonFilter<"VendorProfile">
+    identityStatus?: EnumIdentityStatusFilter<"VendorProfile"> | $Enums.IdentityStatus
+    stripeVerificationSessionId?: StringNullableFilter<"VendorProfile"> | string | null
     createdAt?: DateTimeFilter<"VendorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"VendorProfile"> | Date | string
   }, "id" | "userId" | "fiscalCode">
@@ -2074,6 +2134,8 @@ export namespace Prisma {
     contactEmail?: SortOrder
     phoneNumber?: SortOrder
     address?: SortOrder
+    identityStatus?: SortOrder
+    stripeVerificationSessionId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: VendorProfileCountOrderByAggregateInput
@@ -2098,6 +2160,8 @@ export namespace Prisma {
     contactEmail?: StringWithAggregatesFilter<"VendorProfile"> | string
     phoneNumber?: StringWithAggregatesFilter<"VendorProfile"> | string
     address?: JsonWithAggregatesFilter<"VendorProfile">
+    identityStatus?: EnumIdentityStatusWithAggregatesFilter<"VendorProfile"> | $Enums.IdentityStatus
+    stripeVerificationSessionId?: StringNullableWithAggregatesFilter<"VendorProfile"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"VendorProfile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"VendorProfile"> | Date | string
   }
@@ -2116,6 +2180,8 @@ export namespace Prisma {
     contactEmail: string
     phoneNumber: string
     address: JsonNullValueInput | InputJsonValue
+    identityStatus?: $Enums.IdentityStatus
+    stripeVerificationSessionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -2134,6 +2200,8 @@ export namespace Prisma {
     contactEmail: string
     phoneNumber: string
     address: JsonNullValueInput | InputJsonValue
+    identityStatus?: $Enums.IdentityStatus
+    stripeVerificationSessionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -2152,6 +2220,8 @@ export namespace Prisma {
     contactEmail?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     address?: JsonNullValueInput | InputJsonValue
+    identityStatus?: EnumIdentityStatusFieldUpdateOperationsInput | $Enums.IdentityStatus
+    stripeVerificationSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2170,6 +2240,8 @@ export namespace Prisma {
     contactEmail?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     address?: JsonNullValueInput | InputJsonValue
+    identityStatus?: EnumIdentityStatusFieldUpdateOperationsInput | $Enums.IdentityStatus
+    stripeVerificationSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2188,6 +2260,8 @@ export namespace Prisma {
     contactEmail: string
     phoneNumber: string
     address: JsonNullValueInput | InputJsonValue
+    identityStatus?: $Enums.IdentityStatus
+    stripeVerificationSessionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -2206,6 +2280,8 @@ export namespace Prisma {
     contactEmail?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     address?: JsonNullValueInput | InputJsonValue
+    identityStatus?: EnumIdentityStatusFieldUpdateOperationsInput | $Enums.IdentityStatus
+    stripeVerificationSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2224,6 +2300,8 @@ export namespace Prisma {
     contactEmail?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     address?: JsonNullValueInput | InputJsonValue
+    identityStatus?: EnumIdentityStatusFieldUpdateOperationsInput | $Enums.IdentityStatus
+    stripeVerificationSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2298,6 +2376,13 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type EnumIdentityStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.IdentityStatus | EnumIdentityStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.IdentityStatus[] | ListEnumIdentityStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IdentityStatus[] | ListEnumIdentityStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumIdentityStatusFilter<$PrismaModel> | $Enums.IdentityStatus
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -2317,6 +2402,8 @@ export namespace Prisma {
     contactEmail?: SortOrder
     phoneNumber?: SortOrder
     address?: SortOrder
+    identityStatus?: SortOrder
+    stripeVerificationSessionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2334,6 +2421,8 @@ export namespace Prisma {
     vatNumber?: SortOrder
     contactEmail?: SortOrder
     phoneNumber?: SortOrder
+    identityStatus?: SortOrder
+    stripeVerificationSessionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2351,6 +2440,8 @@ export namespace Prisma {
     vatNumber?: SortOrder
     contactEmail?: SortOrder
     phoneNumber?: SortOrder
+    identityStatus?: SortOrder
+    stripeVerificationSessionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2440,6 +2531,16 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
+  export type EnumIdentityStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.IdentityStatus | EnumIdentityStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.IdentityStatus[] | ListEnumIdentityStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IdentityStatus[] | ListEnumIdentityStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumIdentityStatusWithAggregatesFilter<$PrismaModel> | $Enums.IdentityStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumIdentityStatusFilter<$PrismaModel>
+    _max?: NestedEnumIdentityStatusFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -2454,6 +2555,10 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type EnumIdentityStatusFieldUpdateOperationsInput = {
+    set?: $Enums.IdentityStatus
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2500,6 +2605,13 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedEnumIdentityStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.IdentityStatus | EnumIdentityStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.IdentityStatus[] | ListEnumIdentityStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IdentityStatus[] | ListEnumIdentityStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumIdentityStatusFilter<$PrismaModel> | $Enums.IdentityStatus
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -2602,6 +2714,16 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumIdentityStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.IdentityStatus | EnumIdentityStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.IdentityStatus[] | ListEnumIdentityStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IdentityStatus[] | ListEnumIdentityStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumIdentityStatusWithAggregatesFilter<$PrismaModel> | $Enums.IdentityStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumIdentityStatusFilter<$PrismaModel>
+    _max?: NestedEnumIdentityStatusFilter<$PrismaModel>
   }
 
 

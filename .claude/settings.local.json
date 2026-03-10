@@ -70,7 +70,9 @@
       "Bash(docker compose exec postgres psql -U user -d auth_db -c 'ALTER TABLE \"\"users\"\" ADD COLUMN IF NOT EXISTS \"\"isBanned\"\" BOOLEAN NOT NULL DEFAULT false; ALTER TABLE \"\"users\"\" ADD COLUMN IF NOT EXISTS \"\"lastLoginAt\"\" TIMESTAMP\\(3\\);')",
       "Bash(docker compose exec postgres psql -U user -d auth_db -c \"INSERT INTO \"\"_prisma_migrations\"\" \\(id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count\\) VALUES \\(gen_random_uuid\\(\\), ''manual'', NOW\\(\\), ''20260301090000_add_user_management_fields'', NULL, NULL, NOW\\(\\), 1\\) ON CONFLICT DO NOTHING;\")",
       "Bash(docker compose exec postgres psql -U user -d auth_db -c 'SELECT id, email, role, \"\"isBanned\"\", \"\"lastLoginAt\"\", LEFT\\(\"\"passwordHash\"\", 20\\) FROM users LIMIT 5;')",
-      "Bash(docker compose exec postgres psql -U user -d auth_db -c \"SELECT id, email, role, \"\"isBanned\"\" FROM users WHERE email = ''admin@mystore.com'';\")"
+      "Bash(docker compose exec postgres psql -U user -d auth_db -c \"SELECT id, email, role, \"\"isBanned\"\" FROM users WHERE email = ''admin@mystore.com'';\")",
+      "Bash(docker compose exec user-data-service sh -c \"cd /app/services/user-data-service && npx prisma migrate deploy\")",
+      "Bash(docker compose exec auth-service sh -c \"cd /app/services/auth-service && npx prisma migrate deploy\")"
     ]
   }
 }

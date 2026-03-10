@@ -40,7 +40,8 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 export const ProfileStatus: {
   COMPLETE: 'COMPLETE',
-  PENDING_PROFILE: 'PENDING_PROFILE'
+  PENDING_PROFILE: 'PENDING_PROFILE',
+  PENDING_IDENTITY: 'PENDING_IDENTITY'
 };
 
 export type ProfileStatus = (typeof ProfileStatus)[keyof typeof ProfileStatus]

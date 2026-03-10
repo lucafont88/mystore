@@ -21,6 +21,7 @@ enum Role {
 enum ProfileStatus {
   COMPLETE
   PENDING_PROFILE
+  PENDING_IDENTITY
 }
 
 model User {

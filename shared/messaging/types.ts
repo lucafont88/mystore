@@ -98,6 +98,7 @@ export const ROUTING_KEYS = {
   PRODUCT_DELETED: 'product.deleted',
   VENDOR_REGISTERED: 'vendor.registered',
   PROFILE_COMPLETED: 'profile.completed',
+  IDENTITY_VERIFIED: 'identity.verified',
 } as const;
 
 export const QUEUES = {
@@ -105,6 +106,7 @@ export const QUEUES = {
   PRODUCT_VALIDATE: 'product.validate',
   USER_DATA_VENDOR_REGISTERED: 'user-data.vendor-registered',
   AUTH_PROFILE_COMPLETED: 'auth.profile-completed',
+  AUTH_IDENTITY_VERIFIED: 'auth.identity-verified',
 } as const;
 
 // ── User/Vendor Event Types ──
@@ -115,5 +117,9 @@ export interface VendorRegisteredPayload {
 }
 
 export interface VendorProfileCompletedPayload {
+  userId: string;
+}
+
+export interface VendorIdentityVerifiedPayload {
   userId: string;
 }

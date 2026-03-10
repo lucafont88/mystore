@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export type ProfileStatus = 'COMPLETE' | 'PENDING_PROFILE' | 'PENDING_IDENTITY';
+
 export interface User {
   id: string;
   email: string;
   role: string;
-  profileStatus?: 'COMPLETE' | 'PENDING_PROFILE';
+  profileStatus?: ProfileStatus;
 }
 
 interface AuthState {
@@ -16,7 +18,7 @@ interface AuthState {
   login: (user: User, token: string) => void;
   logout: () => void;
   setLoading: (isLoading: boolean) => void;
-  setProfileStatus: (status: 'COMPLETE' | 'PENDING_PROFILE') => void;
+  setProfileStatus: (status: ProfileStatus) => void;
 }
 
 export const useAuthStore = create<AuthState>()(

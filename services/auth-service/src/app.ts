@@ -20,6 +20,7 @@ import cors from 'cors';
 import routes from './routes';
 import { initVendorRegisteredPublisher } from './events/vendorRegisteredPublisher';
 import { setupProfileCompletedConsumer } from './events/profileCompletedConsumer';
+import { setupIdentityVerifiedConsumer } from './events/identityVerifiedConsumer';
 
 const app: express.Application = express();
 const PORT = process.env.AUTH_SERVICE_PORT || 3001;
@@ -61,6 +62,7 @@ if (process.env.NODE_ENV !== 'test') {
       await mqConnection.connect();
       await initVendorRegisteredPublisher(mqConnection, logger);
       await setupProfileCompletedConsumer(mqConnection, logger);
+      await setupIdentityVerifiedConsumer(mqConnection, logger);
       logger.info('RabbitMQ connected and handlers ready');
     } catch (err) {
       logger.warn({ err }, 'RabbitMQ not available, running without messaging');

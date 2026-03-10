@@ -169,6 +169,9 @@ services:
       - USER_DATA_DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@db-utenti:5432/user_data_db?schema=public
       - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - STRIPE_API_KEY=${STRIPE_API_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - STRIPE_IDENTITY_FLUX_ID=${STRIPE_IDENTITY_FLUX_ID}
     depends_on:
       - db-utenti
       - rabbitmq
