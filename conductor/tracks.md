@@ -55,9 +55,19 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+- [x] **Track: User Registration Fix + Vendor Onboarding — fix bug registrazione + selezione ruolo + flusso anagrafica vendor in due fasi con db-utenti + user-data-service + RabbitMQ Saga**
+  *Link: [./archive/user_registration_vendor_onboard_20260305/](./archive/user_registration_vendor_onboard_20260305/)*
+
+---
+
+- [x] **Track: OTP Email Verification + Vendor UX improvements + K8s Deploy — verifica email OTP alla registrazione, sidebar vendor completa, check email duplicata, home SVG logo, configurazione Kubernetes**
+  *Link: [./archive/otp_email_vendor_ux_k8s_20260307/](./archive/otp_email_vendor_ux_k8s_20260307/)*
+
+---
+
 ## Active Tracks
 
-- [ ] **Track: User Registration Fix + Vendor Onboarding — fix bug registrazione + selezione ruolo + flusso anagrafica vendor in due fasi con db-utenti + user-data-service + RabbitMQ Saga**
-  *Link: [./tracks/user_registration_vendor_onboard_20260305/](./tracks/user_registration_vendor_onboard_20260305/)*
+- [ ] **Track: User Onboard**
+  *Link: [./tracks/user_onboard_20260309/](./tracks/user_onboard_20260309/)*
 
 ---

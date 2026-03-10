@@ -1,0 +1,1501 @@
+# ============================================================================
+# Zelko Market — Kubernetes Deployment (single-file, all-in-one)
+# Generato il: 2026-03-09
+# Stato progetto: tutti i microservizi attivi
+#
+# SERVIZI INCLUSI:
+#   Infrastruttura:  postgres | db-utenti | redis | rabbitmq | minio
+#   Backend:        auth-service | product-service | shop-page-service |
+#                   order-service | user-data-service | api-gateway
+#   Frontend:       frontend (Vite + nginx)
+#
+# PRIMA DI APPLICARE:
+#   1. Sostituisci <REGISTRY> con il tuo container registry
+#      es: ghcr.io/zelkomarket  |  registry.digitalocean.com/zelko
+#   2. Sostituisci TUTTI i valori CHANGE_ME con valori reali
+#      Genera con: echo -n 'valore' | base64
+#      Oppure usa: kubectl create secret generic / Sealed Secrets / Vault
+#   3. Imposta storageClassName corretto per il tuo cloud:
+#      GKE: standard-rwo  |  EKS: gp3  |  AKS: managed-premium  |  locale: manual
+#   4. Aggiorna i domini in Ingress
+#
+# APPLY:   kubectl apply -f k8s-deploy.yaml
+# DELETE:  kubectl delete -f k8s-deploy.yaml
+# STATO:   kubectl get all -n zelko
+# ============================================================================
+
+# ============================================================================
+# NAMESPACE
+# ============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zelko
+  labels:
+    app.kubernetes.io/part-of: zelko-market
+
+---
+# ============================================================================
+# SECRETS
+# ⚠️  Non committare mai questo file con valori reali in produzione.
+#     Usa Sealed Secrets, External Secrets Operator o HashiCorp Vault.
+# ============================================================================
+apiVersion: v1
+kind: Secret
+metadata:
+  name: zelko-secrets
+  namespace: zelko
+type: Opaque
+stringData:
+  # ---- Database (postgres condiviso per auth/products/shop_pages/orders) ----
+  POSTGRES_USER: "CHANGE_ME"
+  POSTGRES_PASSWORD: "CHANGE_ME"
+
+  # ---- Database (db-utenti — separato per user-data-service) ----
+  DB_UTENTI_USER: "CHANGE_ME"
+  DB_UTENTI_PASSWORD: "CHANGE_ME"
+
+  # ---- Database URLs completi ----
+  AUTH_DATABASE_URL: "postgresql://CHANGE_ME:CHANGE_ME@postgres:5432/auth_db?schema=public"
+  PRODUCT_DATABASE_URL: "postgresql://CHANGE_ME:CHANGE_ME@postgres:5432/products_db?schema=public"
+  SHOP_PAGE_DATABASE_URL: "postgresql://CHANGE_ME:CHANGE_ME@postgres:5432/shop_pages_db?schema=public"
+  ORDER_DATABASE_URL: "postgresql://CHANGE_ME:CHANGE_ME@postgres:5432/orders_db?schema=public"
+  USER_DATA_DATABASE_URL: "postgresql://CHANGE_ME:CHANGE_ME@db-utenti:5432/user_data_db?schema=public"
+
+  # ---- JWT (genera con: openssl rand -hex 64) ----
+  JWT_ACCESS_SECRET: "CHANGE_ME_USE_OPENSSL_RAND_HEX_64"
+  JWT_REFRESH_SECRET: "CHANGE_ME_USE_OPENSSL_RAND_HEX_64"
+
+  # ---- RabbitMQ ----
+  RABBITMQ_USER: "zelko"
+  RABBITMQ_PASSWORD: "CHANGE_ME"
+  RABBITMQ_URL: "amqp://zelko:CHANGE_ME@rabbitmq:5672"
+
+  # ---- MinIO ----
+  MINIO_ACCESS_KEY: "CHANGE_ME"
+  MINIO_SECRET_KEY: "CHANGE_ME"
+
+  # ---- Resend (email OTP) ----
+  RESEND_API_KEY: "CHANGE_ME"
+
+  # ---- Stripe ----
+  STRIPE_API_KEY: "CHANGE_ME"
+  STRIPE_IDENTITY_FLUX_ID: "CHANGE_ME"
+
+  # ---- Swagger UI ----
+  SWAGGER_USER: "admin"
+  SWAGGER_PASSWORD: "CHANGE_ME"
+
+---
+# ============================================================================
+# CONFIGMAP — configurazione non sensibile
+# ============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zelko-config
+  namespace: zelko
+data:
+  NODE_ENV: "production"
+  LOG_LEVEL: "info"
+
+  # Service DNS interni K8s
+  AUTH_SERVICE_URL: "http://auth-service:3001"
+  PRODUCT_SERVICE_URL: "http://product-service:3002"
+  SHOP_PAGE_SERVICE_URL: "http://shop-page-service:3003"
+  ORDER_SERVICE_URL: "http://order-service:3004"
+  USER_DATA_SERVICE_URL: "http://user-data-service:3005"
+
+  # Redis
+  REDIS_URL: "redis://redis:6379"
+
+  # MinIO
+  MINIO_ENDPOINT: "minio"
+  MINIO_PORT: "9000"
+  MINIO_BUCKET_SHOP: "shop-pages"
+  MINIO_BUCKET_DIGITAL: "digital-products"
+
+  # Email
+  RESEND_FROM: "noreply@zelkomarket.com"
+
+---
+# ============================================================================
+# CONFIGMAP — script di inizializzazione PostgreSQL
+# Crea i DB aggiuntivi al primo avvio (auth_db è creato da POSTGRES_DB)
+# ============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: zelko
+data:
+  init-databases.sh: |
+    #!/bin/bash
+    set -e
+    for db in products_db shop_pages_db orders_db; do
+      echo "Creating database '$db' if not exists..."
+      psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "postgres" <<-EOSQL
+        SELECT 'CREATE DATABASE $db'
+        WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$db')\gexec
+    EOSQL
+    done
+    echo "All databases initialized."
+
+---
+# ============================================================================
+# POSTGRES — database condiviso (auth_db, products_db, shop_pages_db, orders_db)
+# ============================================================================
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: zelko
+  labels:
+    app: postgres
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              value: "auth_db"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          livenessProbe:
+            exec:
+              command: [pg_isready, -U, postgres, -d, auth_db]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: [pg_isready, -U, postgres, -d, auth_db]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: init-scripts
+          configMap:
+            name: postgres-init-scripts
+            defaultMode: 0755
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard   # ← cambia per il tuo cloud provider
+        resources:
+          requests:
+            storage: 20Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: zelko
+spec:
+  type: ClusterIP
+  clusterIP: None   # headless per StatefulSet
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: postgres
+
+---
+# ============================================================================
+# DB-UTENTI — postgres separato per user-data-service (user_data_db)
+# ============================================================================
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db-utenti
+  namespace: zelko
+  labels:
+    app: db-utenti
+spec:
+  serviceName: db-utenti
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-utenti
+  template:
+    metadata:
+      labels:
+        app: db-utenti
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: DB_UTENTI_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: DB_UTENTI_PASSWORD
+            - name: POSTGRES_DB
+              value: "user_data_db"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: db-utenti-data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "300m"
+          livenessProbe:
+            exec:
+              command: [pg_isready, -U, postgres, -d, user_data_db]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: [pg_isready, -U, postgres, -d, user_data_db]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+  volumeClaimTemplates:
+    - metadata:
+        name: db-utenti-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-utenti
+  namespace: zelko
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: db-utenti
+
+---
+# ============================================================================
+# REDIS
+# ============================================================================
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: zelko
+  labels:
+    app: redis
+spec:
+  serviceName: redis
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          command:
+            - redis-server
+            - --appendonly
+            - "yes"
+            - --maxmemory
+            - "256mb"
+            - --maxmemory-policy
+            - "allkeys-lru"
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "512Mi"
+              cpu: "200m"
+          livenessProbe:
+            exec:
+              command: [redis-cli, ping]
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command: [redis-cli, ping]
+            initialDelaySeconds: 5
+            periodSeconds: 3
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 2Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: zelko
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: redis
+
+---
+# ============================================================================
+# RABBITMQ
+# ============================================================================
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: zelko
+  labels:
+    app: rabbitmq
+spec:
+  serviceName: rabbitmq
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3-management-alpine
+          ports:
+            - containerPort: 5672
+              name: amqp
+            - containerPort: 15672
+              name: management
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: RABBITMQ_USER
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: RABBITMQ_PASSWORD
+          volumeMounts:
+            - name: rabbitmq-data
+              mountPath: /var/lib/rabbitmq
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "300m"
+          livenessProbe:
+            exec:
+              command: [rabbitmq-diagnostics, -q, ping]
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command: [rabbitmq-diagnostics, -q, ping]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: rabbitmq-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 5Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: zelko
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 5672
+      targetPort: 5672
+      name: amqp
+    - port: 15672
+      targetPort: 15672
+      name: management
+  selector:
+    app: rabbitmq
+
+---
+# ============================================================================
+# MINIO — object storage (shop HTML + file digitali)
+# ============================================================================
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minio
+  namespace: zelko
+  labels:
+    app: minio
+spec:
+  serviceName: minio
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio
+          image: minio/minio:latest
+          command:
+            - minio
+            - server
+            - /data
+            - --console-address
+            - ":9001"
+          ports:
+            - containerPort: 9000
+              name: api
+            - containerPort: 9001
+              name: console
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: MINIO_SECRET_KEY
+          volumeMounts:
+            - name: minio-data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: 9000
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /minio/health/ready
+              port: 9000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: minio-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 50Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: zelko
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 9000
+      targetPort: 9000
+      name: api
+    - port: 9001
+      targetPort: 9001
+      name: console
+  selector:
+    app: minio
+
+---
+# ============================================================================
+# AUTH-SERVICE
+# ============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: zelko
+  labels:
+    app: auth-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done']
+        - name: wait-for-redis
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z redis 6379; do echo waiting for redis; sleep 2; done']
+        - name: wait-for-rabbitmq
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done']
+      containers:
+        - name: auth-service
+          image: <REGISTRY>/zelko/auth-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: NODE_ENV
+            - name: AUTH_SERVICE_PORT
+              value: "3001"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: AUTH_DATABASE_URL
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_ACCESS_SECRET
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_REFRESH_SECRET
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: REDIS_URL
+            - name: RABBITMQ_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: RABBITMQ_URL
+            - name: RESEND_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: RESEND_API_KEY
+            - name: RESEND_FROM
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: RESEND_FROM
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: auth-service
+                topologyKey: kubernetes.io/hostname
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: zelko
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3001
+      targetPort: 3001
+  selector:
+    app: auth-service
+
+---
+# ============================================================================
+# PRODUCT-SERVICE
+# ============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+  namespace: zelko
+  labels:
+    app: product-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done']
+        - name: wait-for-rabbitmq
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done']
+        - name: wait-for-minio
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z minio 9000; do echo waiting for minio; sleep 2; done']
+      containers:
+        - name: product-service
+          image: <REGISTRY>/zelko/product-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3002
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: NODE_ENV
+            - name: PRODUCT_SERVICE_PORT
+              value: "3002"
+            - name: PRODUCT_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: PRODUCT_DATABASE_URL
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_ACCESS_SECRET
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_REFRESH_SECRET
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: REDIS_URL
+            - name: RABBITMQ_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: RABBITMQ_URL
+            - name: MINIO_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: MINIO_ENDPOINT
+            - name: MINIO_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: MINIO_PORT
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: MINIO_SECRET_KEY
+            - name: MINIO_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: MINIO_BUCKET_DIGITAL
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+  namespace: zelko
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3002
+      targetPort: 3002
+  selector:
+    app: product-service
+
+---
+# ============================================================================
+# SHOP-PAGE-SERVICE
+# ============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shop-page-service
+  namespace: zelko
+  labels:
+    app: shop-page-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shop-page-service
+  template:
+    metadata:
+      labels:
+        app: shop-page-service
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done']
+        - name: wait-for-rabbitmq
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done']
+        - name: wait-for-minio
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z minio 9000; do echo waiting for minio; sleep 2; done']
+      containers:
+        - name: shop-page-service
+          image: <REGISTRY>/zelko/shop-page-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3003
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: NODE_ENV
+            - name: SHOP_PAGE_SERVICE_PORT
+              value: "3003"
+            - name: SHOP_PAGE_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: SHOP_PAGE_DATABASE_URL
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_ACCESS_SECRET
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_REFRESH_SECRET
+            - name: RABBITMQ_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: RABBITMQ_URL
+            - name: MINIO_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: MINIO_ENDPOINT
+            - name: MINIO_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: MINIO_PORT
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: MINIO_SECRET_KEY
+            - name: MINIO_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: MINIO_BUCKET_SHOP
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "300m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shop-page-service
+  namespace: zelko
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3003
+      targetPort: 3003
+  selector:
+    app: shop-page-service
+
+---
+# ============================================================================
+# ORDER-SERVICE
+# ============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+  namespace: zelko
+  labels:
+    app: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done']
+      containers:
+        - name: order-service
+          image: <REGISTRY>/zelko/order-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3004
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: NODE_ENV
+            - name: ORDER_SERVICE_PORT
+              value: "3004"
+            - name: ORDER_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: ORDER_DATABASE_URL
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_ACCESS_SECRET
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_REFRESH_SECRET
+            - name: STRIPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: STRIPE_API_KEY
+            - name: STRIPE_IDENTITY_FLUX_ID
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: STRIPE_IDENTITY_FLUX_ID
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "300m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  namespace: zelko
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3004
+      targetPort: 3004
+  selector:
+    app: order-service
+
+---
+# ============================================================================
+# USER-DATA-SERVICE (anagrafica vendor, db-utenti separato)
+# ============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-data-service
+  namespace: zelko
+  labels:
+    app: user-data-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-data-service
+  template:
+    metadata:
+      labels:
+        app: user-data-service
+    spec:
+      initContainers:
+        - name: wait-for-db-utenti
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z db-utenti 5432; do echo waiting for db-utenti; sleep 2; done']
+        - name: wait-for-rabbitmq
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done']
+      containers:
+        - name: user-data-service
+          image: <REGISTRY>/zelko/user-data-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3005
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: NODE_ENV
+            - name: USER_DATA_SERVICE_PORT
+              value: "3005"
+            - name: USER_DATA_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: USER_DATA_DATABASE_URL
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: JWT_ACCESS_SECRET
+            - name: RABBITMQ_URL
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: RABBITMQ_URL
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "300m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3005
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3005
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-data-service
+  namespace: zelko
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3005
+      targetPort: 3005
+  selector:
+    app: user-data-service
+
+---
+# ============================================================================
+# API-GATEWAY (porta 3000 — unico punto d'ingresso per le API)
+# ============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: zelko
+  labels:
+    app: api-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      initContainers:
+        - name: wait-for-auth
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z auth-service 3001; do echo waiting for auth-service; sleep 2; done']
+        - name: wait-for-product
+          image: busybox:1.36
+          command: ['sh', '-c', 'until nc -z product-service 3002; do echo waiting for product-service; sleep 2; done']
+      containers:
+        - name: api-gateway
+          image: <REGISTRY>/zelko/api-gateway:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: NODE_ENV
+            - name: API_GATEWAY_PORT
+              value: "3000"
+            - name: AUTH_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: AUTH_SERVICE_URL
+            - name: PRODUCT_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: PRODUCT_SERVICE_URL
+            - name: SHOP_PAGE_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: SHOP_PAGE_SERVICE_URL
+            - name: ORDER_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: ORDER_SERVICE_URL
+            - name: USER_DATA_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: zelko-config
+                  key: USER_DATA_SERVICE_URL
+            - name: SWAGGER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: SWAGGER_USER
+            - name: SWAGGER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zelko-secrets
+                  key: SWAGGER_PASSWORD
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: api-gateway
+                topologyKey: kubernetes.io/hostname
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: zelko
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    app: api-gateway
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-gateway-hpa
+  namespace: zelko
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-gateway
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+---
+# ============================================================================
+# FRONTEND (Vite build servita da nginx)
+# Richiede una Docker image con: npm run build + nginx
+# Dockerfile consigliato: multi-stage (node → nginx:alpine)
+# ============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-frontend-config
+  namespace: zelko
+data:
+  nginx.conf: |
+    server {
+      listen 80;
+      root /usr/share/nginx/html;
+      index index.html;
+
+      # Gzip
+      gzip on;
+      gzip_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript;
+
+      # Cache per asset statici
+      location ~* \.(js|css|png|svg|ico|woff2?)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+      }
+
+      # SPA fallback — tutte le route tornano a index.html
+      location / {
+        try_files $uri $uri/ /index.html;
+      }
+
+      # Proxy /api → api-gateway
+      location /api/ {
+        proxy_pass http://api-gateway:3000/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+    }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: zelko
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: <REGISTRY>/zelko/frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: nginx.conf
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-frontend-config
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: frontend
+                topologyKey: kubernetes.io/hostname
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: zelko
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: frontend
+
+---
+# ============================================================================
+# INGRESS (richiede nginx-ingress-controller)
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/
+#   controller-v1.9.4/deploy/static/provider/cloud/deploy.yaml
+#
+# TLS: decommentare la sezione tls e configurare cert-manager per Let's Encrypt
+# ============================================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zelko-ingress
+  namespace: zelko
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  # tls:
+  #   - hosts:
+  #       - zelkomarket.com
+  #       - www.zelkomarket.com
+  #     secretName: zelko-tls
+  rules:
+    - host: zelkomarket.com   # ← cambia con il tuo dominio
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 3000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+    - host: www.zelkomarket.com   # ← redirect www → bare domain consigliato
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+
+---
+# MinIO console — accesso admin separato (proteggi con autenticazione!)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zelko-minio-console-ingress
+  namespace: zelko
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: minio.zelkomarket.com   # ← cambia con il tuo dominio
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: minio
+                port:
+                  number: 9001
