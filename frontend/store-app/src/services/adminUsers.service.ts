@@ -1,4 +1,5 @@
 import { api } from './api';
+import { ApiError } from '../types/api';
 
 export interface IpLogEntry {
   ipAddress: string;
@@ -74,8 +75,14 @@ export const adminUsersService = {
   getUserDetail: (id: string): Promise<AdminUserDetail> =>
     api.get<AdminUserDetail>(`/admin/users/${id}`),
 
-  getVendorProfile: (userId: string): Promise<VendorProfile> =>
-    api.get<VendorProfile>(`/user-data/admin/vendor-profile/${userId}`),
+  getVendorProfile: async (userId: string): Promise<VendorProfile | null> => {
+    try {
+      return await api.get<VendorProfile>(`/user-data/admin/vendor-profile/${userId}`);
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 404) return null;
+      throw err;
+    }
+  },
 
   setIdentityStatus: (
     userId: string,

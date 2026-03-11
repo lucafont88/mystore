@@ -70,6 +70,9 @@ Aggiungere la verifica dell'identità del vendor tramite Stripe Identity come st
 - [x] user-data-service: migration + Stripe service + controller + rebuild Docker
 - [x] docker-compose.yml: env Stripe aggiunti
 - [x] Frontend: pagina VerifyIdentity + guard + route + TypeScript clean
+- [x] Cancellazione utente admin: DELETE /admin/users/:id + evento user.deleted + consumer user-data + consumer product
+- [x] Admin vendor profile endpoints: GET /admin/vendor-profile/:userId + PUT /admin/vendor-profile/:userId/identity-status (pubblica identity.verified se VERIFIED)
+- [x] Frontend admin: dialog dettaglio utente con anagrafica vendor + gestione identityStatus + i18n (it + en)
 
 ## Note configurazione
 - Aggiungere `STRIPE_WEBHOOK_SECRET` (ottenibile da `stripe listen --print-secret`)

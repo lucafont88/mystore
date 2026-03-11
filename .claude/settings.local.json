@@ -72,7 +72,8 @@
       "Bash(docker compose exec postgres psql -U user -d auth_db -c 'SELECT id, email, role, \"\"isBanned\"\", \"\"lastLoginAt\"\", LEFT\\(\"\"passwordHash\"\", 20\\) FROM users LIMIT 5;')",
       "Bash(docker compose exec postgres psql -U user -d auth_db -c \"SELECT id, email, role, \"\"isBanned\"\" FROM users WHERE email = ''admin@mystore.com'';\")",
       "Bash(docker compose exec user-data-service sh -c \"cd /app/services/user-data-service && npx prisma migrate deploy\")",
-      "Bash(docker compose exec auth-service sh -c \"cd /app/services/auth-service && npx prisma migrate deploy\")"
+      "Bash(docker compose exec auth-service sh -c \"cd /app/services/auth-service && npx prisma migrate deploy\")",
+      "Bash(python3 -c \"print\\(''hello''\\)\")"
     ]
   }
 }

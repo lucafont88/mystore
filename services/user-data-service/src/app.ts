@@ -21,6 +21,7 @@ import routes from './routes';
 import { initProfileCompletedPublisher } from './events/profileCompletedPublisher';
 import { initIdentityVerifiedPublisher } from './events/identityVerifiedPublisher';
 import { setupVendorRegisteredConsumer } from './events/vendorRegisteredConsumer';
+import { setupUserDeletedConsumer } from './events/userDeletedConsumer';
 
 const app: express.Application = express();
 const PORT = process.env.USER_DATA_SERVICE_PORT || 3005;
@@ -63,6 +64,7 @@ if (process.env.NODE_ENV !== 'test') {
       await initProfileCompletedPublisher(mqConnection, logger);
       await initIdentityVerifiedPublisher(mqConnection, logger);
       await setupVendorRegisteredConsumer(mqConnection, logger);
+      await setupUserDeletedConsumer(mqConnection, logger);
       logger.info('RabbitMQ connected and handlers ready');
     } catch (err) {
       logger.warn({ err }, 'RabbitMQ not available, running without messaging');

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { adminUsersService } from '../services/adminUsers.service';
+import { adminUsersService, VendorProfile } from '../services/adminUsers.service';
 
 const USERS_KEY = ['admin-users'] as const;
 const VENDOR_STATS_KEY = ['admin-vendor-stats'] as const;
@@ -16,8 +16,9 @@ export function useChangeRoleMutation() {
   return useMutation({
     mutationFn: ({ id, role }: { id: string; role: string }) =>
       adminUsersService.changeRole(id, role),
-    onSuccess: () => {
+    onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: USERS_KEY });
+      queryClient.invalidateQueries({ queryKey: ['admin-user-detail', id] });
     },
   });
 }
@@ -27,8 +28,9 @@ export function useToggleBanMutation() {
   return useMutation({
     mutationFn: ({ id, banned }: { id: string; banned: boolean }) =>
       adminUsersService.toggleBan(id, banned),
-    onSuccess: () => {
+    onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: USERS_KEY });
+      queryClient.invalidateQueries({ queryKey: ['admin-user-detail', id] });
     },
   });
 }
@@ -66,7 +68,7 @@ export function useAdminUserDetailQuery(userId: string | null) {
 }
 
 export function useAdminVendorProfileQuery(userId: string | null, role: string | undefined) {
-  return useQuery({
+  return useQuery<VendorProfile | null>({
     queryKey: ['admin-vendor-profile', userId],
     queryFn: () => adminUsersService.getVendorProfile(userId!),
     enabled: !!userId && role === 'VENDOR',

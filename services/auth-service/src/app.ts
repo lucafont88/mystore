@@ -19,6 +19,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import routes from './routes';
 import { initVendorRegisteredPublisher } from './events/vendorRegisteredPublisher';
+import { initUserDeletedPublisher } from './events/userDeletedPublisher';
 import { setupProfileCompletedConsumer } from './events/profileCompletedConsumer';
 import { setupIdentityVerifiedConsumer } from './events/identityVerifiedConsumer';
 
@@ -61,6 +62,7 @@ if (process.env.NODE_ENV !== 'test') {
       const mqConnection = new MessagingConnection({ url: rabbitmqUrl }, logger);
       await mqConnection.connect();
       await initVendorRegisteredPublisher(mqConnection, logger);
+      await initUserDeletedPublisher(mqConnection, logger);
       await setupProfileCompletedConsumer(mqConnection, logger);
       await setupIdentityVerifiedConsumer(mqConnection, logger);
       logger.info('RabbitMQ connected and handlers ready');

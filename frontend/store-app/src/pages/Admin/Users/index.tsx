@@ -22,7 +22,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { AdminUser, AdminUserDetail, VendorProfile } from '@/services/adminUsers.service';
+import { AdminUser } from '@/services/adminUsers.service';
 import {
   useAdminUsersQuery,
   useAdminVendorStatsQuery,
@@ -82,8 +82,8 @@ export default function AdminUsersPage() {
   const [detailUserId, setDetailUserId] = useState<string | null>(null);
   const [detailUserRole, setDetailUserRole] = useState<string | undefined>(undefined);
 
-  const { data: userDetail, isLoading: isLoadingDetail } = useAdminUserDetailQuery(detailUserId);
-  const { data: vendorProfile, isLoading: isLoadingProfile } = useAdminVendorProfileQuery(detailUserId, detailUserRole);
+  const { data: userDetail, isLoading: isLoadingDetail, isError: isErrorDetail } = useAdminUserDetailQuery(detailUserId);
+  const { data: vendorProfile, isLoading: isLoadingProfile, isError: isErrorProfile } = useAdminVendorProfileQuery(detailUserId, detailUserRole);
 
   function openDetailDialog(user: AdminUser) {
     setDetailUserId(user.id);
@@ -338,6 +338,8 @@ export default function AdminUsersPage() {
 
           {isLoadingDetail ? (
             <p className="py-4 text-center text-sm text-muted-foreground">{t('users.loading')}</p>
+          ) : isErrorDetail ? (
+            <p className="py-4 text-center text-sm text-destructive">{t('users.errorLoad')}</p>
           ) : userDetail ? (
             <div className="space-y-6 py-2">
 
@@ -388,6 +390,8 @@ export default function AdminUsersPage() {
                   </h3>
                   {isLoadingProfile ? (
                     <p className="text-sm text-muted-foreground">{t('users.loading')}</p>
+                  ) : isErrorProfile ? (
+                    <p className="text-sm text-destructive">{t('users.errorLoad')}</p>
                   ) : vendorProfile ? (
                     <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
                       <div>
@@ -474,6 +478,7 @@ export default function AdminUsersPage() {
           <DialogFooter>
             <Button variant="outline" onClick={closeDetailDialog}>{t('users.close')}</Button>
           </DialogFooter>
+
         </DialogContent>
       </Dialog>
 
@@ -592,7 +597,7 @@ export default function AdminUsersPage() {
                 </Button>
               </>
             ) : (
-              <Button onClick={closeDialog}>Chiudi</Button>
+              <Button onClick={closeDialog}>{t('users.close')}</Button>
             )}
           </DialogFooter>
         </DialogContent>

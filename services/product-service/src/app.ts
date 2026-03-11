@@ -20,6 +20,7 @@ import cors from 'cors';
 import routes from './routes';
 import { initProductPublisher } from './events/publisher';
 import { setupProductValidationResponder } from './events/responder';
+import { setupUserDeletedConsumer } from './events/userDeletedConsumer';
 import { ensureBucket } from './config/minio';
 
 const app: express.Application = express();
@@ -65,6 +66,7 @@ if (process.env.NODE_ENV !== 'test') {
       await mqConnection.connect();
       await initProductPublisher(mqConnection, logger);
       await setupProductValidationResponder(mqConnection, logger);
+      await setupUserDeletedConsumer(mqConnection, logger);
       logger.info('RabbitMQ connected and handlers ready');
     } catch (err) {
       logger.warn({ err }, 'RabbitMQ not available, running without messaging');
