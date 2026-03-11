@@ -2,6 +2,7 @@ import { Router } from 'express';
 import express from 'express';
 import vendorProfileController from '../controllers/vendorProfile.controller';
 import stripeIdentityController from '../controllers/stripeIdentity.controller';
+import adminVendorProfileController from '../controllers/adminVendorProfile.controller';
 import { vendorProfileValidator } from '../validators/vendorProfile.validator';
 import { authenticate } from '../middleware/auth.middleware';
 import { authorize } from '../middleware/role.middleware';
@@ -61,6 +62,28 @@ router.post(
   '/stripe/webhook',
   express.raw({ type: '*/*' }),
   stripeIdentityController.webhook.bind(stripeIdentityController)
+);
+
+/**
+ * GET /api/v1/user-data/admin/vendor-profile/:userId
+ * Returns the VendorProfile for the given userId (admin only)
+ */
+router.get(
+  '/admin/vendor-profile/:userId',
+  authenticate,
+  authorize(['ADMIN']),
+  adminVendorProfileController.getVendorProfile.bind(adminVendorProfileController)
+);
+
+/**
+ * PUT /api/v1/user-data/admin/vendor-profile/:userId/identity-status
+ * Updates identityStatus; if VERIFIED also publishes identity.verified event (admin only)
+ */
+router.put(
+  '/admin/vendor-profile/:userId/identity-status',
+  authenticate,
+  authorize(['ADMIN']),
+  adminVendorProfileController.setIdentityStatus.bind(adminVendorProfileController)
 );
 
 export default router;
