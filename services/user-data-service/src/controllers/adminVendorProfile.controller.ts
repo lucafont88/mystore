@@ -23,6 +23,8 @@ export class AdminVendorProfileController {
       const userId = req.params.userId as string;
       const { status } = req.body;
 
+      // Admin can only reset to PENDING (vendor retries Stripe) or force to VERIFIED (manual approval)
+      // PROCESSING and FAILED are set automatically by Stripe webhook, not by admin
       const validStatuses = ['PENDING', 'VERIFIED'];
       if (!validStatuses.includes(status)) {
         res.status(400).json({ error: 'Status non valido. Usare PENDING o VERIFIED.' });
@@ -35,7 +37,7 @@ export class AdminVendorProfileController {
         return;
       }
 
-      await prisma.vendorProfile.update({
+      const updated = await prisma.vendorProfile.update({
         where: { userId },
         data: { identityStatus: status },
       });
@@ -46,7 +48,7 @@ export class AdminVendorProfileController {
         await publishIdentityVerified(userId);
       }
 
-      res.status(200).json({ userId, identityStatus: status });
+      res.status(200).json(updated);
     } catch (error: any) {
       res.status(500).json({ error: 'Internal Server Error' });
     }
