@@ -2,6 +2,7 @@ import { Response } from 'express';
 import argon2 from 'argon2';
 import prisma from '../config/db';
 import { AuthRequest } from '../middlewares/auth.middleware';
+import { publishUserDeleted } from '../events/userDeletedPublisher';
 
 export class AdminUserController {
   async listUsers(req: AuthRequest, res: Response): Promise<void> {
@@ -94,6 +95,73 @@ export class AdminUserController {
       res.status(200).json(user);
     } catch (error: any) {
       res.status(400).json({ error: error.message });
+    }
+  }
+
+  async deleteUser(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const id = req.params.id as string;
+
+      // Impedisce all'admin di cancellare se stesso
+      if (req.user?.id === id) {
+        res.status(400).json({ error: 'Non puoi cancellare il tuo account' });
+        return;
+      }
+
+      const user = await prisma.user.findUnique({ where: { id }, select: { id: true, role: true } });
+      if (!user) {
+        res.status(404).json({ error: 'Utente non trovato' });
+        return;
+      }
+
+      // Pubblica l'evento PRIMA di cancellare, così i consumer possono usare l'userId
+      await publishUserDeleted(user.id, user.role);
+
+      // Cancella l'utente (UserIpLog in cascade tramite DB)
+      await prisma.user.delete({ where: { id } });
+
+      res.status(204).send();
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getUserDetail(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const id = req.params.id as string;
+      const user = await prisma.user.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          email: true,
+          role: true,
+          isBanned: true,
+          profileStatus: true,
+          lastLoginAt: true,
+          createdAt: true,
+          ipLogs: {
+            orderBy: { createdAt: 'desc' },
+            take: 20,
+            select: { ipAddress: true, createdAt: true },
+          },
+        },
+      });
+      if (!user) {
+        res.status(404).json({ error: 'Utente non trovato' });
+        return;
+      }
+      res.status(200).json({
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        isBanned: user.isBanned,
+        profileStatus: user.profileStatus,
+        lastLoginAt: user.lastLoginAt,
+        createdAt: user.createdAt,
+        ipHistory: user.ipLogs,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
     }
   }
 

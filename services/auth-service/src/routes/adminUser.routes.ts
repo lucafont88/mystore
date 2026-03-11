@@ -9,5 +9,7 @@ router.get('/', authenticate, authorize(['ADMIN']), adminUserController.listUser
 router.put('/:id/role', authenticate, authorize(['ADMIN']), adminUserController.changeRole.bind(adminUserController));
 router.put('/:id/ban', authenticate, authorize(['ADMIN']), adminUserController.toggleBan.bind(adminUserController));
 router.post('/:id/reset-password', authenticate, authorize(['ADMIN']), adminUserController.resetPassword.bind(adminUserController));
+router.delete('/:id', authenticate, authorize(['ADMIN']), adminUserController.deleteUser.bind(adminUserController));
+router.get('/:id', authenticate, authorize(['ADMIN']), adminUserController.getUserDetail.bind(adminUserController));
 
 export default router;
