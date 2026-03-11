@@ -22,22 +22,39 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { AdminUser } from '@/services/adminUsers.service';
+import { AdminUser, AdminUserDetail, VendorProfile } from '@/services/adminUsers.service';
 import {
   useAdminUsersQuery,
   useAdminVendorStatsQuery,
   useChangeRoleMutation,
+  useDeleteUserMutation,
   useResetPasswordMutation,
   useToggleBanMutation,
+  useAdminUserDetailQuery,
+  useAdminVendorProfileQuery,
+  useAdminSetIdentityStatusMutation,
 } from '@/queries/useAdminUsersQuery';
 
-type DialogType = 'role' | 'ban' | 'reset' | null;
+type DialogType = 'role' | 'ban' | 'reset' | 'delete' | null;
 
 const ROLE_COLORS: Record<string, string> = {
   ADMIN: 'bg-purple-100 text-purple-800',
   VENDOR: 'bg-blue-100 text-blue-800',
   CUSTOMER: 'bg-green-100 text-green-800',
   SUPPORT: 'bg-orange-100 text-orange-800',
+};
+
+const IDENTITY_STATUS_COLORS: Record<string, string> = {
+  PENDING: 'bg-gray-100 text-gray-700',
+  PROCESSING: 'bg-yellow-100 text-yellow-800',
+  VERIFIED: 'bg-green-100 text-green-800',
+  FAILED: 'bg-red-100 text-red-800',
+};
+
+const PROFILE_STATUS_COLORS: Record<string, string> = {
+  COMPLETE: 'bg-green-100 text-green-800',
+  PENDING_PROFILE: 'bg-yellow-100 text-yellow-800',
+  PENDING_IDENTITY: 'bg-orange-100 text-orange-800',
 };
 
 function formatDate(dateStr: string | null): string {
@@ -59,6 +76,24 @@ export default function AdminUsersPage() {
   const changeRoleMutation = useChangeRoleMutation();
   const toggleBanMutation = useToggleBanMutation();
   const resetPasswordMutation = useResetPasswordMutation();
+  const deleteUserMutation = useDeleteUserMutation();
+
+  const setIdentityStatusMutation = useAdminSetIdentityStatusMutation();
+  const [detailUserId, setDetailUserId] = useState<string | null>(null);
+  const [detailUserRole, setDetailUserRole] = useState<string | undefined>(undefined);
+
+  const { data: userDetail, isLoading: isLoadingDetail } = useAdminUserDetailQuery(detailUserId);
+  const { data: vendorProfile, isLoading: isLoadingProfile } = useAdminVendorProfileQuery(detailUserId, detailUserRole);
+
+  function openDetailDialog(user: AdminUser) {
+    setDetailUserId(user.id);
+    setDetailUserRole(user.role);
+  }
+
+  function closeDetailDialog() {
+    setDetailUserId(null);
+    setDetailUserRole(undefined);
+  }
 
   const [activeDialog, setActiveDialog] = useState<DialogType>(null);
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
@@ -117,6 +152,12 @@ export default function AdminUsersPage() {
     setTempPassword(result.tempPassword);
   }
 
+  async function handleDeleteUser() {
+    if (!selectedUser) return;
+    await deleteUserMutation.mutateAsync(selectedUser.id);
+    closeDialog();
+  }
+
   function copyToClipboard() {
     navigator.clipboard.writeText(tempPassword);
     setCopied(true);
@@ -173,7 +214,15 @@ export default function AdminUsersPage() {
           <tbody>
             {filteredUsers?.map((user) => (
               <tr key={user.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
-                <td className="px-4 py-3 font-medium">{user.email}</td>
+                <td className="px-4 py-3">
+                  <button
+                    type="button"
+                    onClick={() => openDetailDialog(user)}
+                    className="font-medium text-primary underline-offset-2 hover:underline cursor-pointer text-left"
+                  >
+                    {user.email}
+                  </button>
+                </td>
                 <td className="px-4 py-3">
                   <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${ROLE_COLORS[user.role] ?? 'bg-gray-100 text-gray-800'}`}>
                     {user.role}
@@ -260,6 +309,13 @@ export default function AdminUsersPage() {
                     >
                       {t('users.resetPassword')}
                     </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => openDialog('delete', user)}
+                    >
+                      {t('users.deleteUser')}
+                    </Button>
                   </div>
                 </td>
               </tr>
@@ -272,6 +328,154 @@ export default function AdminUsersPage() {
           </p>
         )}
       </div>
+
+      {/* Dialog: Dettaglio Utente */}
+      <Dialog open={!!detailUserId} onOpenChange={(open) => !open && closeDetailDialog()}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{t('users.detailTitle')}</DialogTitle>
+          </DialogHeader>
+
+          {isLoadingDetail ? (
+            <p className="py-4 text-center text-sm text-muted-foreground">{t('users.loading')}</p>
+          ) : userDetail ? (
+            <div className="space-y-6 py-2">
+
+              {/* Sezione 1: Account — tutti gli utenti */}
+              <div className="space-y-3">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  {t('users.sectionAccount')}
+                </h3>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                  <div>
+                    <p className="text-muted-foreground mb-0.5">{t('users.email')}</p>
+                    <p className="font-medium">{userDetail.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground mb-0.5">{t('users.role')}</p>
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${ROLE_COLORS[userDetail.role] ?? 'bg-gray-100'}`}>
+                      {userDetail.role}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground mb-0.5">{t('users.status')}</p>
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${userDetail.isBanned ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+                      {userDetail.isBanned ? t('users.banned') : t('users.active')}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground mb-0.5">{t('users.profileStatus')}</p>
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${PROFILE_STATUS_COLORS[userDetail.profileStatus] ?? 'bg-gray-100 text-gray-700'}`}>
+                      {userDetail.profileStatus}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground mb-0.5">{t('users.lastLogin')}</p>
+                    <p>{formatDate(userDetail.lastLoginAt)}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground mb-0.5">{t('users.createdAt')}</p>
+                    <p>{formatDate(userDetail.createdAt)}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sezione 2: Anagrafica — solo VENDOR */}
+              {userDetail.role === 'VENDOR' && (
+                <div className="space-y-3 border-t pt-4">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                    {t('users.sectionProfile')}
+                  </h3>
+                  {isLoadingProfile ? (
+                    <p className="text-sm text-muted-foreground">{t('users.loading')}</p>
+                  ) : vendorProfile ? (
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                      <div>
+                        <p className="text-muted-foreground mb-0.5">{t('users.fullName')}</p>
+                        <p className="font-medium">{vendorProfile.firstName} {vendorProfile.lastName}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground mb-0.5">{t('users.dateOfBirth')}</p>
+                        <p>{formatDate(vendorProfile.dateOfBirth)}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground mb-0.5">{t('users.fiscalCode')}</p>
+                        <p className="font-mono text-xs">{vendorProfile.fiscalCode}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground mb-0.5">{t('users.vatNumber')}</p>
+                        <p className="font-mono text-xs">{vendorProfile.vatNumber ?? '—'}</p>
+                      </div>
+                      <div className="col-span-2">
+                        <p className="text-muted-foreground mb-0.5">{t('users.businessName')}</p>
+                        <p className="font-medium">{vendorProfile.businessName}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground mb-0.5">{t('users.contactEmail')}</p>
+                        <p>{vendorProfile.contactEmail}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground mb-0.5">{t('users.phoneNumber')}</p>
+                        <p>{vendorProfile.phoneNumber}</p>
+                      </div>
+                      <div className="col-span-2">
+                        <p className="text-muted-foreground mb-0.5">{t('users.address')}</p>
+                        <p>{vendorProfile.address.street}, {vendorProfile.address.zip} {vendorProfile.address.city} ({vendorProfile.address.country})</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">{t('users.noProfile')}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Sezione 3: Verifica identità — solo VENDOR con profilo */}
+              {userDetail.role === 'VENDOR' && vendorProfile && (
+                <div className="space-y-3 border-t pt-4">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                    {t('users.sectionIdentity')}
+                  </h3>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-muted-foreground">{t('users.identityStatus')}</p>
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${IDENTITY_STATUS_COLORS[vendorProfile.identityStatus] ?? 'bg-gray-100'}`}>
+                        {vendorProfile.identityStatus}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {vendorProfile.identityStatus !== 'PENDING' && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={setIdentityStatusMutation.isPending}
+                          onClick={() => setIdentityStatusMutation.mutate({ userId: detailUserId!, status: 'PENDING' })}
+                        >
+                          {t('users.resetIdentity')}
+                        </Button>
+                      )}
+                      {vendorProfile.identityStatus !== 'VERIFIED' && (
+                        <Button
+                          variant="default"
+                          size="sm"
+                          disabled={setIdentityStatusMutation.isPending}
+                          onClick={() => setIdentityStatusMutation.mutate({ userId: detailUserId!, status: 'VERIFIED' })}
+                        >
+                          {t('users.approveIdentity')}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          ) : null}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={closeDetailDialog}>{t('users.close')}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Dialog: Cambia Ruolo */}
       <Dialog open={activeDialog === 'role'} onOpenChange={(open) => !open && closeDialog()}>
@@ -323,6 +527,33 @@ export default function AdminUsersPage() {
               disabled={toggleBanMutation.isPending}
             >
               {toggleBanMutation.isPending ? t('users.saving') : t('users.confirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog: Elimina Utente */}
+      <Dialog open={activeDialog === 'delete'} onOpenChange={(open) => !open && closeDialog()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('users.deleteUser')}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive space-y-1">
+              <p className="font-semibold">{t('users.deleteWarningTitle')}</p>
+              <p>{t('users.deleteWarningBody')}</p>
+            </div>
+            <p className="text-sm text-muted-foreground">{t('users.deleteConfirmText')}</p>
+            <p className="text-sm font-medium">{selectedUser?.email}</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={closeDialog}>{t('users.cancel')}</Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteUser}
+              disabled={deleteUserMutation.isPending}
+            >
+              {deleteUserMutation.isPending ? t('users.deleting') : t('users.deleteConfirm')}
             </Button>
           </DialogFooter>
         </DialogContent>
