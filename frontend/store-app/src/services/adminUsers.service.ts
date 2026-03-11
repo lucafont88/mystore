@@ -23,6 +23,34 @@ export interface VendorSalesStats {
 
 export type VendorStatsMap = Record<string, VendorSalesStats>;
 
+export interface AdminUserDetail extends AdminUser {
+  profileStatus: 'COMPLETE' | 'PENDING_PROFILE' | 'PENDING_IDENTITY';
+}
+
+export interface VendorProfile {
+  id: string;
+  userId: string;
+  status: 'PENDING' | 'COMPLETE';
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  gender: string | null;
+  fiscalCode: string;
+  businessName: string;
+  vatNumber: string | null;
+  contactEmail: string;
+  phoneNumber: string;
+  address: {
+    street: string;
+    city: string;
+    zip: string;
+    country: string;
+  };
+  identityStatus: 'PENDING' | 'PROCESSING' | 'VERIFIED' | 'FAILED';
+  createdAt: string;
+  updatedAt: string;
+}
+
 export const adminUsersService = {
   getUsers: (): Promise<AdminUser[]> =>
     api.get<AdminUser[]>('/admin/users'),
@@ -38,4 +66,19 @@ export const adminUsersService = {
 
   resetPassword: (id: string): Promise<{ tempPassword: string }> =>
     api.post<{ tempPassword: string }>(`/admin/users/${id}/reset-password`, {}),
+
+  deleteUser: (id: string): Promise<void> =>
+    api.delete<void>(`/admin/users/${id}`),
+
+  getUserDetail: (id: string): Promise<AdminUserDetail> =>
+    api.get<AdminUserDetail>(`/admin/users/${id}`),
+
+  getVendorProfile: (userId: string): Promise<VendorProfile> =>
+    api.get<VendorProfile>(`/user-data/admin/vendor-profile/${userId}`),
+
+  setIdentityStatus: (
+    userId: string,
+    status: 'PENDING' | 'VERIFIED'
+  ): Promise<VendorProfile> =>
+    api.put<VendorProfile>(`/user-data/admin/vendor-profile/${userId}/identity-status`, { status }),
 };
