@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { adminUsersService, VendorProfile } from '../services/adminUsers.service';
+import { adminUsersService } from '../services/adminUsers.service';
 
 const USERS_KEY = ['admin-users'] as const;
 const VENDOR_STATS_KEY = ['admin-vendor-stats'] as const;

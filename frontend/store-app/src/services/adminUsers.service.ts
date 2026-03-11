@@ -23,8 +23,9 @@ export interface VendorSalesStats {
 
 export type VendorStatsMap = Record<string, VendorSalesStats>;
 
-export interface AdminUserDetail extends AdminUser {
+export interface AdminUserDetail extends Omit<AdminUser, 'lastIp' | 'ipHistory'> {
   profileStatus: 'COMPLETE' | 'PENDING_PROFILE' | 'PENDING_IDENTITY';
+  ipHistory: Array<{ ipAddress: string; createdAt: string }>;
 }
 
 export interface VendorProfile {
